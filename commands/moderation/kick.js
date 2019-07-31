@@ -27,7 +27,7 @@ module.exports = class Kick extends Command {
 
     run(message, { member, reason }) {
         try {
-            member.kick(reason);
+            // member.kick(reason);
         }
         catch (e) {
             console.log(e.toString());
