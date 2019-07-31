@@ -33,6 +33,6 @@ module.exports = class Ban extends Command {
         catch(e) {
             console.log(e.toString());
         }
-        return message.reply(`successfully banned ${member.user.username} for ${reason}`);
+        return message.say(`***${member.user.username} was banned for ${reason}!***`);
     }
 };
