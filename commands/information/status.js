@@ -31,7 +31,6 @@ module.exports = class Status extends Command {
             memberName: 'status',
             description: 'Obtains the status for the specified FiveM server.',
             clientPermissions: ['EMBED_LINKS'],
-            guildOnly: true,
             args: [
                 {
                     key: 'server',
