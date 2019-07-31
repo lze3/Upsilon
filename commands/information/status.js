@@ -62,18 +62,16 @@ module.exports = class Status extends Command {
                     .addField('Status', 'Offline')
                     .setColor('#FF9C00');
 
-                return message.say(errorEmbed);
+                return message.say(message.author, {
+                    embed: errorEmbed
+                });
             }
 
             try {
                 playerData = JSON.parse(body);
             }
             catch(err) {
-                const errorEmbed = new RichEmbed()
-                    .setTitle('Error when obtaining player information')
-                    .setDescription(err.toString());
-
-                return message.say(errorEmbed);
+                return;
             }
         });
 
@@ -90,11 +88,14 @@ module.exports = class Status extends Command {
             }
             catch(err) {
                 const errorEmbed = new RichEmbed()
-                    .setTitle(`Server Information - ${IP}:${details[server].port}.`)
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                    .addField('Server IP', IP + ':' + details[server].port)
                     .addField('Status', 'Offline')
-                    .setTimestamp();
+                    .setColor('#FF9C00');
 
-                return message.say(errorEmbed);
+                return message.say(message.author, {
+                    embed: errorEmbed
+                });
             }
 
             const embed = new RichEmbed()
