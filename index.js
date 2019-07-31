@@ -11,8 +11,12 @@ colors.setTheme({
 
 const client = new CommandoClient({
     commandPrefix: '..',
-    owner: '595789969965187072',
-    invite: ''
+    owner: [
+        '458456013528498177',
+        '595789969965187072'
+    ],
+    invite: '',
+    unknownCommandResponse: false
 });
 
 client.registry
