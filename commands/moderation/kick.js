@@ -33,6 +33,6 @@ module.exports = class Kick extends Command {
         catch (e) {
             console.log(e.toString());
         }
-        return message.reply(`successfully kicked ${member.user.username} for ${reason}`);
+        return message.say(`***${member.user.username} was kicked for ${reason}!***`);
     }
 };
