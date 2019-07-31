@@ -23,7 +23,8 @@ client.registry
     .registerDefaultTypes()
     .registerGroups([
         ['misc', 'Useless commands that don\'t serve much purpose other than entertainment.'],
-        ['moderation', 'Commands to help moderators perform their tasks effectively.']
+        ['moderation', 'Commands to help moderators perform their tasks effectively.'],
+        ['information', 'Commands that provide useful information to the user.']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands()
