@@ -60,7 +60,8 @@ module.exports = class Status extends Command {
                     .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                     .addField('Server IP', IP + ':' + details[server].port)
                     .addField('Status', 'Offline')
-                    .setColor('#FF9C00');
+                    .setColor('#FF9C00')
+                    .setTimestamp();
 
                 return message.say(message.author, {
                     embed: errorEmbed
@@ -91,7 +92,8 @@ module.exports = class Status extends Command {
                     .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                     .addField('Server IP', IP + ':' + details[server].port)
                     .addField('Status', 'Offline')
-                    .setColor('#FF9C00');
+                    .setColor('#FF9C00')
+                    .setTimestamp();
 
                 return message.say(message.author, {
                     embed: errorEmbed
