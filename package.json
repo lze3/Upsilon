@@ -1,0 +1,22 @@
+{
+  "name": "jcrpbot",
+  "version": "1.0.0",
+  "description": "A Discord bot designed specifically for use on the JusticeCommunityRP guild.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scandula-c/phillip-bot.git"
+  },
+  "author": "Scandula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scandula-c/phillip-bot/issues"
+  },
+  "homepage": "https://github.com/scandula-c/phillip-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
