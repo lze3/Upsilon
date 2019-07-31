@@ -8,7 +8,7 @@ module.exports = class Kick extends Command {
             group: 'moderation',
             memberName: 'kick',
             description: 'Kicks a user from the guild.',
-            userPermissions: ['SEND_MESSAGES'],
+            userPermissions: ['KICK_MEMBERS'],
             clientPermissions: ['KICK_MEMBERS'],
             args: [
                 {
