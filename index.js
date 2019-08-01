@@ -25,7 +25,8 @@ client.registry
         ['misc', 'Useless commands that don\'t serve much purpose other than entertainment.'],
         ['moderation', 'Commands to help moderators perform their tasks effectively.'],
         ['information', 'Commands that provide useful information to the user.'],
-        ['admin', 'Commands to help administration give out information and perform their tasks more easily.']
+        ['admin', 'Commands to help administration give out information and perform their tasks more easily.'],
+        ['department', 'Commands that help Field Training Officers.']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands()
