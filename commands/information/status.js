@@ -52,6 +52,9 @@ module.exports = class Status extends Command {
         const member = message.member || message.guild.fetchMember(message.author);
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
 
+        // delete the message entered by the user
+        message.delete();
+
         // player information
         request.get(`http://${IP}:${details[server].port}/players.json`, {
             timeout: 2000
