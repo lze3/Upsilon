@@ -28,7 +28,10 @@ module.exports = class Kick extends Command {
 
     run(message, { member, reason }) {
         try {
-            // member.kick(reason);
+            member.kick(reason);
+
+            // delete the command entered by the user
+            message.delete();
         }
         catch (e) {
             console.log(e.toString());

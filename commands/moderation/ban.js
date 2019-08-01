@@ -28,7 +28,10 @@ module.exports = class Ban extends Command {
 
     run(message, { member, reason }) {
         try {
-            // member.ban(reason);
+            member.ban(reason);
+
+            // delete the command entered by the user
+            message.delete();
         }
         catch(e) {
             console.log(e.toString());
