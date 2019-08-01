@@ -27,14 +27,23 @@ module.exports = class Ban extends Command {
     }
 
     run(message, { member, reason }) {
+
+        // prevent kicking yourself
+        if (member.user.id === message.author.id) {
+            return message.say('you can\'t ban yourself!', {
+                file: '.\\images\\trust-nobody.jpg'
+            });
+        }
+
         try {
-            member.ban(reason);
+            message.guild.ban(member, reason);
 
             // delete the command entered by the user
             message.delete();
         }
         catch(e) {
             console.log(e.toString());
+            return message.say('Uh oh! Something went wrong, developer notified');
         }
         return message.say(`***${member.user.username} was banned for ${reason}!***`);
     }
