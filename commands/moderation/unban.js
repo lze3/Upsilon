@@ -13,9 +13,9 @@ module.exports = class Unban extends Command {
             guildOnly: true,
             args: [
                 {
-                    key: 'member',
-                    prompt: 'Which member would you like to unban?',
-                    type: 'member'
+                    key: 'user',
+                    prompt: 'Which user would you like to unban?',
+                    type: 'user'
                 },
                 {
                     key: 'reason',
@@ -27,15 +27,15 @@ module.exports = class Unban extends Command {
         });
     }
 
-    run(message, { member, reason }) {
+    run(message, { user, reason }) {
         try {
-            message.guild.unban(member, reason);
+            message.guild.unban(user, reason);
         }
         catch(e) {
             console.log(e.toString());
             return message.say('Uh oh! Something went wrong, developer notified');
         }
 
-        return message.say(`***${member.user.username} was unbanned${reason === 'No reason provided.' ? '.' : ' for ' + reason}***`);
+        return message.say(`***${user.username}#${user.discriminator} was unbanned${reason === 'No reason provided.' ? '.' : ' for ' + reason}***`);
     }
 };

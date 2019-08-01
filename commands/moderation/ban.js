@@ -13,9 +13,9 @@ module.exports = class Ban extends Command {
             guildOnly: true,
             args: [
                 {
-                    key: 'member',
-                    prompt: 'Which member would you like to ban?',
-                    type: 'member'
+                    key: 'user',
+                    prompt: 'Which user would you like to ban?',
+                    type: 'user'
                 },
                 {
                     key: 'reason',
@@ -26,17 +26,17 @@ module.exports = class Ban extends Command {
         });
     }
 
-    run(message, { member, reason }) {
+    run(message, { user, reason }) {
 
         // prevent kicking yourself
-        if (member.user.id === message.author.id) {
+        if (user.id === message.author.id) {
             return message.say('you can\'t ban yourself!', {
                 file: '.\\images\\trust-nobody.jpg'
             });
         }
 
         try {
-            message.guild.ban(member, reason);
+            message.guild.ban(user, reason);
 
             // delete the command entered by the user
             message.delete();
@@ -45,6 +45,6 @@ module.exports = class Ban extends Command {
             console.log(e.toString());
             return message.say('Uh oh! Something went wrong, developer notified');
         }
-        return message.say(`***${member.user.username} was banned for ${reason}!***`);
+        return message.say(`***${user.username}#${user.discriminator} was banned for ${reason}!***`);
     }
 };
