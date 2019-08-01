@@ -34,7 +34,7 @@ module.exports = class Kick extends Command {
 
         // prevent banning yourself
         if (member.user.id === message.author.id) {
-            return message.say('you can\'t ban yourself!', {
+            return message.reply('you can\'t kick yourself!', {
                 file: '.\\images\\trust-nobody.jpg'
             });
         }
