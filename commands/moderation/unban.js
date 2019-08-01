@@ -11,6 +11,7 @@ module.exports = class Unban extends Command {
             userPermissions: ['BAN_MEMBERS'],
             clientPermissions: ['BAN_MEMBERS'],
             guildOnly: true,
+            hidden: true,
             args: [
                 {
                     key: 'user',

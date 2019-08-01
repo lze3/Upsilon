@@ -11,6 +11,7 @@ module.exports = class Kick extends Command {
             userPermissions: ['KICK_MEMBERS'],
             clientPermissions: ['KICK_MEMBERS'],
             guildOnly: true,
+            hidden: true,
             args: [
                 {
                     key: 'member',
