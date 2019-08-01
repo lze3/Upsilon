@@ -28,6 +28,9 @@ module.exports = class Kick extends Command {
 
     run(message, { member, reason }) {
 
+        // delete the command entered by the user
+        message.delete();
+
         // prevent banning yourself
         if (member.user.id === message.author.id) {
             return message.say('you can\'t ban yourself!', {
@@ -37,12 +40,10 @@ module.exports = class Kick extends Command {
 
         try {
             member.kick(reason);
-
-            // delete the command entered by the user
-            message.delete();
         }
         catch (e) {
             console.log(e.toString());
+            return message.say('Uh oh! Something went wrong, developer notified');
         }
         return message.say(`***${member.user.username} was kicked for ${reason}!***`);
     }
