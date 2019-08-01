@@ -28,6 +28,10 @@ module.exports = class Unban extends Command {
     }
 
     run(message, { user, reason }) {
+
+        // delete the command entered by the user
+        message.delete();
+
         try {
             message.guild.unban(user, reason);
         }

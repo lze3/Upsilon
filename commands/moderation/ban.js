@@ -28,6 +28,9 @@ module.exports = class Ban extends Command {
 
     run(message, { user, reason }) {
 
+        // delete the command entered by the user
+        message.delete();
+
         // prevent kicking yourself
         if (user.id === message.author.id) {
             return message.say('you can\'t ban yourself!', {
@@ -37,9 +40,6 @@ module.exports = class Ban extends Command {
 
         try {
             message.guild.ban(user, reason);
-
-            // delete the command entered by the user
-            message.delete();
         }
         catch(e) {
             console.log(e.toString());
