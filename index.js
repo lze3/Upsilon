@@ -15,7 +15,7 @@ const client = new CommandoClient({
         '458456013528498177',
         '595789969965187072'
     ],
-    invite: '',
+    invite: 'https://discord.gg/B7e72je',
     unknownCommandResponse: false
 });
 
