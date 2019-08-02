@@ -21,6 +21,8 @@
     "discord.js": "^11.5.1",
     "discord.js-commando": "^0.10.0",
     "eslint": "^6.1.0",
+    "node-fetch": "^2.6.0",
+    "querystring": "^0.2.0",
     "request": "^2.88.0"
   }
 }
