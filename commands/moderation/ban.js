@@ -28,6 +28,8 @@ module.exports = class Ban extends Command {
     }
 
     run(message, { user, reason }) {
+        // get the member from the user
+        const member = message.guild.members.find(foundMember => foundMember.id === user.id);
 
         // delete the command entered by the user
         message.delete();
@@ -40,10 +42,10 @@ module.exports = class Ban extends Command {
         }
 
         try {
-            message.guild.ban(user, reason);
+            member.ban(reason);
         }
         catch(e) {
-            console.log(e.toString());
+            console.log(e.stack);
             return message.say('Uh oh! Something went wrong, developer notified');
         }
         return message.say(`***${user.username}#${user.discriminator} was banned for ${reason}!***`);
