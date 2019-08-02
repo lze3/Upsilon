@@ -8,7 +8,11 @@ module.exports = class TrustNobody extends Command {
             group: 'misc',
             memberName: 'trust-nobody',
             description: 'Trust nobody, not even yourself.',
-            clientPermissions: ['ATTACH_FILES']
+            clientPermissions: ['ATTACH_FILES'],
+            throttling: {
+                usages: 1,
+                duration: 10
+            }
         });
     }
 
