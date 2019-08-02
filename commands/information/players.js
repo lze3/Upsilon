@@ -31,6 +31,11 @@ module.exports = class Status extends Command {
             memberName: 'players',
             description: 'Displays the player list for the specified FiveM server.',
             clientPermissions: ['EMBED_LINKS'],
+            examples: [
+                '..players s1 false',
+                '..players s2',
+                '..players'
+            ],
             args: [
                 {
                     key: 'server',
@@ -42,12 +47,18 @@ module.exports = class Status extends Command {
                         's2',
                         'tr'
                     ]
+                },
+                {
+                    key: 'shorten',
+                    prompt: 'Would you like to shorten the output?',
+                    type: 'boolean',
+                    default: false
                 }
             ]
         });
     }
 
-    run(message, { server }) {
+    async run(message, { server, shorten }) {
         const member = message.member || message.guild.fetchMember(message.author);
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
 
@@ -107,11 +118,19 @@ module.exports = class Status extends Command {
                 .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                 .addField('Server IP', IP + ':' + details[server].port)
                 .setTitle('Player count: ' + playerData.length + '/' + parsedData.vars.sv_maxClients)
-                .setDescription(playerData.length > 0 ?
-                    playerData.map(player => '**' + player.name + '**  |  ID: ``' + player.id + '``').join('\n') :
-                    '**No players online.**')
                 .setColor(embedColor)
                 .setTimestamp();
+
+            if (shorten) {
+                embed.setDescription(playerData.length > 0 ?
+                    '``' + playerData.map(player => player.name + ' - ' + player.id).join(', ') + '``' :
+                    '**No players online.**');
+            }
+            else {
+                embed.setDescription(playerData.length > 0 ?
+                    playerData.map(player => '**' + player.name + '**  |  ID: ``' + player.id + '``').join('\n') :
+                    '**No players online.**');
+            }
 
             return message.say(message.author, {
                 embed: embed
