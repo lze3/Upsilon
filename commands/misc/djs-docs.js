@@ -40,9 +40,7 @@ module.exports = class Docs extends Command {
             return message.reply('I could not find what your were looking for, sorry.');
         }
 
-        return message.say({
-            embed: embed
-        });
+        return message.reply({ embed });
 
     }
 };
