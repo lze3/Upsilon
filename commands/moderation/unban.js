@@ -37,7 +37,7 @@ module.exports = class Unban extends Command {
             message.guild.unban(user, reason);
         }
         catch(e) {
-            console.log(e.toString());
+            console.log(e.stack);
             return message.say('Uh oh! Something went wrong, developer notified');
         }
 
