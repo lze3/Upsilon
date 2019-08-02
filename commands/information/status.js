@@ -48,12 +48,9 @@ module.exports = class Status extends Command {
         });
     }
 
-    run(message, { server }) {
+    async run(message, { server }) {
         const member = message.member || message.guild.fetchMember(message.author);
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
-
-        // delete the message entered by the user
-        message.delete();
 
         // player information
         request.get(`http://${IP}:${details[server].port}/players.json`, {
@@ -76,7 +73,7 @@ module.exports = class Status extends Command {
                 playerData = JSON.parse(body);
             }
             catch(err) {
-                return;
+                console.log(err.stack);
             }
         });
 
@@ -85,13 +82,15 @@ module.exports = class Status extends Command {
             timeout: 2000
         }, function(error, _, body) {
             if (error) {
-                return;
+                console.log(error.stack);
             }
 
             try {
                 parsedData = JSON.parse(body);
             }
             catch(err) {
+                console.log(err.stack);
+
                 const errorEmbed = new RichEmbed()
                     .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                     .addField('Server IP', IP + ':' + details[server].port)
