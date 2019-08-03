@@ -32,6 +32,9 @@ module.exports = class UserInfo extends Command {
         // get the member from the user
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);
 
+        embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL);
+        embed.setThumbnail(user.avatarURL);
+
         // this is the username; will be undefined if they don't have one
         const nickname = user.nickname;
         if (nickname !== undefined) embed.addField('Nickname', nickname);
@@ -51,7 +54,7 @@ module.exports = class UserInfo extends Command {
         // the member's roles
         const amountOfRoles = member.roles.array().length - 1;
         const roles = amountOfRoles > 0 ?
-            member.roles.map(role => role.name !== '@everyone' ? '<@&' + role.id + '>' : '').join(' ') :
+            member.roles.map(role => role.name !== '@everyone' && role.name !== '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯' ? '<@&' + role.id + '>' : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`Roles [${amountOfRoles}]`, roles);
 
