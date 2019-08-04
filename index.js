@@ -14,7 +14,7 @@ colors.setTheme({
 });
 
 const client = new CommandoClient({
-    commandPrefix: '..',
+    commandPrefix: process.env['Prefix'] || '..',
     owner: '595789969965187072',
     invite: 'https://discord.gg/B7e72je',
     unknownCommandResponse: false
