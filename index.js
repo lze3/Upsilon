@@ -2,6 +2,8 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const colors = require('colors');
 
+const prefix = process.env['Prefix'] || '..';
+
 require('dotenv').config({
     path: __dirname + '/.env'
 });
@@ -14,7 +16,7 @@ colors.setTheme({
 });
 
 const client = new CommandoClient({
-    commandPrefix: process.env['Prefix'] || '..',
+    commandPrefix: prefix,
     owner: '595789969965187072',
     invite: 'https://discord.gg/B7e72je',
     unknownCommandResponse: false
@@ -35,6 +37,7 @@ client.registry
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`.success);
+    console.log(`Prefix is set to: ${prefix}`.blue);
 });
 
 client.on('error', console.error);
