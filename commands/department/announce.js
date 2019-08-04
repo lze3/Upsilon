@@ -16,6 +16,10 @@ module.exports = class Announce extends Command {
             group: 'department',
             memberName: 'announce',
             description: 'Sends an announcement to the channel.',
+            examples: [
+                client.commandPrefix + 'announce title: Announcement title | Body',
+                client.commandPrefix + 'announce Just an announcement with no title.'
+            ],
             userPermissions: ['MANAGE_MESSAGES'],
             clientPermissions: ['EMBED_LINKS'],
             guildOnly: true,
