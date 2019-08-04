@@ -2,11 +2,11 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const colors = require('colors');
 
-const prefix = process.env['Prefix'] || '..';
-
 require('dotenv').config({
     path: __dirname + '/.env'
 });
+
+const prefix = process.env['Prefix'] || '..';
 
 colors.setTheme({
     success: 'green',
