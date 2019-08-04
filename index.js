@@ -12,7 +12,7 @@ colors.setTheme({
     success: 'green',
     error: 'red',
     warn: 'yellow',
-    debug: 'blue'
+    debug: 'cyan'
 });
 
 const client = new CommandoClient({
@@ -37,7 +37,7 @@ client.registry
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`.success);
-    console.log(`Prefix is set to: ${prefix}`.blue);
+    console.log(`Prefix is set to: ${prefix}`.debug);
 });
 
 client.on('error', console.error);
