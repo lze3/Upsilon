@@ -6,3 +6,5 @@ shortlog.txt
 
 # auto puller
 git-auto-puller/
+
+*.bat
