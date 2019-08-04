@@ -26,6 +26,8 @@ module.exports = class UserInfo extends Command {
     }
 
     run(message, { user }) {
+        message.delete();
+
         // create the new embed object
         const embed = new RichEmbed();
 
@@ -66,6 +68,7 @@ module.exports = class UserInfo extends Command {
             embed.addField('Nickname', nickname);
         }
 
-        message.embed(embed);
+        message.embed(embed)
+            .then(msg => msg.delete(30000));
     }
 };
