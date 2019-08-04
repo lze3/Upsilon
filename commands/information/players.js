@@ -118,17 +118,15 @@ module.exports = class Status extends Command {
                 .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                 .addField('Server IP', IP + ':' + details[server].port)
                 .setTitle('Player count: ' + playerData.length + '/' + parsedData.vars.sv_maxClients)
+                .setDescription(playerData.length > 0 ?
+                    playerData.map(player => '**' + player.name + '**  |  ID: ``' + player.id + '``').join('\n') :
+                    '**No players online.**')
                 .setColor(embedColor)
                 .setTimestamp();
 
             if (shorten) {
                 embed.setDescription(playerData.length > 0 ?
                     '``' + playerData.map(player => player.name + ' - ' + player.id).join(', ') + '``' :
-                    '**No players online.**');
-            }
-            else {
-                embed.setDescription(playerData.length > 0 ?
-                    playerData.map(player => '**' + player.name + '**  |  ID: ``' + player.id + '``').join('\n') :
                     '**No players online.**');
             }
 
