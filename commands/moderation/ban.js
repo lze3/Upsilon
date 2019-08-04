@@ -1,5 +1,7 @@
 const { Command } = require('discord.js-commando');
 
+const blockedRoles = ['586026320786489364'];
+
 module.exports = class Ban extends Command {
     constructor(client) {
         super(client, {
@@ -39,6 +41,12 @@ module.exports = class Ban extends Command {
             return message.reply('you can\'t ban yourself!', {
                 file: '.\\images\\trust-nobody.jpg'
             });
+        }
+
+        for (let i = 0; i < blockedRoles.length; i++) {
+            if (member.roles.has(blockedRoles[i])) {
+                return message.reply('I can\'t ban that user');
+            }
         }
 
         try {
