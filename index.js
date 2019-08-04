@@ -2,6 +2,10 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const colors = require('colors');
 
+require('dotenv').config({
+    path: __dirname + '/.env'
+});
+
 colors.setTheme({
     success: 'green',
     error: 'red',
@@ -35,4 +39,4 @@ client.once('ready', () => {
 
 client.on('error', console.error);
 
-client.login('NTQxMjk2NjMyMjMxMTAwNDM4.XQsZzA.9oe7tvUOORExlX7DWENyqU6qzu0');
+client.login(process.env['Bot_Token']);
