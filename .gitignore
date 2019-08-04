@@ -8,3 +8,5 @@ shortlog.txt
 git-auto-puller/
 
 *.bat
+
+.vscode/
