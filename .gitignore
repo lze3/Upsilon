@@ -1,5 +1,8 @@
 node_modules/
 shortlog.txt
 
-# node environment variables
+# node environment
 .env
+
+# auto puller
+git-auto-puller/
