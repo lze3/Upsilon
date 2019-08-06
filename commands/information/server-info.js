@@ -8,7 +8,7 @@ module.exports = class MemberCount extends Command {
             aliases:  ['server', 'si'],
             group:  'information',
             memberName:  'serverinfo',
-            description:  'Returns the currecnt discord server\'s details.'
+            description:  'Returns the current discord server\'s details.'
         });
     }
 
