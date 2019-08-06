@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 
@@ -13,7 +14,8 @@ module.exports = class MemberCount extends Command {
     }
 
     run(message) {
-        const embedColor = message.member.colorRole ? message.member.colorRole.color : '#23E25D';
+        const member = message.member || message.guild.fetchMember(message.author);
+        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
         const serverEmbed = new RichEmbed()
             .setAuthor(message.guild.name, message.guild.avatarURL)
             .setDescription('Detailed infromation of ' + message.guild.name)
