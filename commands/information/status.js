@@ -48,73 +48,59 @@ module.exports = class Status extends Command {
         });
     }
 
-    async run(message, { server }) {
-        const member = message.member || message.guild.fetchMember(message.author);
-        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+    async run(message, { server, shorten }) {
+        const embedColor = message.member.colorRole ? message.member.colorRole.color : '#23E25D';
 
-        // player information
-        request.get(`http://${IP}:${details[server].port}/players.json`, {
+        // remove the command entererd by the user
+        message.delete();
+        const serverDownEmbed = new RichEmbed() //Error Embed for both Players and Server information request query
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+            .addField('Server IP', IP + ':' + details[server].port)
+            .addField('Status', 'Offline')
+            .setColor('#FF9C00')
+            .setTimestamp();
+
+        request.get(`http://${IP}:${details[server].port}/players.json`, { //Player's data request query
             timeout: 2000
-        }, function(error, _, body) {
-            if (error) {
-                const errorEmbed = new RichEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
-                    .addField('Server IP', IP + ':' + details[server].port)
-                    .addField('Status', 'Offline')
-                    .setColor('#FF9C00')
-                    .setTimestamp();
-
+        }, function(error, _, playersBody) { //Player's data function
+            if(error) {
                 return message.say(message.author, {
-                    embed: errorEmbed
+                    embed: serverDownEmbed
                 });
             }
 
-            try {
-                playerData = JSON.parse(body);
-            }
-            catch(err) {
-                console.log(err.stack);
-            }
-        });
+            // server information
+            request.get(`http://${IP}:${details[server].port}/info.json`, { //Server's data request query
+                timeout: 2000
+            }, function(error, _, serverBody) {  //Server's data function
+                if (error) {
+                    return message.say(message.author, {
+                        embed: serverDownEmbed
+                    });
+                }
 
-        // server information
-        request.get(`http://${IP}:${details[server].port}/info.json`, {
-            timeout: 2000
-        }, function(error, _, body) {
-            if (error) {
-                console.log(error.stack);
-            }
-
-            try {
-                parsedData = JSON.parse(body);
-            }
-            catch(err) {
-                console.log(err.stack);
-
-                const errorEmbed = new RichEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
-                    .addField('Server IP', IP + ':' + details[server].port)
-                    .addField('Status', 'Offline')
-                    .setColor('#FF9C00')
-                    .setTimestamp();
-
-                return message.say(message.author, {
-                    embed: errorEmbed
-                });
-            }
-
-            const embed = new RichEmbed()
+                try {  //Try function for both ServerData Parser and playersData Parser
+                    var serverData = JSON.parse(serverBody);
+                    var playerData = JSON.parse(playersBody);
+                }
+                catch(err) {
+                    return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err);
+                }
+        
+                const embed = new RichEmbed()
                 .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
                 .addField('Server IP', IP + ':' + details[server].port)
                 .addField('Status', 'Online')
-                .addField('Uptime', parsedData.vars.Uptime)
-                .addField('Players', playerData.length + ' | ' + parsedData.vars.sv_maxClients)
-                .addField('OneSync Enabled', parsedData.vars.onesync_enabled)
+                .addField('Uptime', serverData.vars.Uptime)
+                .addField('Players', playerData.length + ' | ' + serverData.vars.sv_maxClients)
+                .addField('OneSync Enabled', serverData.vars.onesync_enabled)
                 .setColor(embedColor)
                 .setTimestamp();
-
-            return message.say(message.author, {
-                embed: embed
+    
+    
+                return message.say(message.author, {
+                    embed: embed
+                });
             });
         });
     }
