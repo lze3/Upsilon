@@ -63,52 +63,55 @@ module.exports = class Status extends Command {
 
         // remove the command entererd by the user
         message.delete();
-        const serverDownEmbed = new RichEmbed() //Error Embed for both Players and Server information request query
+
+        // Error Embed for both Players and Server information request query
+        const serverDownEmbed = new RichEmbed()
             .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Offline')
             .setColor('#FF9C00')
             .setTimestamp();
 
-        request.get(`http://${IP}:${details[server].port}/players.json`, { //Player's data request query
+        // Player's data request query
+        request.get(`http://${IP}:${details[server].port}/players.json`, {
             timeout: 2000
-        }, function(error, _, playersBody) { //Player's data function
+        }, function(error, _, playersBody) {
             if(error) {
                 return message.say(message.author, {
                     embed: serverDownEmbed
                 });
             }
 
-            // server information
-            request.get(`http://${IP}:${details[server].port}/info.json`, { //Server's data request query
+            // server information query
+            request.get(`http://${IP}:${details[server].port}/info.json`, {
                 timeout: 2000
-            }, function(error, _, serverBody) {  //Server's data function
+            }, function(_error, __, serverBody) {
                 if (error) {
                     return message.say(message.author, {
                         embed: serverDownEmbed
                     });
                 }
 
-                try {  //Try function for both ServerData Parser and playersData Parser
-                    var serverData = JSON.parse(serverBody);
-                    var playerData = JSON.parse(playersBody);
+                // Try function for both ServerData Parser and playersData Parser
+                try {
+                    serverData = JSON.parse(serverBody);
+                    playerData = JSON.parse(playersBody);
                 }
                 catch(err) {
                     return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err);
                 }
-    
-                let sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0 ); //Sorting server players by thier unique In-Game ID
-    
+
+                // Sorting server players by thier unique In-Game ID
+                const sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
+
                 const embed = new RichEmbed()
                     .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
-                    .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join("\n") : "No players found!" : sortedPlayers.length > 0 ? sortedPlayers.map(sp => "**ID." + sp.id + "**: " + sp.name).join("\n") : "No players found!")
-                    .addField('Join Server',"<fivem://connect/" + IP + ':' + details[server].port + "/>")
+                    .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join('\n') : 'No players found!' : sortedPlayers.length > 0 ? sortedPlayers.map(sp => '**ID.' + sp.id + '**: ' + sp.name).join('\n') : 'No players found!')
+                    .addField('Join Server', '<fivem://connect/' + IP + ':' + details[server].port + '/>')
                     .setTitle('Player count: ' + playerData.length + '/' + serverData.vars.sv_maxClients)
                     .setColor(embedColor)
                     .setTimestamp();
-    
-    
-    
+
                 return message.say(message.author, {
                     embed: embed
                 });
