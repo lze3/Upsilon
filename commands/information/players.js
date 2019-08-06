@@ -106,7 +106,7 @@ module.exports = class Status extends Command {
 
                 const embed = new RichEmbed()
                     .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
-                    .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join('\n') : 'No players found!' : sortedPlayers.length > 0 ? sortedPlayers.map(sp => '**ID.' + sp.id + '**: ' + sp.name).join('\n') : 'No players found!')
+                    .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join('\n') : 'No players found!' : sortedPlayers.length > 0 ? sortedPlayers.map(sp => '**ID: ' + sp.id + '** - ' + sp.name).join('\n') : 'No players found!')
                     .addField('Join Server', '<fivem://connect/' + IP + ':' + details[server].port + '/>')
                     .setTitle('Player count: ' + playerData.length + '/' + serverData.vars.sv_maxClients)
                     .setColor(embedColor)
