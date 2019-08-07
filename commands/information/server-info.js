@@ -18,7 +18,7 @@ module.exports = class MemberCount extends Command {
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
         const serverEmbed = new RichEmbed()
             .setAuthor(message.guild.name, message.guild.avatarURL)
-            .setDescription('Detailed infromation of ' + message.guild.name)
+            .setDescription('Detailed Information of ' + message.guild.name)
             .addField('⏵Owner', `Username: ${message.guild.owner.user.tag}\nID: ${message.guild.owner.user.id}`)
             .addField('⏵Roles', `Total Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id).size}\nAdmin Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id && role.hasPermission('ADMINISTRATOR')).size}\nNon-Admin Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id && !role.hasPermission('ADMINISTRATOR')).size} `)
             .addField('⏵Channels', `Total Channels: ${message.guild.channels.filter(channel => channel.type !== 'category').size}\nTotal Categories: ${message.guild.channels.filter(channel => channel.type === 'category').size}\nVoice Channels: ${message.guild.channels.filter(channel => channel.type === 'voice').size}\nText Channels: ${message.guild.channels.filter(channel => channel.type === 'text').size}`)
