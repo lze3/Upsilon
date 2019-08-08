@@ -59,9 +59,10 @@ module.exports = class Status extends Command {
     }
 
     async run(message, { server, shorten }) {
-        const embedColor = message.member.colorRole ? message.member.colorRole.color : '#23E25D';
+        const member = message.member || message.guild.fetchMember(message.author);
+        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
 
-        // remove the command entererd by the user
+        // remove the command entered by the user
         message.delete();
 
         // Error Embed for both Players and Server information request query
