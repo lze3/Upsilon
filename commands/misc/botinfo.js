@@ -16,7 +16,8 @@ module.exports = class BotInfo extends Command {
     }
 
     run(message) {
-        const embedColor = message.member.colorRole ? message.member.colorRole.color : '#23E25D';
+        const member = message.member || message.guild.fetchMember(message.author);
+        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
         const embed = new RichEmbed()
             .setTitle(`${message.guild.me.user.username}#${message.guild.me.user.discriminator} Information`)
             .addField('⏵Connectivity', `Ping: ${this.client.ping}\nUptime: ${ms (this.client.uptime, { vosbose: true })}`)
