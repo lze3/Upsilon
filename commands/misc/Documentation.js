@@ -41,6 +41,5 @@ module.exports = class Docs extends Command {
         }
 
         return message.reply({ embed });
-
     }
 };
