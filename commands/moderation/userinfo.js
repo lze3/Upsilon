@@ -7,7 +7,7 @@ const gameStates = {
     1: 'Streaming',
     2: 'Listening',
     3: 'Watching'
-}
+};
 
 module.exports = class UserInfo extends Command {
     constructor(client) {
