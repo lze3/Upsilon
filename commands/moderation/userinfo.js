@@ -2,6 +2,13 @@ const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const moment = require('moment');
 
+const gameStates = {
+    0: 'Playing',
+    1: 'Streaming',
+    2: 'Listening',
+    3: 'Watching'
+}
+
 module.exports = class UserInfo extends Command {
     constructor(client) {
         super(client, {
@@ -42,7 +49,7 @@ module.exports = class UserInfo extends Command {
         if (nickname !== undefined) embed.addField('Nickname', nickname);
 
         // this is the user's status
-        const status = user.presence.status + (user.presence.game !== null ? ' playing ' + user.presence.game : '');
+        const status = user.presence.status + (user.presence.game !== null ? ' ' + gameStates[user.presence.game.type].toLowerCase() + ' ' + user.presence.game : '');
         if (user.presence !== null) embed.addField('Status', status, true);
 
         // this is the date at which the member joined the guild
