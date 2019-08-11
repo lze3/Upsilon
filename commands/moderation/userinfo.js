@@ -75,7 +75,6 @@ module.exports = class UserInfo extends Command {
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);
 
         for (let i = 0; i < Acknowledgements.length; i++) {
-            console.log(Acknowledgements[i].id);
             if (Acknowledgements[i].type === 'User') {
                 if (user.id === Acknowledgements[i].id) {
                     locAcknow[user.id].push(Acknowledgements[i].title);
@@ -118,7 +117,6 @@ module.exports = class UserInfo extends Command {
 
         console.log(locAcknow[user.id]);
         if (locAcknow[user.id].length > 0) {
-            console.log('they have acknowledgements...');
             embed.addField('❯ User Acknowledgements', locAcknow[user.id].map(title => '• ' + title));
         }
 
