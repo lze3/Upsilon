@@ -9,6 +9,35 @@ const gameStates = {
     3: 'Watching'
 };
 
+const Acknowledgements = [
+    {
+        id: '595789969965187072',
+        title: 'Bot Developer',
+        type: 'User'
+
+    },
+
+    {
+        id: '357842475328733186',
+        title: 'Bot Developer',
+        type: 'User'
+
+    },
+
+    {
+        id: '539450716629106698',
+        title: 'Server Administration',
+        type: 'Role'
+    },
+
+    {
+        id: '586026320786489364',
+        title: 'The Collective',
+        type: 'Role'
+    }
+
+];
+
 module.exports = class UserInfo extends Command {
     constructor(client) {
         super(client, {
@@ -35,44 +64,70 @@ module.exports = class UserInfo extends Command {
     run(message, { user }) {
         message.delete();
 
+        const locAcknow = [];
+
+        locAcknow[user.id] = [];
+
         // create the new embed object
         const embed = new RichEmbed();
 
         // get the member from the user
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);
 
+        for (let i = 0; i < Acknowledgements.length; i++) {
+            console.log(Acknowledgements[i].id);
+            if (Acknowledgements[i].type === 'User') {
+                if (user.id === Acknowledgements[i].id) {
+                    locAcknow[user.id].push(Acknowledgements[i].title);
+                }
+            }
+
+            if (Acknowledgements[i].type === 'Role') {
+                if (member.roles.has(Acknowledgements[i].id)) {
+                    locAcknow[user.id].push(Acknowledgements[i].title);
+                }
+            }
+
+        }
+
         embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL);
         embed.setThumbnail(user.avatarURL);
 
         // this is the username; will be undefined if they don't have one
         const nickname = user.nickname;
-        if (nickname !== undefined) embed.addField('Nickname', nickname);
+        if (nickname !== undefined) embed.addField('❯ Nickname', nickname);
 
         // this is the user's status
         const status = user.presence.status + (user.presence.game !== null ? ' ' + gameStates[user.presence.game.type].toLowerCase() + ' ' + user.presence.game : '');
-        if (user.presence !== null) embed.addField('Status', status, true);
+        if (user.presence !== null) embed.addField('❯ Status', status, true);
 
         // this is the date at which the member joined the guild
         const joinedAt = moment(member.joinedAt).format('ddd, MMM D, YYYY H:mm A');
-        embed.addField('Joined', joinedAt, true);
+        embed.addField('❯ Joined', joinedAt, true);
 
         // this is the date at which the account was created
         const createdAt = moment(user.createdAt).format('ddd, MMM D, YYYY H:mm A');
-        embed.addField('Registered', createdAt);
+        embed.addField('❯ Registered', createdAt);
 
         // the member's roles
         const amountOfRoles = member.roles.array().length - 1;
         const roles = amountOfRoles > 0 ?
             member.roles.map(role => role.name !== '@everyone' && role.name !== '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯' ? '<@&' + role.id + '>' : '').join(' ') :
             'This user doesn\'t have any roles.';
-        embed.addField(`Roles [${amountOfRoles}]`, roles);
+        embed.addField(`❯ Roles [${amountOfRoles}]`, roles);
+
+        console.log(locAcknow[user.id]);
+        if (locAcknow[user.id].length > 0) {
+            console.log('they have acknowledgements...');
+            embed.addField('❯ User Acknowledgements', locAcknow[user.id].map(title => '• ' + title));
+        }
 
         // the color of the embed
         embed.setColor(message.guild.me.colorRole.color);
         if (member.colorRole !== null) embed.setColor(member.colorRole.color);
 
         if (nickname !== undefined) {
-            embed.addField('Nickname', nickname);
+            embed.addField('❯ Nickname', nickname);
         }
 
         message.embed(embed)
