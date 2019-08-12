@@ -39,7 +39,7 @@ module.exports = class SoftBan extends Command {
 
         try {
             member.ban({
-                days: 31,
+                days: 7,
                 reason: reason
             });
 
