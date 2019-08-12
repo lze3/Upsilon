@@ -30,7 +30,8 @@ client.registry
         ['moderation', 'Commands to help moderators perform their tasks effectively.'],
         ['information', 'Commands that provide useful information to the user.'],
         ['admin', 'Commands to help administration give out information and perform their tasks more easily.'],
-        ['department', 'Commands that help Field Training Officers.']
+        ['department', 'Commands that help Field Training Officers.'],
+        ['administration', 'Commands for administration, involves game server <-> Discord.']
     ])
     .registerDefaultGroups()
     .registerDefaultCommands({
