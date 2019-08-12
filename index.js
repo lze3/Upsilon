@@ -1,4 +1,5 @@
 const { CommandoClient } = require('discord.js-commando');
+const { RichEmbed } = require('discord.js');
 const path = require('path');
 const colors = require('colors');
 
@@ -43,5 +44,7 @@ client.once('ready', () => {
 });
 
 client.on('error', console.error);
+
+client.on('warn', console.warn);
 
 client.login(process.env['Bot_Token']);
