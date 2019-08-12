@@ -1,5 +1,5 @@
 const { CommandoClient } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+// const { RichEmbed } = require('discord.js');
 const path = require('path');
 const colors = require('colors');
 
