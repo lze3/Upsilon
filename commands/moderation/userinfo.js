@@ -11,17 +11,15 @@ const gameStates = {
 
 const Acknowledgements = [
     {
-        id: '595789969965187072',
+        id: '607380065461993472',
         title: 'Bot Developer',
-        type: 'User'
-
+        type: 'Role'
     },
 
     {
-        id: '357842475328733186',
-        title: 'Bot Developer',
-        type: 'User'
-
+        id: '607380063264178186',
+        title: 'Game Developer',
+        type: 'Role'
     },
 
     {
