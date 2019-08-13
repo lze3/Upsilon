@@ -1,5 +1,7 @@
 const { Command } = require('discord.js-commando');
-let togState = require('../../index').backupLogs;
+const bup = require('../../config');
+
+let curState = bup.logging;
 
 module.exports = class ToggleLogs extends Command {
     constructor(client) {
@@ -17,13 +19,13 @@ module.exports = class ToggleLogs extends Command {
     }
 
     run(message) {
-        togState = !togState;
-        if (togState) {
+        bup.toggleLogs(!bup.logging);
+        curState = bup.backupLogs;
+        if (curState) {
             message.reply('I have started logging things now.');
         }
         else {
             message.reply('I have stopped logging things.');
         }
-
     }
 };

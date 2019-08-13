@@ -10,3 +10,5 @@ git-auto-puller/
 *.bat
 
 .vscode/
+
+config.js
