@@ -19,7 +19,7 @@ module.exports = class ToggleLogs extends Command {
     }
 
     run(message) {
-        bup.toggleLogs(!bup.logging);
+        bup.toggleLogging(!bup.logging);
         curState = bup.backupLogs;
         if (curState) {
             message.reply('I have started logging things now.');
