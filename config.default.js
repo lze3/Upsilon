@@ -16,6 +16,10 @@ module.exports = {
         member: '610876982359752714'
     },
 
+    /**
+     * Sets the state for Discord logging
+     * @param {boolean} state
+     */
     toggleLogging: function(state) {
         this.logging = state;
     }
