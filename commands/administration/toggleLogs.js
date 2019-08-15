@@ -1,8 +1,6 @@
 const { Command } = require('discord.js-commando');
 const bup = require('../../config');
 
-let curState = bup.logging;
-
 module.exports = class ToggleLogs extends Command {
     constructor(client) {
         super(client, {
@@ -19,8 +17,8 @@ module.exports = class ToggleLogs extends Command {
     }
 
     run(message) {
-        bup.toggleLogging(!bup.logging);
-        curState = bup.backupLogs;
+        const curState = bup.logging;
+        bup.toggleLogging(!curState);
         if (curState) {
             message.reply('I have started logging things now.');
         }
