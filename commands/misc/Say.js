@@ -21,6 +21,8 @@ module.exports = class Say extends Command {
     }
 
     run(message, { text }) {
+        message.delete();
+
         message.say(text);
     }
 };
