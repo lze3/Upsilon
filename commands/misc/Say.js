@@ -1,0 +1,26 @@
+const { Command } = require('discord.js-commando');
+
+module.exports = class Say extends Command {
+    constructor(client) {
+        super(client, {
+            name: 'say',
+            group: 'misc',
+            memberName: 'say',
+            description: 'Say a message as the bot.',
+            hidden: true,
+            guildOnly: true,
+            clientPermissions: ['KICK_MEMBERS'],
+            args: [
+                {
+                    key: 'text',
+                    prompt: 'What would you like to say?',
+                    type: 'string'
+                }
+            ]
+        });
+    }
+
+    run(message, { text }) {
+        message.say(text);
+    }
+};
