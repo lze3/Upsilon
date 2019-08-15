@@ -5,7 +5,6 @@ module.exports = class ToggleLogs extends Command {
     constructor(client) {
         super(client, {
             name: 'toglogs',
-            aliases: [],
             group: 'administration',
             memberName: 'toglogs',
             description: 'Toggles logging in case a log bot goes offline.',
@@ -17,9 +16,8 @@ module.exports = class ToggleLogs extends Command {
     }
 
     run(message) {
-        const curState = bup.logging;
-        bup.toggleLogging(!curState);
-        if (curState) {
+        bup.toggleLogging(!bup.logging);
+        if (bup.logging) {
             message.reply('I have started logging things now.');
         }
         else {
