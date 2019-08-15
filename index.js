@@ -98,5 +98,5 @@ client.on('channelCreate', channel => {
         .setColor(config.embedColors.success)
         .setTimestamp();
 
-    return client.channels.get(logChannels.channel).send(chCrEmbed);
+    return client.channels.get(logChannels.actions).send(chCrEmbed);
 });

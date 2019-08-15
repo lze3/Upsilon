@@ -20,7 +20,7 @@ module.exports = class BotInfo extends Command {
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
         const embed = new RichEmbed()
             .setTitle(`${message.guild.me.user.username}#${message.guild.me.user.discriminator} Information`)
-            .addField('❯ Connectivity', `Ping: ${this.client.ping}\nUptime: ${ms (this.client.uptime, { vosbose: true })}`)
+            .addField('❯ Connectivity', `Ping: ${Math.floor(this.client.ping)}ms\nUptime: ${ms (this.client.uptime, { vosbose: true })}`)
             .addField('❯ Resources', `RAM Usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + 'MB'}`, true)
             .setColor(embedColor);
 

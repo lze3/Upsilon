@@ -11,9 +11,8 @@ module.exports = {
         msgEdit: '#58C3EB'
     },
     logChannels: {
-        actions: '610681448436858880',
-        channel: '610877037078511636',
-        member: '610876982359752714'
+        actions: '611293519302230047',
+        member: '539493323287691275'
     },
 
     /**
