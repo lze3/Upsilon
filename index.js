@@ -1,11 +1,14 @@
 const { CommandoClient } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
 const path = require('path');
 const colors = require('colors');
 const config = require('./config');
+<<<<<<< Updated upstream
 const request = require('request');
 
 const logChannels = config.logChannels;
+=======
+const LogsHandler = require('./utils/LogsHandler');
+>>>>>>> Stashed changes
 
 require('dotenv').config({
     path: __dirname + '/.env'
@@ -115,48 +118,57 @@ client.on('warn', console.warn);
 
 client.login(process.env['Bot_Token']);
 
-client.on('messageDelete', message => {
-    if (!config.logging) return;
-    if (!message.guild) return;
-    if (message.author.bot) return;
-
-    const delEmbed = new RichEmbed()
-        .setAuthor(message.author.tag, message.author.avatarURL)
-        .setDescription(`**Message sent in ${message.channel} by ${message.author} was deleted**\n` + message.content)
-        .setFooter(`ID: ${message.id}`)
-        .setColor(config.embedColors.msgDelete)
-        .setTimestamp();
-
-    return client.channels.get(logChannels.actions).send(delEmbed);
+// Logging System
+// Messages
+client.on('messageDelete', async message => {
+    LogsHandler.messageDelete(message);
 });
-
-client.on('messageUpdate', (oldMessage, newMessage) => {
-    if (!config.logging) return;
-    if (!oldMessage.guild) return;
-    if (oldMessage.author.bot) return;
-
-    const editEmbed = new RichEmbed()
-        .setAuthor(newMessage.author.tag, newMessage.author.avatarURL)
-        .setDescription(`**Message edited in ${newMessage.channel}** | [Go to Message](${newMessage.url})`)
-        .addField('Before', oldMessage.content)
-        .addField('After', newMessage.content)
-        .setColor(config.embedColors.msgEdit)
-        .setFooter(`ID: ${newMessage.id}`)
-        .setTimestamp();
-
-    return client.channels.get(logChannels.actions).send(editEmbed);
+client.on('messageUpdate', async (newMessage, oldMessage) => {
+    LogsHandler.messageUpdate(newMessage, oldMessage);
 });
-
-client.on('channelCreate', channel => {
-    if (!config.logging) return;
-
-    const chCrEmbed = new RichEmbed()
-        .setAuthor(channel.client.user.tag, channel.client.user.avatarURL)
-        .setDescription(`**Channel created by ${channel.client.user.tag}**`)
-        .addField('Name', channel.name)
-        .addField('ID', channel.id)
-        .setColor(config.embedColors.success)
-        .setTimestamp();
-
-    return client.channels.get(logChannels.actions).send(chCrEmbed);
+client.on('messageReactionAdd', async (messageReaction, user) => {
+    LogsHandler.messageReactionAdd(messageReaction, user);
+});
+client.on('messageReactionRemove', async (messageReaction, user) => {
+    LogsHandler.messageReactionRemove(messageReaction, user);
+});
+client.on('messageReactionRemoveAll', async message => {
+    LogsHandler.messageReactionRemoveAll(message);
+});
+// Channels
+client.on('channelCreate', async channel => {
+    LogsHandler.channelCreate(channel);
+});
+client.on('channelDelete', async channel => {
+    LogsHandler.channelDelete(channel);
+});
+client.on('channelPinsUpdate', async (channel, time) => {
+    LogsHandler.channelPinsUpdate(channel, time);
+});
+client.on('channelUpdate', async (oldChannel, newChannel) => {
+    LogsHandler.channelUpdate(oldChannel, newChannel);
+});
+// Bans
+client.on('guildBanAdd', async (guild, user) => {
+    LogsHandler.guildBanAdd(guild, user);
+});
+client.on('guildBanRemove', async (guild, user) => {
+    LogsHandler.guildBanRemove(guild, user);
+});
+// Members
+client.on('guildMemberAdd', async member => {
+    LogsHandler.guildMemberAdd(member);
+});
+client.on('guildMemberRemove', async member => {
+    LogsHandler.guildMemberRemove(member);
+});
+// Roles
+client.on('roleCreate', async role => {
+    LogsHandler.roleCreate(role);
+});
+client.on('roleDelete', async role => {
+    LogsHandler.roleDelete(role);
+});
+client.on('roleUpdate', async (oldRole, newRole) => {
+    LogsHandler.roleUpdate(oldRole, newRole);
 });
