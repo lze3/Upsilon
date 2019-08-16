@@ -118,52 +118,67 @@ client.login(process.env['Bot_Token']);
 client.on('messageDelete', async message => {
     LogsHandler.messageDelete(message);
 });
+
 client.on('messageUpdate', async (newMessage, oldMessage) => {
     LogsHandler.messageUpdate(newMessage, oldMessage);
 });
+
 client.on('messageReactionAdd', async (messageReaction, user) => {
     LogsHandler.messageReactionAdd(messageReaction, user);
 });
+
 client.on('messageReactionRemove', async (messageReaction, user) => {
     LogsHandler.messageReactionRemove(messageReaction, user);
 });
+
 client.on('messageReactionRemoveAll', async message => {
     LogsHandler.messageReactionRemoveAll(message);
 });
+
 // Channels
 client.on('channelCreate', async channel => {
     LogsHandler.channelCreate(channel);
 });
+
 client.on('channelDelete', async channel => {
     LogsHandler.channelDelete(channel);
 });
+
 client.on('channelPinsUpdate', async (channel, time) => {
     LogsHandler.channelPinsUpdate(channel, time);
 });
+
 client.on('channelUpdate', async (oldChannel, newChannel) => {
     LogsHandler.channelUpdate(oldChannel, newChannel);
 });
+
 // Bans
 client.on('guildBanAdd', async (guild, user) => {
     LogsHandler.guildBanAdd(guild, user);
 });
+
 client.on('guildBanRemove', async (guild, user) => {
     LogsHandler.guildBanRemove(guild, user);
 });
+
 // Members
 client.on('guildMemberAdd', async member => {
     LogsHandler.guildMemberAdd(member);
 });
+
 client.on('guildMemberRemove', async member => {
     LogsHandler.guildMemberRemove(member);
 });
+
 // Roles
 client.on('roleCreate', async role => {
     LogsHandler.roleCreate(role);
 });
+
 client.on('roleDelete', async role => {
     LogsHandler.roleDelete(role);
 });
+
 client.on('roleUpdate', async (oldRole, newRole) => {
     LogsHandler.roleUpdate(oldRole, newRole);
 });
