@@ -2,13 +2,8 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const colors = require('colors');
 const config = require('./config');
-<<<<<<< Updated upstream
-const request = require('request');
-
-const logChannels = config.logChannels;
-=======
 const LogsHandler = require('./utils/LogsHandler');
->>>>>>> Stashed changes
+const request = require('request');
 
 require('dotenv').config({
     path: __dirname + '/.env'
