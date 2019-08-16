@@ -68,9 +68,7 @@ module.exports = class Status extends Command {
             timeout: 2000
         }, function(error, _, playersBody) {
             if(error) {
-                return message.say(message.author, {
-                    embed: serverDownEmbed
-                });
+                return message.reply({ embed: serverDownEmbed });
             }
 
             // server information
@@ -78,9 +76,7 @@ module.exports = class Status extends Command {
                 timeout: 2000
             }, function(_error, __, serverBody) {
                 if (_error) {
-                    return message.say(message.author, {
-                        embed: serverDownEmbed
-                    });
+                    return message.reply({ embed: serverDownEmbed });
                 }
 
                 // Try function for both ServerData Parser and playersData Parser
@@ -102,9 +98,11 @@ module.exports = class Status extends Command {
                     .setColor(embedColor)
                     .setTimestamp();
 
-                return message.say(message.author, {
-                    embed: embed
-                });
+                if (serverData.vars.rpZone !== undefined) {
+                    embed.addField('AOP', serverData.vars.rpZone);
+                }
+
+                return message.reply({ embed: embed });
             });
         });
     }
