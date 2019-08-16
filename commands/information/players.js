@@ -109,8 +109,8 @@ module.exports = class Status extends Command {
                     .setColor(embedColor)
                     .setTimestamp();
 
-                if (serverData.vars.rpZone !== undefined) {
-                    embed.addField('AOP', serverData.vars.rpZone);
+                if (serverData.vars.rpArea !== undefined) {
+                    embed.addField('AOP', serverData.vars.rpArea);
                 }
 
                 return message.reply({ embed: embed });
