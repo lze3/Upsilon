@@ -246,9 +246,10 @@ module.exports.roleDelete = async (role) => {
     return role.guild.channels.get(logChannels.actions).send(embed);
 };
 
-module.exports.roleUpdate = async (oldRole, newRole) => {
+module.exports.roleUpdate = async (oldRole) => {
     roleCounter++;
-    let roleCounterTester = roleCounter/2;
+    const roleCounterTester = roleCounter / 2;
+    if(roleCounterTester.toString().includes('.')) return;
     const Audit = await oldRole.guild.fetchAuditLogs({ type:'ROLE_UPDATE' });
     const audit = Audit.entries.first();
     const changes = Audit.entries.first().changes;
