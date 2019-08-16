@@ -113,7 +113,6 @@ module.exports = class UserInfo extends Command {
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amountOfRoles}]`, roles);
 
-        console.log(locAcknow[user.id]);
         if (locAcknow[user.id].length > 0) {
             embed.addField('❯ User Acknowledgements', locAcknow[user.id].map(title => '• ' + title));
         }
@@ -125,6 +124,8 @@ module.exports = class UserInfo extends Command {
         if (nickname !== undefined) {
             embed.addField('❯ Nickname', nickname);
         }
+
+        embed.setFooter('Requested by ' + message.author.tag);
 
         message.embed(embed)
             .then(msg => msg.delete(30000));
