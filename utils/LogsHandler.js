@@ -10,50 +10,54 @@ module.exports.messageDelete = (message) => {
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.msgDelete)
         .setAuthor(message.author.tag, message.author.avatarURL)
-        .setDescription(`**Message sent by ${message.author} deleted in ${message.channel}\n Message Content: **\`\`${message.content}\`\``)
+        .setDescription(`**Message sent by ${message.author} was deleted in ${message.channel}\n Message Content: **\`\`${message.content}\`\``)
         .setFooter(`AUTHOR ID: ${message.author.id} | MESSAGE ID: ${message.id}`)
         .setTimestamp();
     return message.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.messageUpdate = (oldMessage, newMessage) => {
     if(oldMessage.author.bot) return;
     if(oldMessage.content.toUpperCase() === newMessage.content.toUpperCase()) return;
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.msgEdit)
         .setAuthor(oldMessage.author.tag, oldMessage.author.avatarURL)
-        .setDescription(`**Message sent by ${oldMessage.author} edited in ${oldMessage.channel}  \n  [jump to message](${newMessage.url})\n**`)
+        .setDescription(`**Message sent by ${oldMessage.author} was edited in ${oldMessage.channel}  \n  [jump to message](${newMessage.url})\n**`)
         .addField('⇢ Old Message', `\`\`${oldMessage}\`\``)
         .addField('⇢ New Message', `\`\`${newMessage}\`\``)
         .setFooter(`AUTHOR ID: ${oldMessage.author.id} | MESSAGE ID: ${oldMessage.id}`)
         .setTimestamp();
     return oldMessage.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.messageReactionAdd = (messageReaction, user) => {
     if(user.bot) return;
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(user.tag, user.avatarURL)
-        .setDescription(`**Message sent by ${messageReaction.message.author} reacted by ${user} in ${messageReaction.message.channel}\n  [jump to message](${messageReaction.message.url})\n Reaction: **${messageReaction.emoji}`)
+        .setDescription(`**Message sent by ${messageReaction.message.author} was reacted by ${user} in ${messageReaction.message.channel}\n  [jump to message](${messageReaction.message.url})\n Reaction: **${messageReaction.emoji}`)
         .setFooter(`AUTHOR ID: ${user.id} | MESSAGE ID: ${messageReaction.message.id}`)
         .setTimestamp();
     return messageReaction.message.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.messageReactionRemove = (messageReaction, user) => {
     if(user.bot) return;
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(user.tag, user.avatarURL)
-        .setDescription(`**Reaction by ${user} deleted in ${messageReaction.message.channel}\n  [jump to message](${messageReaction.message.url})\n Reaction: **${messageReaction.emoji}`)
+        .setDescription(`**Reaction by ${user} was deleted in ${messageReaction.message.channel}\n  [jump to message](${messageReaction.message.url})\n Reaction: **${messageReaction.emoji}`)
         .setFooter(`AUTHOR ID: ${user.id} | MESSAGE ID: ${messageReaction.message.id}`)
         .setTimestamp();
     return messageReaction.message.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.messageReactionRemoveAll = message => {
     if(message.author.bot) return;
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(message.author.tag, message.author.avatarURL)
-        .setDescription(`**Message sent by ${message.author} cleared from reactions in ${message.channel}\n  [jump to message](${message.url})**`)
+        .setDescription(`**Message sent by ${message.author} was cleared from reactions in ${message.channel}\n  [jump to message](${message.url})**`)
         .setFooter(`AUTHOR ID: ${message.author.id} | MESSAGE ID: ${message.id}`)
         .setTimestamp();
     return message.guild.channels.get(logChannels.actions).send(embed);
@@ -66,7 +70,7 @@ module.exports.channelCreate = async (channel) => {
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(audit.executor.username + '#' + audit.executor.discriminator, channel.guild.members.get(audit.executor.id).user.avatarURL)
-        .setDescription(`**A **\`\`#${channel.name}\`\`** ${channel.type === 'category'? channel.type: channel.type + ' channel' } has been created by ${channel.guild.members.get(audit.executor.id)} **`)
+        .setDescription(`**A **\`\`#${channel.name}\`\`** ${channel.type === 'category'? channel.type: channel.type + ' channel' } was created by ${channel.guild.members.get(audit.executor.id)} **`)
         .setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${channel.id}`)
         .setTimestamp();
     return channel.guild.channels.get(logChannels.actions).send(embed);
@@ -77,7 +81,7 @@ module.exports.channelDelete = async (channel) => {
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(audit.executor.username + '#' + audit.executor.discriminator, channel.guild.members.get(audit.executor.id).user.avatarURL)
-        .setDescription(`**A **\`\`#${channel.name}\`\`** ${channel.type} channel has been deleted by ${channel.guild.members.get(audit.executor.id)} **`)
+        .setDescription(`**A **\`\`#${channel.name}\`\`** ${channel.name}\`\`** ${channel.type === 'category'? channel.type: channel.type + ' channel' } was deleted by ${channel.guild.members.get(audit.executor.id)} **`)
         .setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${channel.id}`)
         .setTimestamp();
     return channel.guild.channels.get(logChannels.actions).send(embed);
@@ -104,7 +108,7 @@ module.exports.channelUpdate = async (oldChannel, newChannel) => {
         const audit = Audit.entries.first();
         const changes = Audit.entries.first().changes;
         embed.setAuthor(audit.executor.username + '#' + audit.executor.discriminator, newChannel.guild.members.get(audit.executor.id).user.avatarURL);
-        embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\`! **`);
+        embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\`! **`);
         embed.setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldChannel.id}`);
         embed.setColor(embedColor.action);
         changes.forEach(change => embed.addField('⇢ ' + change.key.toString().split('_').join(' '), `**Was:** ${change.old}\n**Now:** ${change.new}`, true));
@@ -114,10 +118,10 @@ module.exports.channelUpdate = async (oldChannel, newChannel) => {
         const audit = Audit1.entries.first();
         embed.setAuthor(audit.executor.username + '#' + audit.executor.discriminator, newChannel.guild.members.get(audit.executor.id).user.avatarURL);
         if(!audit.extra.user) {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(audit.extra.id)}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(audit.extra.id)}! **`);
         }
         else {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated a permission overwrite in the  ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has updated a permission overwrite in the  ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
         }
         embed.setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldChannel.id}`);
         embed.setColor(embedColor.action);
@@ -127,10 +131,10 @@ module.exports.channelUpdate = async (oldChannel, newChannel) => {
         const audit = Audit2.entries.first();
         embed.setAuthor(audit.executor.username + '#' + audit.executor.discriminator, newChannel.guild.members.get(audit.executor.id).user.avatarURL);
         if(!audit.extra.user) {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has created a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(audit.extra.id)}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has created a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(audit.extra.id)}! **`);
         }
         else {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has created a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has created a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
         }
         embed.setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldChannel.id}`);
         embed.setColor(embedColor.action);
@@ -140,10 +144,10 @@ module.exports.channelUpdate = async (oldChannel, newChannel) => {
         const audit = Audit3.entries.first();
         embed.setAuthor(audit.executor.username + '#' + audit.executor.discriminator, newChannel.guild.members.get(audit.executor.id).user.avatarURL);
         if(!audit.extra.user) {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has removed a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(oldChannel.guild.roles.get(audit.extra.id))}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has removed a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.roles.get(oldChannel.guild.roles.get(audit.extra.id))}! **`);
         }
         else {
-            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has removed a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' }\`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
+            embed.setDescription(`**${oldChannel.guild.members.get(audit.executor.id)} has removed a permission overwrite in the ${oldChannel.type === 'category'? oldChannel.type: oldChannel.type + ' channel' } \`\`${oldChannel.name}\`\` channel for ${oldChannel.guild.members.get(audit.extra.user.id)}! **`);
         }
         embed.setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldChannel.id}`);
         embed.setColor(embedColor.action);
@@ -167,6 +171,7 @@ module.exports.guildBanAdd = async (guild, user) => {
         .setTimestamp();
     return guild.channels.get(logChannels.member).send(embed);
 };
+
 module.exports.guildBanRemove = async (guild, user) => {
     const Audit = await guild.fetchAuditLogs({ type:'MEMBER_BAN_REMOVE' });
     if(Audit.entries.first().target.id !== user.id) return;
@@ -179,6 +184,7 @@ module.exports.guildBanRemove = async (guild, user) => {
         .setTimestamp();
     return guild.channels.get(logChannels.member).send(embed);
 };
+
 // Members
 module.exports.guildMemberAdd = async (member) => {
     const embed = new Discord.RichEmbed()
@@ -189,6 +195,7 @@ module.exports.guildMemberAdd = async (member) => {
         .setTimestamp();
     return member.guild.channels.get(logChannels.member).send(embed);
 };
+
 module.exports.guildMemberRemove = async (member) => {
     const Audit = await member.guild.fetchAuditLogs({ type:'MEMBER_KICK' });
     if(Audit.entries.first().createdTimestamp + 500 > nau) {
@@ -225,6 +232,7 @@ module.exports.roleCreate = async (role) => {
         .setTimestamp();
     return role.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.roleDelete = async (role) => {
     const Audit = await role.guild.fetchAuditLogs({ type:'ROLE_DELETE' });
     const audit = Audit.entries.first();
@@ -236,6 +244,7 @@ module.exports.roleDelete = async (role) => {
         .setTimestamp();
     return role.guild.channels.get(logChannels.actions).send(embed);
 };
+
 module.exports.roleUpdate = async (oldrole) => {
     const Audit = await oldrole.guild.fetchAuditLogs({ type:'ROLE_UPDATE' });
     const audit = Audit.entries.first();
