@@ -81,6 +81,11 @@ setInterval(() => {
                 }
             }
         }
+        else {
+            client.user.setActivity('Server offline :(', {
+                type: 'WATCHING'
+            });
+        }
     }
 }, 3000);
 
