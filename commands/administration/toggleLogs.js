@@ -11,7 +11,15 @@ module.exports = class ToggleLogs extends Command {
             userPermissions: ['ADMINISTRATOR'],
             clientPermissions: ['EMBED_LINKS'],
             guildOnly: true,
-            hidden: true
+            hidden: true,
+            args: [
+                {
+                    key: 'state',
+                    prompt: 'Enable or disable logging?',
+                    type: 'boolean',
+                    default: !bup.logging
+                }
+            ]
         });
     }
 
