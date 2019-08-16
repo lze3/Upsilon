@@ -3,6 +3,7 @@ const config = require('../config');
 const logChannels = config.logChannels;
 const embedColor = config.embedColors;
 const nau = Date.now();
+let roleCounter = 0;
 
 // Messages
 module.exports.messageDelete = (message) => {
@@ -245,14 +246,17 @@ module.exports.roleDelete = async (role) => {
     return role.guild.channels.get(logChannels.actions).send(embed);
 };
 
-module.exports.roleUpdate = async (oldrole) => {
-    const Audit = await oldrole.guild.fetchAuditLogs({ type:'ROLE_UPDATE' });
+module.exports.roleUpdate = async (oldRole) => {
+    roleCounter++;
+    const roleCounterTester = roleCounter / 2;
+    if(roleCounterTester.toString().includes('.')) return;
+    const Audit = await oldRole.guild.fetchAuditLogs({ type:'ROLE_UPDATE' });
     const audit = Audit.entries.first();
     const changes = Audit.entries.first().changes;
     const embed = new Discord.RichEmbed()
-        .setAuthor(oldrole.guild.members.get(audit.executor.id).user.tag, oldrole.guild.members.get(audit.executor.id).user.avatarURL)
-        .setDescription(`**${oldrole.guild.members.get(audit.executor.id)} has updated the ${oldrole} role!**`)
-        .setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldrole.id}`)
+        .setAuthor(oldRole.guild.members.get(audit.executor.id).user.tag, oldRole.guild.members.get(audit.executor.id).user.avatarURL)
+        .setDescription(`**${oldRole.guild.members.get(audit.executor.id)} has updated the ${oldRole} role!**`)
+        .setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldRole.id}`)
         .setColor(embedColor.action);
     changes.forEach(change => {
         if(change.key === 'color') {
@@ -276,5 +280,5 @@ module.exports.roleUpdate = async (oldrole) => {
             embed.addField('⇢ ' + change.key.toString().split('_').join(' '), `**Was:** ${change.old}\n**Now:** ${change.new}`, true);
         }
     });
-    return oldrole.guild.channels.get(logChannels.actions).send(embed);
+    return oldRole.guild.channels.get(logChannels.actions).send(embed);
 };
