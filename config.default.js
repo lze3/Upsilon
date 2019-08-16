@@ -21,5 +21,10 @@ module.exports = {
      */
     toggleLogging: function(state) {
         this.logging = state;
-    }
+    },
+
+    /**
+     * Displays player count on bot status
+     */
+    plyCountOnStatus: true
 };
