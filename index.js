@@ -164,6 +164,6 @@ client.on('roleCreate', async role => {
 client.on('roleDelete', async role => {
     LogsHandler.roleDelete(role);
 });
-client.on('roleUpdate', async (oldRole, newRole) => {
+client.on('roleUpdate', (oldRole, newRole) => {
     LogsHandler.roleUpdate(oldRole, newRole);
 });
