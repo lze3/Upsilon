@@ -116,69 +116,85 @@ client.login(process.env['Bot_Token']);
 // Logging System
 // Messages
 client.on('messageDelete', async message => {
+    if (!config.logging) return;
     LogsHandler.messageDelete(message);
 });
 
 client.on('messageUpdate', async (newMessage, oldMessage) => {
+    if (!config.logging) return;
     LogsHandler.messageUpdate(newMessage, oldMessage);
 });
 
 client.on('messageReactionAdd', async (messageReaction, user) => {
+    if (!config.logging) return;
     LogsHandler.messageReactionAdd(messageReaction, user);
 });
 
 client.on('messageReactionRemove', async (messageReaction, user) => {
+    if (!config.logging) return;
     LogsHandler.messageReactionRemove(messageReaction, user);
 });
 
 client.on('messageReactionRemoveAll', async message => {
+    if (!config.logging) return;
     LogsHandler.messageReactionRemoveAll(message);
 });
 
 // Channels
 client.on('channelCreate', async channel => {
+    if (!config.logging) return;
     LogsHandler.channelCreate(channel);
 });
 
 client.on('channelDelete', async channel => {
+    if (!config.logging) return;
     LogsHandler.channelDelete(channel);
 });
 
 client.on('channelPinsUpdate', async (channel, time) => {
+    if (!config.logging) return;
     LogsHandler.channelPinsUpdate(channel, time);
 });
 
 client.on('channelUpdate', async (oldChannel, newChannel) => {
+    if (!config.logging) return;
     LogsHandler.channelUpdate(oldChannel, newChannel);
 });
 
 // Bans
 client.on('guildBanAdd', async (guild, user) => {
+    if (!config.logging) return;
     LogsHandler.guildBanAdd(guild, user);
 });
 
 client.on('guildBanRemove', async (guild, user) => {
+    if (!config.logging) return;
     LogsHandler.guildBanRemove(guild, user);
 });
 
 // Members
 client.on('guildMemberAdd', async member => {
+    if (!config.logging) return;
     LogsHandler.guildMemberAdd(member);
 });
 
 client.on('guildMemberRemove', async member => {
+    if (!config.logging) return;
     LogsHandler.guildMemberRemove(member);
 });
 
 // Roles
 client.on('roleCreate', async role => {
+    if (!config.logging) return;
     LogsHandler.roleCreate(role);
 });
 
 client.on('roleDelete', async role => {
+    if (!config.logging) return;
     LogsHandler.roleDelete(role);
 });
 
 client.on('roleUpdate', async (oldRole, newRole) => {
+    if (!config.logging) return;
     LogsHandler.roleUpdate(oldRole, newRole);
 });
