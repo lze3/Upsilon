@@ -59,7 +59,7 @@ setInterval(() => {
         request.get('http://149.56.241.128:30123/players.json', {
             timeout: 2000
         }, function(pError, _, pBody) {
-            if (pError) throw pError;
+            if (pError) console.log(pError);
             try {
                 playerData = JSON.parse(pBody);
             }
@@ -97,7 +97,7 @@ setInterval(() => {
 request.get('http://149.56.241.128:30123/info.json', {
     timeout: 2000
 }, function(error, _, body) {
-    if (error) throw error;
+    if (error) console.log(error.stack);
     try {
         serverData = JSON.parse(body);
     }
