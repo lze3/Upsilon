@@ -54,7 +54,7 @@ client.once('ready', () => {
 
 // This checks server status every 3000msec
 let i = 0;
-setInterval(() => {
+const cor = setInterval(() => {
     if (config.plyCountOnStatus) {
         request.get('http://149.56.241.128:30123/players.json', {
             timeout: 2000
@@ -86,6 +86,7 @@ setInterval(() => {
                 client.user.setActivity('Server offline :(', {
                     type: 'WATCHING'
                 });
+                clearInterval(cor);
             }
             else {
                 client.user.setActivity('Obtaining server information...');
