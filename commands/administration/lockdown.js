@@ -36,7 +36,9 @@ module.exports = class lockdown extends Command {
         });
     }
 
-    run(message, { category, reason }) {
+    run(message, { category, reason, end }) {
+        message.delete();
+
         if (category.type !== 'category') {
             return message.reply('you need to provide a category to lock.');
         }
@@ -44,8 +46,8 @@ module.exports = class lockdown extends Command {
         const children = category.children;
 
         children.forEach(child => {
-            child.overwritePermissions('@everyone', {
-                SEND_MESSAGES: 'false'
+            child.overwritePermissions(message.guild.defaultRole, {
+                SEND_MESSAGES: end
             });
 
             console.log('Locked channel [ ' + child.name + ' ].');
@@ -53,7 +55,7 @@ module.exports = class lockdown extends Command {
 
         const embed = new RichEmbed()
             .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
-            .setDescription(`Category ${category.name} has been locked.`)
+            .setDescription(`Category ${category.name} has been ${end ? 'unlocked' : 'locked'}.`)
             .setColor(config.embedColors.action)
             .setTimestamp();
 
@@ -61,6 +63,9 @@ module.exports = class lockdown extends Command {
             embed.addField('Reason', reason);
         }
 
-        this.client.channels.find(logC => logC.id === config.logChannels.channel).send({ embed: embed });
+
+        this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
+        message.reply(`I ${end ? 'unlocked' : 'locked'} the \`${category.name}\` category for you.`);
+
     }
 };
