@@ -59,7 +59,7 @@ const cor = setInterval(() => {
         request.get('http://149.56.241.128:30123/players.json', {
             timeout: 2000
         }, function(pError, _, pBody) {
-            if (pError) console.log(pError);
+            if (pError) console.log(pError.stack);
             try {
                 playerData = JSON.parse(pBody);
             }
