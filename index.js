@@ -55,7 +55,7 @@ client.once('ready', () => {
 // This checks server status every 3000msec
 let i = 0;
 const cor = setInterval(() => {
-    if (config.plyCountOnStatus) {
+    if (typeof config.plyCountOnStatus === 'boolean') {
         request.get('http://149.56.241.128:30123/players.json', {
             timeout: 2000
         }, function(pError, _, pBody) {
@@ -93,20 +93,25 @@ const cor = setInterval(() => {
             }
         }
     }
+    else if (typeof config.plyCountOnStatus === 'string') {
+        client.user.setActivity(config.plyCountOnStatus);
+    }
 }, 3000);
 
-request.get('http://149.56.241.128:30123/info.json', {
-    timeout: 2000
-}, function(error, _, body) {
-    if (error) console.log(error.stack);
-    try {
-        serverData = JSON.parse(body);
-    }
-    catch(err) {
-        serverData = {};
-        console.log(err.stack);
-    }
-});
+if (typeof config.plyCountOnStatus === 'boolean') {
+    request.get('http://149.56.241.128:30123/info.json', {
+        timeout: 2000
+    }, function(error, _, body) {
+        if (error) console.log(error.stack);
+        try {
+            serverData = JSON.parse(body);
+        }
+        catch(err) {
+            serverData = {};
+            console.log(err.stack);
+        }
+    });
+}
 
 client.on('error', console.error);
 
