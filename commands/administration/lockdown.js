@@ -49,8 +49,6 @@ module.exports = class lockdown extends Command {
             child.overwritePermissions(message.guild.defaultRole, {
                 SEND_MESSAGES: end
             });
-
-            console.log('Locked channel [ ' + child.name + ' ].');
         });
 
         const embed = new RichEmbed()
