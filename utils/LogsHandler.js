@@ -36,7 +36,7 @@ module.exports.messageReactionAdd = (messageReaction, user) => {
     const embed = new Discord.RichEmbed()
         .setColor(embedColor.action)
         .setAuthor(user.tag, user.avatarURL)
-        .setDescription(`**Message sent by ${messageReaction.message.author} was reacted by ${user} in ${messageReaction.message.channel} | [Jump to Message](${messageReaction.message.url})\nReaction: **${messageReaction.emoji}`)
+        .setDescription(`**Message sent by ${messageReaction.message.author} was reacted to by ${user} in ${messageReaction.message.channel} | [Jump to Message](${messageReaction.message.url})\nReaction: **${messageReaction.emoji}`)
         .setFooter(`User ID: ${user.id} | Message ID: ${messageReaction.message.id}`)
         .setTimestamp();
     return messageReaction.message.guild.channels.get(logChannels.actions).send(embed);
@@ -99,12 +99,12 @@ module.exports.channelPinsUpdate = async (channel) => {
 
 module.exports.channelUpdate = async (oldChannel, newChannel) => {
     const timeTriggered = nau;
-    const embed = new Discord.RichEmbed();
+    const embed = new Discord.RichEmbed()
+        .setTimestamp();
     const Audit = await oldChannel.guild.fetchAuditLogs({ type:'CHANNEL_UPDATE' });
     const Audit1 = await oldChannel.guild.fetchAuditLogs({ type:'CHANNEL_OVERWRITE_UPDATE' });
     const Audit2 = await oldChannel.guild.fetchAuditLogs({ type:'CHANNEL_OVERWRITE_CREATE' });
     const Audit3 = await oldChannel.guild.fetchAuditLogs({ type:'CHANNEL_OVERWRITE_DELETE' });
-    // if(!Audit.entries.first() && !Audit1.entries.first() && !Audit2.entries.first() && !Audit3.entries.first()) return;
     if(Audit.entries.first() && Audit.entries.first().createdTimestamp + 250 > timeTriggered) {
         const audit = Audit.entries.first();
         const changes = Audit.entries.first().changes;
@@ -257,7 +257,8 @@ module.exports.roleUpdate = async (oldRole) => {
         .setAuthor(oldRole.guild.members.get(audit.executor.id).user.tag, oldRole.guild.members.get(audit.executor.id).user.avatarURL)
         .setDescription(`**${oldRole.guild.members.get(audit.executor.id)} has updated the ${oldRole} role!**`)
         .setFooter(`EXECUTOR ID: ${audit.executor.id} | CHANNEL ID: ${oldRole.id}`)
-        .setColor(embedColor.action);
+        .setColor(embedColor.action)
+        .setTimestamp();
     changes.forEach(change => {
         if(change.key === 'color') {
             let changee;
