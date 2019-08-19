@@ -49,7 +49,6 @@ client.registry
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`.success);
     console.log(`Prefix is set to: ${prefix}`.debug);
-
 });
 
 // This checks server status every 3000msec
