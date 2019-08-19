@@ -35,7 +35,7 @@ module.exports = class Announce extends Command {
     }
 
     run(message, { announcement }) {
-        const deliminator = announcement.split(/title: (.+) \|/);
+        const deliminator = announcement.split(/ +\| +/);
 
         message.delete();
 
@@ -46,9 +46,9 @@ module.exports = class Announce extends Command {
             .setFooter(message.member.highestRole.name)
             .setTimestamp();
 
-        if (deliminator[1] !== undefined) {
-            embed.setTitle(deliminator[1].replace('title: ', ''));
-            embed.setDescription(announcement.replace(`title: ${deliminator[1]} |`, ''));
+        if (deliminator[0] !== undefined) {
+            embed.setTitle(deliminator[0]);
+            embed.setDescription(announcement.replace(`${deliminator[0]} |`, ''));
         }
 
         message.say(embed);
