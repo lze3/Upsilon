@@ -9,11 +9,10 @@ module.exports = class lockdown extends Command {
             aliases: ['unlock', 'uld'],
             group: 'administration',
             memberName: 'unlockdown',
-            description: 'unLocks a text channel or all channel of a category.',
+            description: 'Unlocks a text channel or all channels in a category.',
             userPermissions: ['MANAGE_CHANNELS'],
             clientPermissions: ['MANAGE_CHANNELS'],
-            guildOnly: null,
-            hidden: null,
+            guildOnly: true,
             args: [
                 {
                     key: 'channel',
@@ -35,11 +34,13 @@ module.exports = class lockdown extends Command {
         if (channel.type === 'category') {
             const children = channel.children;
             children.forEach(child => {
-                if(child.type === 'voice') return;
+                if(child.type === 'voice') return message.reply('I cannot unlock that channel, it is a voice channel!');
+                console.log(child.permissionsFor(_role).FLAGS);
                 child.overwritePermissions(_role, {
                     SEND_MESSAGES: null
                 });
                 console.log('Unlocked channel [ ' + child.name + ' ].');
+                console.log(child);
                 child.send('🔓 This channel was locked by ' + message.member.displayName);
             });
             const embed = new RichEmbed()
@@ -48,7 +49,7 @@ module.exports = class lockdown extends Command {
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
-            this.client.channels.find(logC => logC.id === config.logChannels.channel).send({ embed: embed });
+            this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
         }
         else if (channel.type === 'text') {
             channel.overwritePermissions(_role, {
@@ -61,7 +62,7 @@ module.exports = class lockdown extends Command {
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
-            this.client.channels.find(logC => logC.id === config.logChannels.channel).send({ embed: embed });
+            this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
             return message.guild.channels.get(channel.id).send('🔓 This channel was unlocked by ' + message.member.displayName);
 
         }

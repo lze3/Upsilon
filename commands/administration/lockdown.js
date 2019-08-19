@@ -12,8 +12,8 @@ module.exports = class lockdown extends Command {
             description: 'Locks a text channel or all channel of a category.',
             userPermissions: ['MANAGE_CHANNELS'],
             clientPermissions: ['MANAGE_CHANNELS'],
-            guildOnly: null,
-            hidden: null,
+            guildOnly: true,
+            hidden: true,
             args: [
                 {
                     key: 'channel',
@@ -35,20 +35,22 @@ module.exports = class lockdown extends Command {
         if (channel.type === 'category') {
             const children = channel.children;
             children.forEach(child => {
-                if(child.type === 'voice') return;
+                if (child.type === 'voice') return message.reply('that is a voice channel.');
                 child.overwritePermissions(_role, {
                     SEND_MESSAGES: false
                 });
                 console.log('Locked channel [ ' + child.name + ' ].');
-                child.send('🔒 This channel was locked by ' + message.member.displayName);
+                console.log(child === null);
+                child.send('🔒 This channel was locked: **' + reason + '**')
+                    .then(msg => msg.react('🗑'));
             });
             const embed = new RichEmbed()
-                .setAuthor('Lockdown Start | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
                 .setDescription(`Category ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
-            this.client.channels.find(logC => logC.id === config.logChannels.channel).send({ embed: embed });
+            this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
         }
         else if (channel.type === 'text') {
             channel.overwritePermissions(_role, {
@@ -56,13 +58,13 @@ module.exports = class lockdown extends Command {
             });
             console.log('Locked channel [ ' + channel.name + ' ].');
             const embed = new RichEmbed()
-                .setAuthor('Lockdown  | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
                 .setDescription(`Channel ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
-            this.client.channels.find(logC => logC.id === config.logChannels.channel).send({ embed: embed });
-            return message.guild.channels.get(channel.id).send('🔒 This channel was locked by ' + message.member.displayName);
+            this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
+            return message.guild.channels.get(channel.id).send('🔒 This channel was locked: **' + reason + '**');
         }
         else {
             return message.reply('you need to provide a text channel or a category to lock.');
