@@ -43,7 +43,7 @@ module.exports = class Ban extends Command {
             });
         }
 
-        if (member.roles !== undefined) {
+        if (member !== null) {
             for (let i = 0; i < blockedRoles.length; i++) {
                 if (member.roles.has(blockedRoles[i])) {
                     return message.reply('I can\'t ban that user');
