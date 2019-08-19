@@ -34,10 +34,10 @@ client.registry
     .registerDefaultTypes()
     .registerGroups([
         ['misc', 'Miscellaneous commands that don\'t fit in other groups.'],
-        ['moderation', 'Commands to help moderators perform their tasks effectively.'],
         ['information', 'Commands that provide useful information to the user.'],
         ['admin', 'Commands to help administration give out information and perform their tasks more easily.'],
         ['department', 'Commands that help Field Training Officers.'],
+        ['fivem', 'Commands that are related to FiveM.'],
         ['administration', 'Commands for administration, involves game server <-> Discord.']
     ])
     .registerDefaultGroups()

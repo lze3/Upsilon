@@ -5,7 +5,7 @@ module.exports = class Kick extends Command {
         super(client, {
             name: 'kick',
             aliases: ['k'],
-            group: 'moderation',
+            group: 'administration',
             memberName: 'kick',
             description: 'Kicks a user from the guild.',
             userPermissions: ['KICK_MEMBERS'],

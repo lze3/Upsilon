@@ -41,7 +41,7 @@ module.exports = class UserInfo extends Command {
         super(client, {
             name: 'userinfo',
             aliases: ['whois', 'uinfo'],
-            group: 'moderation',
+            group: 'administration',
             memberName: 'userinfo',
             description: 'Obtains information about a user.',
             userPermissions: ['MANAGE_MESSAGES'],

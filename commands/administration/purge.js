@@ -5,7 +5,7 @@ module.exports = class Purge extends Command {
         super(client, {
             name: 'purge',
             aliases: ['prune', 'bulkdel'],
-            group: 'moderation',
+            group: 'administration',
             memberName: 'purge',
             description: 'Bulk deletes a specific amount of messages.',
             userPermissions: ['MANAGE_MESSAGES'],
