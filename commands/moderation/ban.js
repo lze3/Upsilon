@@ -43,14 +43,16 @@ module.exports = class Ban extends Command {
             });
         }
 
-        for (let i = 0; i < blockedRoles.length; i++) {
-            if (member.roles.has(blockedRoles[i])) {
-                return message.reply('I can\'t ban that user');
+        if (member !== null) {
+            for (let i = 0; i < blockedRoles.length; i++) {
+                if (member.roles.has(blockedRoles[i])) {
+                    return message.reply('I can\'t ban that user');
+                }
             }
         }
 
         try {
-            member.ban(reason);
+            message.guild.ban(user);
         }
         catch(e) {
             console.log(e.stack);
