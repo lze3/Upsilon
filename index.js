@@ -59,7 +59,7 @@ const cor = setInterval(() => {
         request.get('http://149.56.241.128:30123/players.json', {
             timeout: 2000
         }, function(pError, _, pBody) {
-            if (pError) console.log(pError.stack);
+            if (pError) return;
             try {
                 playerData = JSON.parse(pBody);
             }
@@ -67,7 +67,6 @@ const cor = setInterval(() => {
                 playerData = {
                     players: 'Invalid JSON.'
                 };
-                console.log(err.stack);
             }
         });
 
@@ -98,17 +97,16 @@ const cor = setInterval(() => {
     }
 }, 3000);
 
-if (typeof config.plyCountOnStatus === 'boolean') {
+if (typeof config.plyCountOnStatus === 'boolean' && config.plyCountOnStatus) {
     request.get('http://149.56.241.128:30123/info.json', {
         timeout: 2000
     }, function(error, _, body) {
-        if (error) console.log(error.stack);
+        if (error) return;
         try {
             serverData = JSON.parse(body);
         }
         catch(err) {
             serverData = {};
-            console.log(err.stack);
         }
     });
 }
