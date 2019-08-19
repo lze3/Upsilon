@@ -25,7 +25,7 @@ module.exports = class Kick extends Command {
                     prompt: 'What channel do you want to move the member to?',
                     type: 'channel',
                     validate: channel => {
-                        if(this.client.guilds.get('590837279216369694').channels.get(channel) && this.client.guilds.get('590837279216369694').channels.get(channel).type === 'voice') return true;
+                        if(this.client.guilds.get('354062777737936896').channels.get(channel) && this.client.guilds.get('354062777737936896').channels.get(channel).type === 'voice') return true;
                         return 'You can only move a member to a voice channel. Please try again.';
                     }
                 }
