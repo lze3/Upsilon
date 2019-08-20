@@ -34,7 +34,8 @@ module.exports = class Kick extends Command {
     }
 
     run(message, { member, channel }) {
-        if(member.voiceChannelID && channel.id === member.voiceChannelID) return message.reply('You cannot move a member to the same voice channel!');
+        if(!member.voiceChannelID) return message.reply('You only move members who are in a voice channel!!');
+        if(channel.id === member.voiceChannelID) return message.reply('You cannot move a member to the same voice channel!');
         member.setVoiceChannel(channel);
         message.reply(member + ' was moved to ' + channel.name);
 
