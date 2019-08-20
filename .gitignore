@@ -12,3 +12,5 @@ git-auto-puller/
 .vscode/
 
 config.js
+
+commands/local
