@@ -77,7 +77,7 @@ module.exports = class Kick extends Command {
                     else{
                         state = 'Public';
                     }
-                    const hex = functs.convertDecToHex(parseInt('https://steamcommunity.com/id/' + _steam + '/'));
+                    const hex = functs.convertDecToHex(parseInt('https://steamcommunity.com/profiles/' + _steam + '/'));
                     message.channel.send(new RichEmbed()
                         .addField('Steam Profile Link', `[Click Here](${_steam})`)
                         .addField('Steam64 ID', _steam, true)
