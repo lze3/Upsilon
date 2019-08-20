@@ -31,6 +31,7 @@ module.exports = class Kick extends Command {
     }
 
     run(message, { member, newNick }) {
+        message.delete();
         const oldNick = member.displayName;
         member.setNickname(newNick);
         message.reply(member + ' nickname was changed to ' + newNick);

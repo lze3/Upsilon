@@ -29,6 +29,7 @@ module.exports = class Kick extends Command {
     }
 
     async run(message, { _steam }) {
+        message.delete();
         if(_steam.includes('https://steamcommunity.com/id/') || _steam.includes('https://steamcommunity.com/profiles/')) {
             const member = message.member || message.guild.fetchMember(message.author);
             const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
