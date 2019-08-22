@@ -5,7 +5,7 @@ module.exports = class SoftBan extends Command {
         super(client, {
             name: 'softban',
             aliases: ['sb', 'sban'],
-            group: 'moderation',
+            group: 'administration',
             memberName: 'softban',
             description: 'Bans a user then immediately unbans to clear their last messages.',
             userPermissions: ['BAN_MEMBERS'],

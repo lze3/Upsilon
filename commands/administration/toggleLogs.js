@@ -24,6 +24,7 @@ module.exports = class ToggleLogs extends Command {
     }
 
     run(message, { state }) {
+        message.delete();
         bup.toggleLogging(state);
         if (state) {
             message.reply('I have started logging things now.');

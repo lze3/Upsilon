@@ -8,7 +8,7 @@ module.exports = class RoleInfo extends Command {
     constructor(client) {
         super(client, {
             name: 'roleinfo',
-            aliases: ['rolei'],
+            aliases: ['rolei', 'ri'],
             group: 'misc',
             memberName: 'roleinfo',
             description: 'Provides information about a role.',
@@ -25,6 +25,7 @@ module.exports = class RoleInfo extends Command {
     }
 
     run(message, { role }) {
+        message.delete();
         const embed = new RichEmbed()
             // .setAuthor(`Role Information - ${role.name}`, message.author.avatarURL)
             .setColor(role.color || '#23E25D')

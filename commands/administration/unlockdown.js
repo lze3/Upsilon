@@ -5,15 +5,14 @@ const config = require('../../config');
 module.exports = class lockdown extends Command {
     constructor(client) {
         super(client, {
-            name: 'lockdown',
-            aliases: ['lock', 'ld'],
+            name: 'unlockdown',
+            aliases: ['unlock', 'uld'],
             group: 'administration',
-            memberName: 'lockdown',
-            description: 'Locks a text channel or all channel of a category.',
+            memberName: 'unlockdown',
+            description: 'Unlocks a text channel or all channels in a category.',
             userPermissions: ['MANAGE_CHANNELS'],
             clientPermissions: ['MANAGE_CHANNELS'],
             guildOnly: true,
-            hidden: true,
             args: [
                 {
                     key: 'channel',
@@ -36,18 +35,18 @@ module.exports = class lockdown extends Command {
         if (channel.type === 'category') {
             const children = channel.children;
             children.forEach(child => {
-                if (child.type === 'voice') return message.reply('that is a voice channel.');
+                if(child.type === 'voice') return message.reply('I cannot unlock that channel, it is a voice channel!');
+                console.log(child.permissionsFor(_role).FLAGS);
                 child.overwritePermissions(_role, {
-                    SEND_MESSAGES: false
+                    SEND_MESSAGES: null
                 });
-                console.log('Locked channel [ ' + child.name + ' ].');
-                console.log(child === null);
-                child.send('🔒 This channel was locked: **' + reason + '**')
-                    .then(msg => msg.react('🗑'));
+                console.log('Unlocked channel [ ' + child.name + ' ].');
+                console.log(child);
+                child.send('🔓 This channel was locked by ' + message.member.displayName);
             });
             const embed = new RichEmbed()
-                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
-                .setDescription(`Category ${channel.name} has been locked.`)
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+                .setDescription(`Category ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
@@ -55,20 +54,21 @@ module.exports = class lockdown extends Command {
         }
         else if (channel.type === 'text') {
             channel.overwritePermissions(_role, {
-                SEND_MESSAGES: false
+                SEND_MESSAGES: null
             });
-            console.log('Locked channel [ ' + channel.name + ' ].');
+            console.log('Unlocked channel [ ' + channel.name + ' ].');
             const embed = new RichEmbed()
-                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
-                .setDescription(`Channel ${channel.name} has been locked.`)
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+                .setDescription(`Channel ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
                 .setTimestamp();
             this.client.channels.find(logC => logC.id === config.logChannels.actions).send({ embed: embed });
-            return message.guild.channels.get(channel.id).send('🔒 This channel was locked: **' + reason + '**');
+            return message.guild.channels.get(channel.id).send('🔓 This channel was unlocked by ' + message.member.displayName);
+
         }
         else {
-            return message.reply('you need to provide a text channel or a category to lock.');
+            return message.reply('you need to provide a text channel or a category to unlock.');
         }
     }
 };

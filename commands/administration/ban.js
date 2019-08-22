@@ -7,7 +7,7 @@ module.exports = class Ban extends Command {
         super(client, {
             name: 'ban',
             aliases: ['b', 'bean'],
-            group: 'moderation',
+            group: 'administration',
             memberName: 'ban',
             description: 'Bans a user from the guild.',
             userPermissions: ['BAN_MEMBERS'],
