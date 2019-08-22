@@ -21,6 +21,11 @@ let serverData;
 let playerData;
 
 exports.backupLogs = false;
+
+/**
+ * Toggles Discord logging
+ * @param {boolean} state Set logging state
+ */
 exports.toggleLogs = function(state) { this.backupLogs = state; };
 
 colors.setTheme({
