@@ -31,6 +31,7 @@ module.exports = class lockdown extends Command {
     }
 
     run(message, { channel, reason }) {
+        message.delete();
         const _role = message.guild.roles.get(message.guild.id);
         if (channel.type === 'category') {
             const children = channel.children;

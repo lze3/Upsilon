@@ -6,7 +6,7 @@ module.exports = {
      *
      * @example
      *
-     *      convertBoolToStrState(true); // returns 'Yes'
+     *      convertBoolToStrState(true); // Yes
      */
     convertBoolToStrState: function(bool) {
         if (typeof bool !== 'boolean') throw new TypeError('Expected boolean, got ' + typeof bool);
@@ -37,7 +37,7 @@ module.exports = {
      *      convertHexToDec('#d91e18'); // 14229016
      */
     convertHexToDec: function(hex) {
-        if (typeof hex !== 'string') throw new TypeError('Expected number, got ' + typeof hex);
+        if (typeof hex !== 'string') throw new TypeError('Expected string, got ' + typeof hex);
         return parseInt(hex, 16);
     }
 };

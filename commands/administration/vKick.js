@@ -26,6 +26,7 @@ module.exports = class Kick extends Command {
     }
 
     async run(message, { member }) {
+        message.delete();
         if(!member.voiceChannel) return message.reply('You can only kick member who are in a voice channel.');
         const temp_channel = await message.guild.createChannel(member.id, 'voice', [
             { id: message.guild.id,

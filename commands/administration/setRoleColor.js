@@ -28,6 +28,7 @@ module.exports = class SetRoleColor extends Command {
     }
 
     run(message, { role, color }) {
+        message.delete();
         try {
             role.setColor(color);
             message.reply(`I set the color of the \`${role.name}\` role to \`${role.color}\` (\`${color}\`).`);

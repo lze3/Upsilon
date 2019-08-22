@@ -29,6 +29,7 @@ module.exports = class Kick extends Command {
     }
 
     async run(message, { _steam }) {
+        message.delete();
         if(_steam.includes('https://steamcommunity.com/id/') || _steam.includes('https://steamcommunity.com/profiles/')) {
             const member = message.member || message.guild.fetchMember(message.author);
             const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
@@ -76,7 +77,7 @@ module.exports = class Kick extends Command {
                     else{
                         state = 'Public';
                     }
-                    const hex = functs.convertDecToHex(parseInt(_steam));
+                    const hex = functs.convertDecToHex(parseInt('https://steamcommunity.com/profiles/' + _steam + '/'));
                     message.channel.send(new RichEmbed()
                         .addField('Steam Profile Link', `[Click Here](${_steam})`)
                         .addField('Steam64 ID', _steam, true)
