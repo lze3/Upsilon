@@ -90,7 +90,7 @@ module.exports = class Status extends Command {
                     playerData = JSON.parse(playersBody);
                 }
                 catch(err) {
-                    return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err);
+                    return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err.stack);
                 }
 
                 const embed = new RichEmbed()
