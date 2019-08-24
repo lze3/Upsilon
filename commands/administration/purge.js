@@ -28,6 +28,6 @@ module.exports = class Purge extends Command {
 
         message.channel.bulkDelete(amount)
             .then(bulkDeleted => message.reply(`I deleted ${bulkDeleted.size} message${bulkDeleted.size > 1 ? 's' : ''} for you.`))
-            .catch(err => message.reply('Uh oh, something went wrong. Developers notified.') & console.log(err.stack));
+            .catch(err => message.reply('I couldn\'t purge those messages.') & console.log(err.stack));
     }
 };
