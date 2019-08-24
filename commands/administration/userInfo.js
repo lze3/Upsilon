@@ -83,6 +83,7 @@ module.exports = class UserInfo extends Command {
         // get the member from the user
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);
 
+        // user acknowledgements
         for (let i = 0; i < Acknowledgements.length; i++) {
             if (Acknowledgements[i].type === 'User') {
                 if (user.id === Acknowledgements[i].id) {
@@ -95,7 +96,10 @@ module.exports = class UserInfo extends Command {
                     locAcknow[user.id].push(Acknowledgements[i].title);
                 }
             }
+        }
 
+        if (message.guild.owner.id === member.id) {
+            locAcknow[user.id].push('Server Owner');
         }
 
         embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL);
@@ -122,8 +126,10 @@ module.exports = class UserInfo extends Command {
         embed.addField('❯ Registered', createdAt);
 
         // the member's roles
-        const amountOfRoles = member.roles.array().length;
-        const roles = amountOfRoles - 1 > 0 ?
+        // we remove 1 because of the @everyone role which doesn't need to be counted
+        const amountOfRoles = member.roles.array().length - 1;
+
+        const roles = amountOfRoles > 0 ?
             member.roles.map(role => role.name !== '@everyone' && role.name !== '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯' ? '<@&' + role.id + '>' : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amountOfRoles}]`, roles);
