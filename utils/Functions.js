@@ -16,7 +16,7 @@ module.exports = {
     /**
      * Converts decimal to hex
      * @param {number} decimal
-     * @return {string} Hex color
+     * @return {string} Hexadecimal
      *
      * @example
      *
@@ -30,7 +30,7 @@ module.exports = {
     /**
      * Converts hex to decimal
      * @param {string} hex
-     * @return {number} Decimal color
+     * @return {number} Decimal
      *
      * @example
      *
