@@ -3,6 +3,7 @@ const { RichEmbed } = require('discord.js');
 const steamAPI = require('steamapi');
 const steam = new steamAPI('74B4B0F5DE97280AE5090F379DB24799');
 const functs = require('../../utils/Functions');
+const converter = require('hex2dec');
 
 
 module.exports = class Kick extends Command {
@@ -46,11 +47,11 @@ module.exports = class Kick extends Command {
                         else{
                             state = 'Public';
                         }
-                        const hex = functs.convertDecToHex(parseInt(id));
+                        const hex = functs.convertDecToHex(parseInt);
                         message.channel.send(new RichEmbed()
                             .addField('Steam Profile Link', `[Click Here](${_steam})`)
                             .addField('Steam64 ID', id, true)
-                            .addField('SteamHex ID', hex.toString().toUpperCase(), true)
+                            .addField('SteamHex ID', converter.decToHex(id).toString().toUpperCase().slice(2), true)
                             .addField('Nickname', raw.nickname, true)
                             .addField('Visibility State', state, true)
                             .addField('VAC Banned', bans.vacBanned ? 'Yes' : 'No', true)
@@ -84,7 +85,7 @@ module.exports = class Kick extends Command {
                     message.channel.send(new RichEmbed()
                         .addField('Steam Profile Link', `[Click Here](https://steamcommunity.com/profiles/${_steam})`)
                         .addField('Steam64 ID', _steam, true)
-                        .addField('SteamHex ID', hex.toString().toUpperCase(), true)
+                        .addField('SteamHex ID', converter.decToHex(_steam).toString().toUpperCase().slice(2), true)
                         .addField('Nickname', raw.nickname, true)
                         .addField('Visibility State', state, true)
                         .addField('VAC Banned', functs.convertBoolToStrState(bans.vacBanned), true)
