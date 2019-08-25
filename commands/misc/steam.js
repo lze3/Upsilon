@@ -63,28 +63,32 @@ module.exports = class Kick extends Command {
                 });
             });
         }
-        else{
+        else {
             const member = message.member || message.guild.fetchMember(message.author);
             const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
             steam.getUserBans(_steam).then(bans => {
                 steam.getUserSummary(_steam).then(raw => {
                     let state;
-                    if(raw.visibilityState > 0 && raw.visibilityState < 2) {
+                    if (raw.visibilityState > 0 && raw.visibilityState < 2) {
                         state = 'Private';
                     }
-                    else if(raw.visibilityState > 1 && raw.visibilityState < 3) {
+                    else if (raw.visibilityState > 1 && raw.visibilityState < 3) {
                         state = 'Friends Only';
                     }
-                    else{
+                    else {
                         state = 'Public';
                     }
+
+                    // eslint-disable-next-line no-inline-comments
+                    const hex = functs.convertDecToHex(parseInt(_steam));
+                    console.log(_steam + ' -> ' + hex);
                     message.channel.send(new RichEmbed()
-                        .addField('Steam Profile Link', `[Click Here](${_steam})`)
+                        .addField('Steam Profile Link', `[Click Here](https://steamcommunity.com/profiles/${_steam})`)
                         .addField('Steam64 ID', _steam, true)
                         .addField('SteamHex ID', converter.decToHex(_steam).toString().toUpperCase().slice(2), true)
                         .addField('Nickname', raw.nickname, true)
                         .addField('Visibility State', state, true)
-                        .addField('VAC Banned', bans.vacBanned ? 'Yes' : 'No', true)
+                        .addField('VAC Banned', functs.convertBoolToStrState(bans.vacBanned), true)
                         .setColor(embedColor)
                         .setThumbnail(raw.avatar.large)
                         .setTimestamp()

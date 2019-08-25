@@ -1,9 +1,9 @@
 const { Command } = require('discord.js-commando');
 const request = require('request');
-
 const { RichEmbed } = require('discord.js');
+const config = require('../../config');
 
-const IP = '149.56.241.128';
+const IP = config.serverIp;
 
 const details = {
     's1': {
@@ -17,6 +17,10 @@ const details = {
     'tr': {
         port: '30199',
         name: 'Training Server'
+    },
+    'temp': {
+        port: '3014',
+        name: 'Temporary Server'
     }
 };
 
@@ -37,11 +41,12 @@ module.exports = class Status extends Command {
                     key: 'server',
                     prompt: 'Which server would you like to get the status for?',
                     type: 'string',
-                    default: 's1',
+                    default: 'temp',
                     oneOf: [
                         's1',
                         's2',
-                        'tr'
+                        'tr',
+                        'temp'
                     ]
                 }
             ]
@@ -85,7 +90,7 @@ module.exports = class Status extends Command {
                     playerData = JSON.parse(playersBody);
                 }
                 catch(err) {
-                    return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err);
+                    return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err.stack);
                 }
 
                 const embed = new RichEmbed()

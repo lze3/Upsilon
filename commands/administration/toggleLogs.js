@@ -11,22 +11,14 @@ module.exports = class ToggleLogs extends Command {
             userPermissions: ['ADMINISTRATOR'],
             clientPermissions: ['EMBED_LINKS'],
             guildOnly: true,
-            hidden: true,
-            args: [
-                {
-                    key: 'state',
-                    prompt: 'Enable or disable logging?',
-                    type: 'boolean',
-                    default: !bup.logging
-                }
-            ]
+            hidden: true
         });
     }
 
-    run(message, { state }) {
+    run(message) {
         message.delete();
-        bup.toggleLogging(state);
-        if (state) {
+        bup.toggleLogging(!bup.logging);
+        if (bup.logging) {
             message.reply('I have started logging things now.');
         }
         else {

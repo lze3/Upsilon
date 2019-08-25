@@ -21,6 +21,11 @@ let serverData;
 let playerData;
 
 exports.backupLogs = false;
+
+/**
+ * Toggles Discord logging
+ * @param {boolean} state Set logging state
+ */
 exports.toggleLogs = function(state) { this.backupLogs = state; };
 
 colors.setTheme({
@@ -50,6 +55,32 @@ client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}! (${client.user.id})`.success);
     console.log(`Prefix is set to: ${prefix}`.debug);
 });
+
+// suggestions
+client.on('message', async message => {
+    if (message.author.bot) return;
+    if (config.suggestionChannels === undefined) return;
+
+    for (const channel of config.suggestionChannels) {
+        if (channel === message.channel.id) {
+            await message.react('👍');
+            await message.react('👎');
+            break;
+        }
+    }
+});
+
+/* eslint-disable no-unused-vars */
+
+/**
+ * Debug stuff
+ * @param {string} text
+ */
+const debugPrint = function(text) {
+    client.channels.find(channel => channel.id === '605434026865590278').send(text);
+};
+
+/* eslint-enable no-unused-vars */
 
 // This checks server status every 3000msec
 let i = 0;

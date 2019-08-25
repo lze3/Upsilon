@@ -32,6 +32,17 @@ const Acknowledgements = [
         id: '586026320786489364',
         title: 'The Collective',
         type: 'Role'
+    },
+
+    {
+        id: '613132089805504512',
+        title: 'Development Bot',
+        type: 'Role'
+    },
+    {
+        id: '611690710894247956',
+        title: 'Cool ass person',
+        type: 'Role'
     }
 
 ];
@@ -92,11 +103,15 @@ module.exports = class UserInfo extends Command {
 
         // this is the username; will be undefined if they don't have one
         const nickname = user.nickname;
-        if (nickname !== undefined) embed.addField('❯ Nickname', nickname);
+        if (nickname !== undefined) {
+            embed.addField('❯ Nickname', nickname);
+        }
 
         // this is the user's status
         const status = user.presence.status + (user.presence.game !== null ? ' ' + gameStates[user.presence.game.type].toLowerCase() + ' ' + user.presence.game : '');
-        if (user.presence !== null) embed.addField('❯ Status', status, true);
+        if (user.presence !== null) {
+            embed.addField('❯ Status', status, true);
+        }
 
         // this is the date at which the member joined the guild
         const joinedAt = moment(member.joinedAt).format('ddd, MMM D, YYYY H:mm A');
@@ -107,8 +122,8 @@ module.exports = class UserInfo extends Command {
         embed.addField('❯ Registered', createdAt);
 
         // the member's roles
-        const amountOfRoles = member.roles.array().length - 1;
-        const roles = amountOfRoles > 0 ?
+        const amountOfRoles = member.roles.array().length;
+        const roles = amountOfRoles - 1 > 0 ?
             member.roles.map(role => role.name !== '@everyone' && role.name !== '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯' ? '<@&' + role.id + '>' : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amountOfRoles}]`, roles);
@@ -119,7 +134,9 @@ module.exports = class UserInfo extends Command {
 
         // the color of the embed
         embed.setColor(message.guild.me.colorRole.color);
-        if (member.colorRole !== null) embed.setColor(member.colorRole.color);
+        if (member.colorRole !== null) {
+            embed.setColor(member.colorRole.color);
+        }
 
         if (nickname !== undefined) {
             embed.addField('❯ Nickname', nickname);

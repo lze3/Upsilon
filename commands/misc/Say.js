@@ -9,7 +9,7 @@ module.exports = class Say extends Command {
             description: 'Say a message as the bot.',
             hidden: true,
             guildOnly: true,
-            clientPermissions: ['KICK_MEMBERS'],
+            userPermissions: ['KICK_MEMBERS'],
             args: [
                 {
                     key: 'text',

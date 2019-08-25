@@ -26,5 +26,7 @@ module.exports = {
     /**
      * Displays player count on bot status
      */
-    plyCountOnStatus: true
+    plyCountOnStatus: true,
+
+    serverIp: '145.239.205.88'
 };
