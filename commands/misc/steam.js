@@ -47,7 +47,6 @@ module.exports = class Kick extends Command {
                         else{
                             state = 'Public';
                         }
-                        const hex = functs.convertDecToHex(parseInt);
                         message.channel.send(new RichEmbed()
                             .addField('Steam Profile Link', `[Click Here](${_steam})`)
                             .addField('Steam64 ID', id, true)
@@ -78,10 +77,6 @@ module.exports = class Kick extends Command {
                     else {
                         state = 'Public';
                     }
-
-                    // eslint-disable-next-line no-inline-comments
-                    const hex = functs.convertDecToHex(parseInt(_steam));
-                    console.log(_steam + ' -> ' + hex);
                     message.channel.send(new RichEmbed()
                         .addField('Steam Profile Link', `[Click Here](https://steamcommunity.com/profiles/${_steam})`)
                         .addField('Steam64 ID', _steam, true)
