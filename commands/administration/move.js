@@ -3,7 +3,7 @@ const { RichEmbed } = require('discord.js');
 const config = require('../../config');
 
 
-module.exports = class Kick extends Command {
+module.exports = class Move extends Command {
     constructor(client) {
         super(client, {
             name: 'move',

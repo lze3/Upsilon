@@ -6,7 +6,7 @@ const functs = require('../../utils/Functions');
 const converter = require('hex2dec');
 
 
-module.exports = class Kick extends Command {
+module.exports = class Steam extends Command {
     constructor(client) {
         super(client, {
             name: 'steam',

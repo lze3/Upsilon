@@ -2,7 +2,7 @@ const { Command } = require('discord.js-commando');
 const { RichEmbed } = require('discord.js');
 const config = require('../../config');
 
-module.exports = class lockdown extends Command {
+module.exports = class Unlockdown extends Command {
     constructor(client) {
         super(client, {
             name: 'unlockdown',
