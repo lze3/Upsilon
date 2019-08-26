@@ -3,7 +3,7 @@ const { RichEmbed } = require('discord.js');
 const config = require('../../config');
 
 
-module.exports = class Kick extends Command {
+module.exports = class SetNick extends Command {
     constructor(client) {
         super(client, {
             name: 'setnick',
@@ -18,12 +18,12 @@ module.exports = class Kick extends Command {
             args: [
                 {
                     key: 'member',
-                    prompt: 'Which member would you like to move?',
+                    prompt: 'Which member would you like to change the nickname of?',
                     type: 'member'
                 },
                 {
                     key: 'newNick',
-                    prompt: 'What channel do you want to move the member to?',
+                    prompt: 'What would you like to set their nickname to?',
                     type: 'string'
                 }
             ]
