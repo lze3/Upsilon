@@ -42,7 +42,7 @@ module.exports = class Unlockdown extends Command {
                 });
                 console.log('Unlocked channel [ ' + child.name + ' ].');
                 console.log(child);
-                child.send('🔓 This channel was locked by ' + message.member.displayName);
+                child.send('🔓 This channel was unlocked by ' + message.member.displayName);
             });
             const embed = new RichEmbed()
                 .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
