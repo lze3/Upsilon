@@ -9,11 +9,15 @@ module.exports = class RulesGenerator extends Command {
             group: 'misc',
             memberName: 'rules',
             description: 'Generates the server rules.',
-            userPermissions: ['ADMINISTRATOR']
+            userPermissions: ['ADMINISTRATOR'],
+            guildOnly: true,
+            hidden: true
         });
     }
 
     run(message) {
+        message.delete();
+
         const rulesEmbed = new RichEmbed()
             .setAuthor('JusticeCommunityRP • Important Server Information - Rules', 'https://i.imgur.com/nKTfMbX.png')
             .setTitle('**Server Motto**: ' +
@@ -42,10 +46,12 @@ module.exports = class RulesGenerator extends Command {
 
         const rolesEmbed = new RichEmbed()
             .setAuthor('JusticeCommunityRP • Important Server Information - Roles', 'https://i.imgur.com/nKTfMbX.png')
-            .setDescription('`JCRP Collective | Director` - The Director of the server (<@!458456013528498177>).\n\n' +
+            .setDescription(
+                '`JCRP Collective | Owner` - The Owner of the server.\n\n' +
+                '`JCRP Collective | Founder` - The Founder of the community.\n\n' +
                 '`JCRP | The Collective` - The management of the community, each member has a particular job and specification.\n\n' +
-                '`JCRP Collective | Internal Administrator` - Administrators of vital tools of the community (<@!248524387454681105> - Server and website provider).\n\n' +
-                '`JCRP Collective | Lead Developer` - The development lead, is in charge of development and recruiting new developers (<@!333690190839414787>, <@!595789969965187072>).\n\n' +
+                '`JCRP Collective | Systems Administrator` - Administrators of vital tools of the community.\n\n' +
+                '`JCRP Collective | Lead Developer` - The development lead, is in charge of development and recruiting new developers.\n\n' +
                 '`JCRP | Administration Team` - The staff of the server, people who are trusted and help keep the server under control.\n\n' +
                 '`JCRP | Development Team` - Those who develop for the game server and other assets the community owns.\n\n' +
                 '`Los Santos Sheriff\'s Department` - The department that patrols all around the counties, both Los Santos County and Blaine County.\n\n' +
