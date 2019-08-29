@@ -1,0 +1,16 @@
+node_modules/
+shortlog.txt
+
+# node environment
+.env
+
+# auto puller
+git-auto-puller/
+
+*.bat
+
+.vscode/
+
+config.js
+
+commands/local

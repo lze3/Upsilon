@@ -1,0 +1,24 @@
+{
+  "name": "upsilon",
+  "version": "1.0.0",
+  "description": "A Discord Bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zeemahh/Upsilon.git"
+  },
+  "author": "Zeemah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zeemahh/Upsilon/issues"
+  },
+  "homepage": "https://github.com/Zeemahh/Upsilon#readme",
+  "dependencies": {
+    "discord-akairo": "^7.5.6",
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0"
+  }
+}
