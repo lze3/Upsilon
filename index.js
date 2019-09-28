@@ -5,8 +5,8 @@ const config = require('./config');
 const LogsHandler = require('./utils/LogsHandler');
 const request = require('request');
 const serverStatusInfo = require('./utils/ServerStatTracking');
-const Discord = require('discord.js');
-const functions = require('./utils/Functions');
+// const Discord = require('discord.js');
+// const functions = require('./utils/Functions');
 
 require('dotenv').config({
     path: __dirname + '/.env'
