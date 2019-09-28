@@ -21,5 +21,5 @@ module.exports = {
         '627278142133764096'
     ],
 
-    waitTime: 1500
+    waitTime: 3500
 };
