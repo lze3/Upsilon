@@ -39,5 +39,15 @@ module.exports = {
     convertHexToDec: function(hex) {
         if (typeof hex !== 'string') throw new TypeError('Expected string, got ' + typeof hex);
         return parseInt(hex, 16);
+    },
+
+    /**
+     * Cleans the string of any carets (^)
+     *
+     * @param {string} str The initial string.
+     */
+    FiveMSanitize: function(str) {
+        if (typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
+        return str.replace(/\^[0-9]/, '');
     }
 };
