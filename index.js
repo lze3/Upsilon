@@ -5,8 +5,9 @@ const config = require('./config');
 const LogsHandler = require('./utils/LogsHandler');
 const request = require('request');
 const serverStatusInfo = require('./utils/ServerStatTracking');
-// const Discord = require('discord.js');
-// const functions = require('./utils/Functions');
+const Discord = require('discord.js');
+const moment = require('moment');
+const functions = require('./utils/Functions');
 
 require('dotenv').config({
     path: __dirname + '/.env'
@@ -15,12 +16,13 @@ require('dotenv').config({
 const prefix = config.prefix || 'p.';
 const client = new CommandoClient({
     commandPrefix: prefix,
-    owner: '595789969965187072',
-    invite: 'https://discord.gg/B7e72je',
+    owner: '264662751404621825',
+    invite: 'https://discord.gg/EqC2wFf',
     unknownCommandResponse: false
 });
 
 let playerData;
+let serverData;
 
 exports.backupLogs = false;
 
@@ -99,10 +101,10 @@ setInterval(() => {
                 if (foundChannel.topic !== undefined) {
                     try {
                         request.get(`http://${foundChannel.topic}/players.json`, (err, response, body) => {
-                            if (err) return console.log(err.stack);
-                            console.log(foundChannel.topic);
+                            if (err) return consoled.log(err.stack);
+                            console.log(foundChannedl.topic);
 
-                            try {
+                            try {d
                                 playerData = JSON.parse(body);
                             }
                             catch(e) {
@@ -142,6 +144,44 @@ setInterval(() => {
 }, serverStatusInfo.waitTime || 3000);
 */
 
+let serverDataObtained = false;
+
+// this is for static data that won't change after server start
+const sinfoHandle = setInterval(() => {
+    if (!serverDataObtained) {
+        if (!serverStatusInfo || !serverStatusInfo.statusChannels) return;
+        for (const channel of serverStatusInfo.statusChannels) {
+            const guildChannel = client.channels.find(ch => ch.id === channel);
+            if (guildChannel === null) return console.log('foundchannel was null');
+            if (!guildChannel.topic) return console.log('the channel had no topic');
+            request.get(`https://servers-live.fivem.net/api/servers/single/${guildChannel.topic}`, {
+                timeout: 4000
+            }, (err, _, body) => {
+                if (err) return console.log(err.stack);
+
+                try {
+                    serverData = JSON.parse(body);
+                }
+                catch(e) {
+                    return console.log(e.stack);
+                }
+            });
+        }
+
+        if (serverData === undefined) {
+            console.log('sv data was null, running interval again');
+        }
+        else {
+            serverDataObtained = true;
+        }
+    }
+    else {
+        console.log('Interval cleared, this information is static and doesn\'t need to be requested more than once.');
+        clearInterval(sinfoHandle);
+    }
+// minus 10 so it happens before other checks
+}, (serverStatusInfo.waitTime || 3000) - 10);
+
 setInterval(() => {
     if (!serverStatusInfo || !serverStatusInfo.status) return;
     if (serverStatusInfo.statusChannels === undefined) return;
@@ -149,7 +189,10 @@ setInterval(() => {
         for (const channel of serverStatusInfo.statusChannels) {
             const guildChannel = client.channels.find(ch => ch.id === channel);
             if (guildChannel === null) return console.log('Could not find channel in channels collection (%s)', channel);
-            request.get(`http://${guildChannel.topic}/players.json`, (err, _, body) => {
+            if (!guildChannel.topic) return;
+            request.get(`http://${guildChannel.topic}/players.json`, {
+                timeout: 4000
+            }, (err, _, body) => {
                 if (err) return console.log(err.stack);
 
                 try {
@@ -160,21 +203,42 @@ setInterval(() => {
                 }
             });
 
+            if (playerData === undefined) return console.log('playerData was undefined.');
+            const format = playerData.length > 0 ?
+                playerData.map(ply => `${ply.name} | ${ply.id} - Ping: ${ply.ping}`) :
+                'No players online.';
             guildChannel.fetchMessages()
                 .then(messages => {
                     console.log(typeof messages);
+                    const statEmbed = new Discord.RichEmbed()
+                        .setColor('#7700EF')
+                        .setAuthor(functions.FiveMSanitize(serverData.Data.hostname), 'https://i.imgur.com/qTPd0ql.png')
+                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                        .setDescription(format);
+
+                    if (messages.array().length === 0) {
+                        guildChannel.send(statEmbed);
+                    }
+
                     messages.forEach(message_ => {
+                        console.log('iterating');
                         if (message_ === null) return console.log('message_ was null');
                         if (message_.embeds.length >= 1) {
-                            console.log('message has embeds', message_.embeds.length);
+                            console.log('message has embeds!', message_.embeds.length);
+                            const embed = new Discord.RichEmbed(message_.embeds[0])
+                                .setDescription(format)
+                                .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'));
+
+                            return message_.edit(embed);
                         }
                         else {
                             message_.delete();
+                            console.log('found a message that was not status embed in #%s (%s)', guildChannel.name, guildChannel.id);
                         }
                     });
                 });
 
-            console.log(playerData);
+            // console.log(playerData);
         }
     }
 }, serverStatusInfo.waitTime || 3000);
