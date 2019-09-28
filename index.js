@@ -4,6 +4,9 @@ const colors = require('colors');
 const config = require('./config');
 const LogsHandler = require('./utils/LogsHandler');
 const request = require('request');
+const serverStatusInfo = require('./utils/ServerStatTracking');
+const Discord = require('discord.js');
+const functions = require('./utils/Functions');
 
 require('dotenv').config({
     path: __dirname + '/.env'
@@ -17,7 +20,6 @@ const client = new CommandoClient({
     unknownCommandResponse: false
 });
 
-let serverData;
 let playerData;
 
 exports.backupLogs = false;
@@ -82,64 +84,100 @@ const debugPrint = function(text) {
 
 /* eslint-enable no-unused-vars */
 
-// This checks server status every 3000msec
-let i = 0;
-const cor = setInterval(() => {
-    if (typeof config.plyCountOnStatus === 'boolean') {
-        request.get('http://149.56.241.128:30123/players.json', {
-            timeout: 2000
-        }, function(pError, _, pBody) {
-            if (pError) return;
-            try {
-                playerData = JSON.parse(pBody);
-            }
-            catch(err) {
-                playerData = {
-                    players: 'Invalid JSON.'
-                };
-            }
-        });
+// let sent = false;
+// let sentMessage;
+/*
+setInterval(() => {
+    if (serverStatusInfo && serverStatusInfo.statusChannels) {
+        console.log('ok, serverstatinfo is not null or whatever');
+        if (typeof serverStatusInfo.statusChannels === 'object') {
+            console.log('is an object too');
+            for (const channel of serverStatusInfo.statusChannels) {
+                console.log(channel);
+                const foundChannel = client.channels.find(ch => ch.id === channel);
+                if (foundChannel === null) break;
+                if (foundChannel.topic !== undefined) {
+                    try {
+                        request.get(`http://${foundChannel.topic}/players.json`, (err, response, body) => {
+                            if (err) return console.log(err.stack);
+                            console.log(foundChannel.topic);
 
-        if (playerData !== undefined) {
-            if (typeof playerData.players !== 'string') {
-                if(serverData !== undefined && serverData.vars.sv_maxClients !== undefined) {
-                    client.user.setActivity(`Player${playerData.length > 0 ? 's' : ''} online: ${playerData.length}/${serverData.vars.sv_maxClients}`, {
-                        type: 'WATCHING'
-                    });
+                            try {
+                                playerData = JSON.parse(body);
+                            }
+                            catch(e) {
+                                return console.log(e.stack);
+                            }
+                        });
+
+                        if (playerData !== undefined) {
+                            const format = playerData.map(ply => `${ply.name} | ${ply.id} - Ping: ${ply.ping}`);
+                            if (!sent) {
+                                const embed = new Discord.RichEmbed()
+                                    .setColor('#7700EF')
+                                    .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
+                                    .setTitle('Here is the updated server status, last updated @ ' + Date.now())
+                                    .setDescription(format);
+                                foundChannel.send(embed)
+                                    .then(msg => sentMessage = msg);
+                            }
+                            else {
+                                const embed = new Discord.RichEmbed(sentMessage.embeds[0]).setDescription(format);
+                                sentMessage.edit(embed);
+                            }
+                            sent = true;
+                        }
+                        else {
+                            return console.log('playerData was undefined, uh oh! this is bad');
+                        }
+                    }
+                    catch(error) {
+                        return console.log(error.stack);
+                    }
                 }
             }
         }
-        else {
-            i++;
-            if (i >= 10) {
-                client.user.setActivity('Server offline :(', {
-                    type: 'WATCHING'
-                });
-                clearInterval(cor);
-            }
-            else {
-                client.user.setActivity('Obtaining server information...');
-            }
-        }
     }
-    else if (typeof config.plyCountOnStatus === 'string') {
-        client.user.setActivity(config.plyCountOnStatus);
-    }
-}, 3000);
+    console.log('Waiting %s', serverStatusInfo.waitTime);
+}, serverStatusInfo.waitTime || 3000);
+*/
 
-if (typeof config.plyCountOnStatus === 'boolean' && config.plyCountOnStatus) {
-    request.get('http://149.56.241.128:30123/info.json', {
-        timeout: 2000
-    }, function(error, _, body) {
-        if (error) return;
-        try {
-            serverData = JSON.parse(body);
+setInterval(() => {
+    if (!serverStatusInfo || !serverStatusInfo.status) return;
+    if (serverStatusInfo.statusChannels === undefined) return;
+    if (typeof serverStatusInfo.statusChannels === 'object') {
+        for (const channel of serverStatusInfo.statusChannels) {
+            const guildChannel = client.channels.find(ch => ch.id === channel);
+            if (guildChannel === null) return console.log('Could not find channel in channels collection (%s)', channel);
+            request.get(`http://${guildChannel.topic}/players.json`, (err, _, body) => {
+                if (err) return console.log(err.stack);
+
+                try {
+                    playerData = JSON.parse(body);
+                }
+                catch(_e) {
+                    return console.log(_e.stack);
+                }
+            });
+
+            guildChannel.fetchMessages()
+                .then(messages => {
+                    console.log(typeof messages);
+                    messages.forEach(message_ => {
+                        if (message_ === null) return console.log('message_ was null');
+                        if (message_.embeds.length >= 1) {
+                            console.log('message has embeds', message_.embeds.length);
+                        }
+                        else {
+                            message_.delete();
+                        }
+                    });
+                });
+
+            console.log(playerData);
         }
-        catch(err) {
-            serverData = {};
-        }
-    });
-}
+    }
+}, serverStatusInfo.waitTime || 3000);
 
 client.on('error', console.error);
 
