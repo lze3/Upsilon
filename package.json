@@ -4,7 +4,8 @@
   "description": "A Discord bot designed specifically for use on the JusticeCommunityRP guild.",
   "main": "index.js",
   "scripts": {
-    "release": "standard-version"
+    "release": "standard-version",
+    "eslint": "eslint *.js"
   },
   "repository": {
     "type": "git",
