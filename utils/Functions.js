@@ -1,3 +1,7 @@
+require('dotenv').config({
+    path: __dirname + '../.env'
+});
+
 module.exports = {
     /**
      * Converts a boolean to a 'Yes' or 'No' string
