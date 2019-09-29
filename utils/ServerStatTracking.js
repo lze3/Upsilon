@@ -21,5 +21,8 @@ module.exports = {
         '627278142133764096'
     ],
 
-    waitTime: 3500
+    /**
+     * Time the interval waits before running again, default is 15000ms (15sec)
+     */
+    waitTime: 7500
 };
