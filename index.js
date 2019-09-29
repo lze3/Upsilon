@@ -28,14 +28,43 @@ const client = new CommandoClient({
 });
 
 // variables
-//  for playerdata that will be used in an embed which updated every x msec
+/**
+ * Contains player data for a specific server
+ *
+ * @const {array}
+ */
 const playerData = [];
 
-//  for server data, likewise for the above
+/**
+ * Contains server data for a specific server
+ *
+ * @const {array}
+ */
 const serverData = [];
 
-// determines whether the server data has been obtained
-let serverDataObtained = false;
+/**
+ * Wait time for server data, this does not need to be as frequent as player data
+ *
+ * @type {number}
+ */
+let serverQueryTime = 6000;
+
+/**
+ * An object that provides long-auth-name, used in server data auto-updated
+ */
+const HSGAuths = {
+    'CR': 'Casual Restricted (CR)',
+    'CU': 'Casual Unrestricted (CU)',
+    'M1': 'New Member (M1)',
+    'M2': 'Member (M2)',
+    'GS': 'General Staff',
+    'A1': 'Junior Administrator (A1)',
+    'A2': 'Senior Administrator (A2)',
+    'A3': 'Lead Administrator (A3)',
+    'DV': 'Developer (DV)',
+    'CD': 'Chief of Development (CD)',
+    'DR': 'Director (DR)'
+};
 
 /**
  * Toggles Discord logging
@@ -85,11 +114,11 @@ client.on('message', async message => {
     }
 });
 
-// this is for static data that won't change after server start
-const sinfoHandle = setInterval(() => {
+// this is for dynamic data that won't change often
+setInterval(() => {
 
     // this boolean will get set to true once the data has been parsed and is not undefined
-    if (serverStatusInfo && !serverDataObtained) {
+    if (serverStatusInfo) {
 
         // ignore this check because we dont want to use this feature
         if (!serverStatusInfo.status) return;
@@ -136,8 +165,8 @@ const sinfoHandle = setInterval(() => {
                     return console.log('serverData[\'%s\'] was undefined, running again...', channel);
                 }
                 else {
-                    // this boolean stops the code execution, it only needs to be run once since the data will not changed
-                    serverDataObtained = true;
+                    // every minute
+                    serverQueryTime = 60000;
                 }
             }
         }
@@ -179,18 +208,11 @@ const sinfoHandle = setInterval(() => {
                 return console.log('serverData[\'%s\'] was undefined, running again...', serverStatusInfo.statusChannels);
             }
             else {
-                // this boolean stops the code from executing, it only needs to be run once since the data will not be changed
-                serverDataObtained = true;
+                serverQueryTime = 60000;
             }
         }
     }
-    else {
-        // clear interval
-        console.log('Interval cleared, this information is static and doesn\'t need to be requested more than once.');
-        clearInterval(sinfoHandle);
-    }
-// minus 10 so it happens before other checks
-}, (serverStatusInfo.waitTime || 3000) - 10);
+}, serverQueryTime);
 
 setInterval(() => {
 
@@ -246,16 +268,33 @@ setInterval(() => {
             // this is the format we use toe display players
             // Name | ServerId - Ping: 100ms
             const format = playerData[channel].length > 0 ?
-                playerData[channel].map(ply => `${ply.name} | ${ply.id} - Ping: ${ply.ping}`) :
+                '`' + playerData[channel].map(ply => `${ply.name}`).join(', ') + '`' :
                 'No players online.';
+
+            // this is for authorization and rpz
+            const additionalFields = [
+                {
+                    name: 'Authorization',
+                    value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
+                },
+                {
+                    name: 'Roleplay Zone',
+                    value: serverData[channel].Data.mapname
+                }
+            ];
+
             guildChannel.fetchMessages()
                 .then(messages => {
                     const statEmbed = new Discord.RichEmbed()
                         .setColor('#7700EF')
-                        .setAuthor(serverData[channel].Data.hostname.replace(/\^[0-9]/, ''), 'https://i.imgur.com/qTPd0ql.png')
+                        .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
                         .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
                         .setDescription(format)
+                        .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
+                        .addField('Roleplay Zone', serverData[channel].Data.mapname)
                         .setFooter('HighSpeed-Gaming 2019');
+
+                    statEmbed.fields = additionalFields;
 
                     if (messages.array().length === 0) {
                         guildChannel.send(statEmbed);
@@ -280,6 +319,8 @@ setInterval(() => {
                             const embed = new Discord.RichEmbed(message_.embeds[0])
                                 .setDescription(format)
                                 .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'));
+
+                            embed.fields = additionalFields;
 
                             return message_.edit(embed);
                         }
