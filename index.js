@@ -67,6 +67,13 @@ const HSGAuths = {
 };
 
 /**
+ * Determines whether the server is offline or not
+ *
+ * @type {boolean}
+ */
+let isProbablyOffline = false;
+
+/**
  * Toggles Discord logging
  * @param {boolean} state Set logging state
  */
@@ -142,7 +149,12 @@ setInterval(() => {
             request.get(`https://servers-live.fivem.net/api/servers/single/${guildChannel.topic}`, {
                 timeout: 10000
             }, (err, _, body) => {
-                if (err) return console.log(err.stack);
+                if (err) {
+                    console.log(err.stack);
+                    serverData[channel] = {
+                        state: 'offline'
+                    };
+                }
 
                 // /!\ IMPORTANT /!\
                 // we must parse the data before we can begin displaying it. if it cannot be
@@ -159,7 +171,10 @@ setInterval(() => {
 
             // run code again if data for this channel (or ip) was not found
             if (serverData[channel] === undefined) {
-                return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+                console.log('serverData[\'%s\'] was undefined, running again...', channel);
+                serverData[channel] = {
+                    state: 'offline'
+                };
             }
             else {
                 // every minute
@@ -196,7 +211,12 @@ setInterval(() => {
         request.get(`http://${guildChannel.topic}/players.json`, {
             timeout: 4000
         }, (err, _, body) => {
-            if (err) return console.log(err.stack);
+            if (err) {
+                console.log(err.stack);
+                playerData[channel] = {
+                    state: 'offline'
+                };
+            }
 
             // /!\ IMPORTANT /!\
             // we must parse the data before we can begin displaying it. if it cannot be
@@ -207,7 +227,10 @@ setInterval(() => {
                 playerData[channel] = JSON.parse(body);
             }
             catch(_e) {
-                return console.log(_e.stack);
+                console.log(_e.stack);
+                playerData[channel] = {
+                    state: 'offline'
+                };
             }
         });
 
@@ -217,6 +240,10 @@ setInterval(() => {
         // likewise for server data
         if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
 
+        // server offline handling
+        isProbablyOffline = false;
+        if (playerData[channel].state !== undefined) isProbablyOffline = true;
+
         // this is the format we use toe display players
         // Name | ServerId - Ping: 100ms
         const format = playerData[channel].length > 0 ?
@@ -224,33 +251,52 @@ setInterval(() => {
             'No players online.';
 
         // this is for authorization and rpz
-        const additionalFields = [
-            {
-                name: 'Authorization',
-                value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
-            },
-            {
-                name: 'Roleplay Zone',
-                value: serverData[channel].Data.mapname
-            }
-        ];
+        let additionalFields;
+        if (!isProbablyOffline) {
+            additionalFields = [
+                {
+                    name: 'Authorization',
+                    value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
+                },
+                {
+                    name: 'Roleplay Zone',
+                    value: serverData[channel].Data.mapname
+                }
+            ];
+        }
 
         guildChannel.fetchMessages()
             .then(messages => {
-                const statEmbed = new Discord.RichEmbed()
-                    .setColor('#7700EF')
-                    .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
-                    .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
-                    .setDescription(format)
-                    .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
-                    .addField('Roleplay Zone', serverData[channel].Data.mapname)
-                    .setFooter('HighSpeed-Gaming 2019');
+                let statEmbed;
+                let offlineEmbed;
+                if (!isProbablyOffline) {
+                    statEmbed = new Discord.RichEmbed()
+                        .setColor('#7700EF')
+                        .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
+                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                        .setDescription(format)
+                        .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
+                        .addField('Roleplay Zone', serverData[channel].Data.mapname)
+                        .setFooter('HighSpeed-Gaming 2019');
 
-                statEmbed.fields = additionalFields;
+                    statEmbed.fields = additionalFields;
+                }
+                else {
+                    offlineEmbed = new Discord.RichEmbed()
+                        .setColor('#7700EF')
+                        .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
+                        .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                        .setFooter('HighSpeed-Gaming 2019');
+                }
 
                 if (messages.array().length === 0) {
-                    guildChannel.send(statEmbed);
-                    return console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', channel);
+                    console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', channel);
+                    if (isProbablyOffline) {
+                        console.log('I think the server is offline.');
+                        return guildChannel.send(offlineEmbed);
+                    }
+
+                    return guildChannel.send(statEmbed);
                 }
 
                 messages.forEach(message_ => {
@@ -266,6 +312,17 @@ setInterval(() => {
                             message_.id,
                             channel
                         );
+
+                        // server offline handling
+                        if (isProbablyOffline) {
+                            const embed = new Discord.RichEmbed(message_.embeds[0])
+                                .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
+
+                            embed.fields = null;
+                            embed.description = null;
+
+                            return message_.edit(embed);
+                        }
 
                         // create an embed from the current embed and set the description to the updated info
                         const embed = new Discord.RichEmbed(message_.embeds[0])
