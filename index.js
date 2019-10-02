@@ -50,7 +50,7 @@ const serverData = [];
 let serverQueryTime = 6000;
 
 /**
- * An object that provides long-auth-name, used in server data auto-updated
+ * An object that provides long-auth-name, used in server data auto-updater
  */
 const HSGAuths = {
     'CR': 'Casual Restricted (CR)',
@@ -124,69 +124,23 @@ setInterval(() => {
         if (!serverStatusInfo.status) return;
 
         // obviously, no channels = no endpoints = no data
-        if (!serverStatusInfo || !serverStatusInfo.statusChannels) return;
+        if (!serverStatusInfo || !serverStatusInfo.statusChannels || typeof serverStatusInfo.statusChannels !== 'object') return;
 
-        // this can be an object or string, if object, we iterate and treat each index differently
-        if (typeof serverStatusInfo.statusChannels === 'object') {
+        // iteration
+        for (const channel of serverStatusInfo.statusChannels) {
 
-            // iteration
-            for (const channel of serverStatusInfo.statusChannels) {
+            // get channel from client's channels collection
+            const guildChannel = client.channels.find(ch => ch.id === channel);
 
-                // get channel from client's channels collection
-                const guildChannel = client.channels.find(ch => ch.id === channel);
+            // if channel couldn't be found in collection, return
+            if (guildChannel === null) return console.log('foundchannel was null');
 
-                // if channel couldn't be found in collection, return
-                if (guildChannel === null) return console.log('foundchannel was null');
+            // we use topic for endpoint, we can't request anything if there is no topic/endpoint
+            if (!guildChannel.topic) return console.log('the channel had no topic');
 
-                // we use topic for endpoint, we can't request anything if there is no topic/endpoint
-                if (!guildChannel.topic) return console.log('the channel had no topic');
-
-                // request for hostname and stuff with timeout of 4000 to stop hangs
-                request.get(`https://servers-live.fivem.net/api/servers/single/${guildChannel.topic}`, {
-                    timeout: 4000
-                }, (err, _, body) => {
-                    if (err) return console.log(err.stack);
-
-                    // /!\ IMPORTANT /!\
-                    // we must parse the data before we can begin displaying it. if it cannot be
-                    // parsed, there is something wrong and we need to check it
-
-                    // also, this crashes app if it's not caught
-                    try {
-                        serverData[serverStatusInfo.statusChannels] = JSON.parse(body);
-                    }
-                    catch(e) {
-                        return console.log(e.stack);
-                    }
-                });
-
-                // run code again if data for this channel (or ip) was not found
-                if (serverData[channel] === undefined) {
-                    return console.log('serverData[\'%s\'] was undefined, running again...', channel);
-                }
-                else {
-                    // every minute
-                    serverQueryTime = 60000;
-                }
-            }
-        }
-
-        // if it is a string, it is a lot easier and can just be a simple:
-        //      - get channel from collection, do normal shit for proofing
-        else if (typeof serverStatusInfo.statusChannels === 'string') {
-
-            // get channel from collection
-            const guildChannel = client.channels.find(ch => ch.id === serverStatusInfo.statusChannels);
-
-            // ensure channel is in collection
-            if (guildChannel === null) return console.log('could not find channel (%s) in client\'s collection', serverStatusInfo.statusChannels);
-
-            // channel needs to have a topic so that the IP can be requested
-            if (!guildChannel.topic) return console.log('the channel has no topic, no endpoint to request');
-
-            // request for hostname and stuff with timeout of 4000ms to stop hangs
+            // request for hostname and stuff with timeout of 4000 to stop hangs
             request.get(`https://servers-live.fivem.net/api/servers/single/${guildChannel.topic}`, {
-                timeout: 4000
+                timeout: 10000
             }, (err, _, body) => {
                 if (err) return console.log(err.stack);
 
@@ -204,10 +158,11 @@ setInterval(() => {
             });
 
             // run code again if data for this channel (or ip) was not found
-            if (serverData[serverStatusInfo.statusChannels] === undefined) {
-                return console.log('serverData[\'%s\'] was undefined, running again...', serverStatusInfo.statusChannels);
+            if (serverData[channel] === undefined) {
+                return console.log('serverData[\'%s\'] was undefined, running again...', channel);
             }
             else {
+                // every minute
                 serverQueryTime = 60000;
             }
         }
@@ -221,121 +176,117 @@ setInterval(() => {
 
     // if there are no channels in the array or string, we don't run because it's impossible to
     // know what to do
-    if (serverStatusInfo.statusChannels === undefined) return;
+    if (serverStatusInfo.statusChannels === undefined || typeof serverStatusInfo.statusChannels !== 'object') return;
 
-    // this is for iterating over the object so all channels get the 'right treatment'
-    if (typeof serverStatusInfo.statusChannels === 'object') {
+    // iteration
+    for (const channel of serverStatusInfo.statusChannels) {
 
-        // iteration
-        for (const channel of serverStatusInfo.statusChannels) {
+        // get the channel in the client's channels collection
+        const guildChannel = client.channels.find(ch => ch.id === channel);
 
-            // get the channel in the client's channels collection
-            const guildChannel = client.channels.find(ch => ch.id === channel);
+        // if the channel doesn't exist in the collection, we stop the code
+        if (guildChannel === null) return console.log('Could not find channel in channels collection (%s)', channel);
 
-            // if the channel doesn't exist in the collection, we stop the code
-            if (guildChannel === null) return console.log('Could not find channel in channels collection (%s)', channel);
+        // in order to request data, we use channel topics for the IP and port, if there is no channel topic, there is no request
+        // therefore, no code can be run
+        if (!guildChannel.topic) return;
 
-            // in order to request data, we use channel topics for the IP and port, if there is no channel topic, there is no request
-            // therefore, no code can be run
-            if (!guildChannel.topic) return;
+        // perform request and get data
+        // timeout for 4000ms to prevent it hanging
+        request.get(`http://${guildChannel.topic}/players.json`, {
+            timeout: 4000
+        }, (err, _, body) => {
+            if (err) return console.log(err.stack);
 
-            // perform request and get data
-            // timeout for 4000ms to prevent it hanging
-            request.get(`http://${guildChannel.topic}/players.json`, {
-                timeout: 4000
-            }, (err, _, body) => {
-                if (err) return console.log(err.stack);
+            // /!\ IMPORTANT /!\
+            // we must parse the data before we can begin displaying it. if it cannot be
+            // parsed, there is something wrong and we need to check it
 
-                // /!\ IMPORTANT /!\
-                // we must parse the data before we can begin displaying it. if it cannot be
-                // parsed, there is something wrong and we need to check it
+            // also. this crashes app if it's not caught
+            try {
+                playerData[channel] = JSON.parse(body);
+            }
+            catch(_e) {
+                return console.log(_e.stack);
+            }
+        });
 
-                // also. this crashes app if it's not caught
-                try {
-                    playerData[channel] = JSON.parse(body);
+        // if player data doesn't exist, we can't display in the embed, obviously
+        if (playerData[channel] === undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+
+        // likewise for server data
+        if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+
+        // this is the format we use toe display players
+        // Name | ServerId - Ping: 100ms
+        const format = playerData[channel].length > 0 ?
+            '`' + playerData[channel].map(ply => `${ply.name}`).join(', ') + '`' :
+            'No players online.';
+
+        // this is for authorization and rpz
+        const additionalFields = [
+            {
+                name: 'Authorization',
+                value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
+            },
+            {
+                name: 'Roleplay Zone',
+                value: serverData[channel].Data.mapname
+            }
+        ];
+
+        guildChannel.fetchMessages()
+            .then(messages => {
+                const statEmbed = new Discord.RichEmbed()
+                    .setColor('#7700EF')
+                    .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
+                    .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                    .setDescription(format)
+                    .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
+                    .addField('Roleplay Zone', serverData[channel].Data.mapname)
+                    .setFooter('HighSpeed-Gaming 2019');
+
+                statEmbed.fields = additionalFields;
+
+                if (messages.array().length === 0) {
+                    guildChannel.send(statEmbed);
+                    return console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', channel);
                 }
-                catch(_e) {
-                    return console.log(_e.stack);
-                }
-            });
 
-            // if player data doesn't exist, we can't display in the embed, obviously
-            if (playerData[channel] === undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+                messages.forEach(message_ => {
+                    // if a method is called on a null property, that is big bad!
+                    if (message_ === null) return console.log('I found a null message object, running again.');
 
-            // likewise for server data
-            if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+                    // delete any messages that are not from the bot
+                    if (message_.author.id !== client.user.id) { return message_.delete(); }
 
-            // this is the format we use toe display players
-            // Name | ServerId - Ping: 100ms
-            const format = playerData[channel].length > 0 ?
-                '`' + playerData[channel].map(ply => `${ply.name}`).join(', ') + '`' :
-                'No players online.';
+                    // if the message has embeds, it is owned by the bot and is definitely the server status embed
+                    if (message_.embeds.length >= 1) {
+                        console.log('I found a message (%s) in the channel (%s) with embeds, editing this message with the updated information.',
+                            message_.id,
+                            channel
+                        );
 
-            // this is for authorization and rpz
-            const additionalFields = [
-                {
-                    name: 'Authorization',
-                    value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
-                },
-                {
-                    name: 'Roleplay Zone',
-                    value: serverData[channel].Data.mapname
-                }
-            ];
+                        // create an embed from the current embed and set the description to the updated info
+                        const embed = new Discord.RichEmbed(message_.embeds[0])
+                            .setDescription(format)
+                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
-            guildChannel.fetchMessages()
-                .then(messages => {
-                    const statEmbed = new Discord.RichEmbed()
-                        .setColor('#7700EF')
-                        .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
-                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
-                        .setDescription(format)
-                        .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
-                        .addField('Roleplay Zone', serverData[channel].Data.mapname)
-                        .setFooter('HighSpeed-Gaming 2019');
+                        embed.fields = additionalFields;
 
-                    statEmbed.fields = additionalFields;
-
-                    if (messages.array().length === 0) {
-                        guildChannel.send(statEmbed);
-                        return console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', channel);
+                        return message_.edit(embed);
                     }
-
-                    messages.forEach(message_ => {
-                        // if a method is called on a null property, that is big bad!
-                        if (message_ === null) return console.log('I found a null message object, running again.');
-
-                        // delete any messages that are not from the bot
-                        if (message_.author.id !== client.user.id) { return message_.delete(); }
-
-                        // if the message has embeds, it is owned by the bot and is definitely the server status embed
-                        if (message_.embeds.length >= 1) {
-                            console.log('I found a message (%s) in the channel (%s) with embeds, editing this message with the updated information.',
-                                message_.id,
-                                channel
-                            );
-
-                            // create an embed from the current embed and set the description to the updated info
-                            const embed = new Discord.RichEmbed(message_.embeds[0])
-                                .setDescription(format)
-                                .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'));
-
-                            embed.fields = additionalFields;
-
-                            return message_.edit(embed);
-                        }
-                        else {
-                            message_.delete();
-                            console.log('found a message in %s by %s that was not status embed in #%s (%s)',
-                                guildChannel.name,
-                                message_.author.tag,
-                                guildChannel.name,
-                                guildChannel.id
-                            );
-                        }
-                    });
+                    else {
+                        message_.delete();
+                        console.log('found a message in %s by %s that was not status embed in #%s (%s)',
+                            guildChannel.name,
+                            message_.author.tag,
+                            guildChannel.name,
+                            guildChannel.id
+                        );
+                    }
                 });
-        }
+            });
     }
 }, serverStatusInfo.waitTime || 3000);
 
