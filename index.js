@@ -53,17 +53,17 @@ let serverQueryTime = 6000;
  * An object that provides long-auth-name, used in server data auto-updater
  */
 const HSGAuths = {
-    'CR': 'Casual Restricted (CR)',
-    'CU': 'Casual Unrestricted (CU)',
-    'M1': 'New Member (M1)',
-    'M2': 'Member (M2)',
+    'CR': 'Casual Restricted',
+    'CU': 'Casual Unrestricted',
+    'M1': 'New Member',
+    'M2': 'Member',
     'GS': 'General Staff',
-    'A1': 'Junior Administrator (A1)',
-    'A2': 'Senior Administrator (A2)',
-    'A3': 'Lead Administrator (A3)',
-    'DV': 'Developer (DV)',
-    'CD': 'Chief of Development (CD)',
-    'DR': 'Director (DR)'
+    'A1': 'Junior Administrator',
+    'A2': 'Senior Administrator',
+    'A3': 'Lead Administrator',
+    'DV': 'Developer',
+    'CD': 'Chief of Development',
+    'DR': 'Director'
 };
 
 /**
@@ -252,11 +252,12 @@ setInterval(() => {
 
         // this is for authorization and rpz
         let additionalFields;
+        const shortAlvl = serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '');
         if (!isProbablyOffline) {
             additionalFields = [
                 {
                     name: 'Authorization',
-                    value: HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')]
+                    value: HSGAuths[shortAlvl] + ` (${shortAlvl})`
                 },
                 {
                     name: 'Roleplay Zone',
@@ -275,8 +276,6 @@ setInterval(() => {
                         .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
                         .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
                         .setDescription(format)
-                        .addField('Authorization', HSGAuths[serverData[channel].Data.gametype.replace('HSG-RP | ', '')])
-                        .addField('Roleplay Zone', serverData[channel].Data.mapname)
                         .setFooter('HighSpeed-Gaming 2019');
 
                     statEmbed.fields = additionalFields;
