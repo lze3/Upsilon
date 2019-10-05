@@ -277,7 +277,7 @@ setInterval(() => {
                     statEmbed = new Discord.RichEmbed()
                         .setColor('#7700EF')
                         .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
-                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') +
+                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                             `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`)
                         .setDescription(format)
                         .setFooter('HighSpeed-Gaming 2019');
