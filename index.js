@@ -150,7 +150,7 @@ setInterval(() => {
                 timeout: 10000
             }, (err, _, body) => {
                 if (err) {
-                    console.log(err.stack);
+                    if (!err.toString().includes('TIMEOUT')) console.log(err.stack);
                     serverData[channel] = {
                         state: 'offline'
                     };
@@ -227,7 +227,6 @@ setInterval(() => {
                 playerData[channel] = JSON.parse(body);
             }
             catch(_e) {
-                console.log(_e.stack);
                 playerData[channel] = {
                     state: 'offline'
                 };
