@@ -235,10 +235,10 @@ setInterval(() => {
         });
 
         // if player data doesn't exist, we can't display in the embed, obviously
-        if (playerData[channel] === undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+        if (playerData[channel].state !== undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
 
         // likewise for server data
-        if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+        if (serverData[channel].state !== undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
 
         // server offline handling
         isProbablyOffline = false;
@@ -327,7 +327,7 @@ setInterval(() => {
                         // create an embed from the current embed and set the description to the updated info
                         const embed = new Discord.RichEmbed(message_.embeds[0])
                             .setDescription(format)
-                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') +
+                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                                 `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`);
 
                         embed.fields = additionalFields;
