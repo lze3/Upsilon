@@ -235,10 +235,13 @@ setInterval(() => {
         });
 
         // if player data doesn't exist, we can't display in the embed, obviously
-        if (playerData[channel].state !== undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+        if (playerData[channel] === undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
 
         // likewise for server data
-        if (serverData[channel].state !== undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+        if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+
+        // another proof check
+        if (serverData[channel].state !== undefined) return;
 
         // server offline handling
         isProbablyOffline = false;
