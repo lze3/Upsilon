@@ -274,7 +274,8 @@ setInterval(() => {
                     statEmbed = new Discord.RichEmbed()
                         .setColor('#7700EF')
                         .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
-                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') +
+                            `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`)
                         .setDescription(format)
                         .setFooter('HighSpeed-Gaming 2019');
 
@@ -326,7 +327,8 @@ setInterval(() => {
                         // create an embed from the current embed and set the description to the updated info
                         const embed = new Discord.RichEmbed(message_.embeds[0])
                             .setDescription(format)
-                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss'));
+                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') +
+                                `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`);
 
                         embed.fields = additionalFields;
 
