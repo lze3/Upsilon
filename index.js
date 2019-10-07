@@ -150,7 +150,7 @@ setInterval(() => {
                 timeout: 10000
             }, (err, _, body) => {
                 if (err) {
-                    if (!err.toString().includes('TIMEOUT')) console.log(err.stack);
+                    if (!err.toString().includes('TIMEDOUT')) console.log(err.stack);
                     serverData[channel] = {
                         state: 'offline'
                     };
