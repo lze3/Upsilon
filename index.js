@@ -239,6 +239,10 @@ setInterval(() => {
         // likewise for server data
         if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
 
+        // return if Data for serverInfo is undefined
+        // this will likely only happen in the odd occurence that the request is being sent as the server is booting up
+        if (serverData[channel].Data === undefined) return console.log('serverData[\'%s\'].Data was undefined, running again...', channel)
+
         // another proof check
         if (serverData[channel].state !== undefined) return;
 
