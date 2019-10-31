@@ -226,7 +226,7 @@ setInterval(() => {
             try {
                 playerData[channel] = JSON.parse(body);
             }
-            catch(_) {
+            catch(_e) {
                 playerData[channel] = {
                     state: 'offline'
                 };
@@ -241,7 +241,7 @@ setInterval(() => {
 
         // return if Data for serverInfo is undefined
         // this will likely only happen in the odd occurence that the request is being sent as the server is booting up
-        if (serverData[channel].Data === undefined) return console.log('serverData[\'%s\'].Data was undefined, running again...', channel)
+        if (serverData[channel].Data === undefined) return console.log('serverData[\'%s\'].Data was undefined, running again...', channel);
 
         // another proof check
         if (serverData[channel].state !== undefined) return;
