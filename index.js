@@ -226,7 +226,7 @@ setInterval(() => {
             try {
                 playerData[channel] = JSON.parse(body);
             }
-            catch(_e) {
+            catch {
                 playerData[channel] = {
                     state: 'offline'
                 };
