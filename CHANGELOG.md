@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/scandula-c/phillip-bot/compare/v1.1.0...v1.2.0) (2019-11-07)
+
+
+### Bug Fixes
+
+* **status-getter:** additional check for if Data property of object is undefined ([f9811a2](https://github.com/scandula-c/phillip-bot/commit/f9811a2))
+* another proof-check ([5b36502](https://github.com/scandula-c/phillip-bot/commit/5b36502))
+* **auto-updater:** undefined error with sv data ([79cf7e5](https://github.com/scandula-c/phillip-bot/commit/79cf7e5))
+* build ([9c1ccec](https://github.com/scandula-c/phillip-bot/commit/9c1ccec))
+* change the message of the purge when error ([0b042a8](https://github.com/scandula-c/phillip-bot/commit/0b042a8))
+* update rules ([dcef8d0](https://github.com/scandula-c/phillip-bot/commit/dcef8d0))
+* **steam:** false conversion to hex ([553aa29](https://github.com/scandula-c/phillip-bot/commit/553aa29))
+* **steam:** hex fixed (again) ([a55f4c0](https://github.com/scandula-c/phillip-bot/commit/a55f4c0))
+* toggle logging not working ([38d3e8b](https://github.com/scandula-c/phillip-bot/commit/38d3e8b))
+
+
+### Features
+
+* add a command to check if a fivem server is blocked ([6b2758a](https://github.com/scandula-c/phillip-bot/commit/6b2758a))
+* **auto-update:** show total clients ([323546e](https://github.com/scandula-c/phillip-bot/commit/323546e))
+* **auto-updated:** offline server handling ([203ce8a](https://github.com/scandula-c/phillip-bot/commit/203ce8a))
+* add an acknowledgement for server owner ([943d368](https://github.com/scandula-c/phillip-bot/commit/943d368))
+* automatic server status update ([21bae8f](https://github.com/scandula-c/phillip-bot/commit/21bae8f))
+* show logging info for bot ([9c97cf4](https://github.com/scandula-c/phillip-bot/commit/9c97cf4))
+* suggestion state setting ([110104e](https://github.com/scandula-c/phillip-bot/commit/110104e))
+
 ## 1.1.0 (2019-08-24)
 
 
