@@ -13,7 +13,7 @@ module.exports = {
      *      convertBoolToStrState(true); // Yes
      */
     convertBoolToStrState: function(bool) {
-        if (typeof bool !== 'boolean') throw new TypeError('Expected boolean, got ' + typeof bool);
+        if (!bool || typeof bool !== 'boolean') throw new TypeError('Expected boolean, got ' + typeof bool);
         return bool ? 'Yes' : 'No';
     },
 
@@ -27,7 +27,7 @@ module.exports = {
      *      convertDecToHex(16711680); // 'FF0000'
      */
     convertDecToHex: function(decimal) {
-        if (typeof decimal !== 'number') throw new TypeError('Expected number, got ' + typeof decimal);
+        if (!decimal || typeof decimal !== 'number') throw new TypeError('Expected number, got ' + typeof decimal);
         return decimal.toString(16);
     },
 
@@ -41,7 +41,7 @@ module.exports = {
      *      convertHexToDec('#d91e18'); // 14229016
      */
     convertHexToDec: function(hex) {
-        if (typeof hex !== 'string') throw new TypeError('Expected string, got ' + typeof hex);
+        if (!hex || typeof hex !== 'string') throw new TypeError('Expected string, got ' + typeof hex);
         return parseInt(hex, 16);
     },
 
@@ -51,7 +51,7 @@ module.exports = {
      * @param {string} str The initial string.
      */
     FiveMSanitize: function(str) {
-        if (typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
+        if (!str || typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
         return str.replace(/\^[0-9]/, '');
     }
 };
