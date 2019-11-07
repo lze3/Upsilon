@@ -165,7 +165,8 @@ setInterval(() => {
                     serverData[serverStatusInfo.statusChannels] = JSON.parse(body);
                 }
                 catch(e) {
-                    return console.log(e.stack);
+                    console.log('The following error is referring to IP: %s', guildChannel.topic);
+                    return console.log(e.toString() + '\n');
                 }
             });
 
