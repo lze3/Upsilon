@@ -46,12 +46,14 @@ module.exports = {
     },
 
     /**
-     * Cleans the string of any carets (^)
+     * Cleans the string of any carets, tilde colors (e.g. ~r~) and HTML tags (<FONT COLOR='#D9E18'>D</FONT>)
      *
      * @param {string} str The initial string.
      */
     FiveMSanitize: function(str) {
         if (!str || typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
-        return str.replace(/\^[0-9]/, '');
+        return str.replace(
+            /(>|<|~[a-zA-Z]~|\^[0-9])/gm, ''
+        );
     }
 };
