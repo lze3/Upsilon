@@ -53,7 +53,7 @@ module.exports = {
     FiveMSanitize: function(str) {
         if (!str || typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
         return str.replace(
-            /(>|<|~[a-zA-Z]~|\^[0-9])/gm, ''
+            /(>|<|~[a-zA-Z]~|\^[0-9])/g, ''
         );
     }
 };
