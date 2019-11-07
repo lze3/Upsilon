@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scandula-c/phillip-bot.git"
+    "url": "git+https://github.com/Zeemahh/Upsilon.git"
   },
   "author": "Scandula",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scandula-c/phillip-bot/issues"
+    "url": "https://github.com/Zeemahh/Upsilon/issues"
   },
-  "homepage": "https://github.com/scandula-c/phillip-bot#readme",
+  "homepage": "https://github.com/Zeemahh/Upsilon#readme",
   "dependencies": {
     "colors": "^1.3.3",
     "discord.js": "^11.5.1",
