@@ -49,11 +49,16 @@ module.exports = {
      * Cleans the string of any carets, tilde colors (e.g. ~r~) and HTML tags (<FONT COLOR='#D9E18'>D</FONT>)
      *
      * @param {string} str The initial string.
+     *
+     * @example
+     *
+     *      FiveMSantize('~r~cool rp serber name, <font></font>'); // 'rcool rp serber name, font/font
      */
     FiveMSanitize: function(str) {
         if (!str || typeof str !== 'string') throw new TypeError('Expected string, got ' + typeof str);
         return str.replace(
-            /(>|<|~[a-zA-Z]~|\^[0-9])/g, ''
+            /(>|<|~[a-zA-Z]~|\^[0-9])/g,
+            ''
         );
     }
 };
