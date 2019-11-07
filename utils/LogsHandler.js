@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const config = require('../config');
+const Functions = require('./Functions');
 const logChannels = config.logChannels;
 const embedColor = config.embedColors;
 const nau = Date.now();
@@ -267,13 +268,13 @@ module.exports.roleUpdate = async (oldRole) => {
                 changee = '#default';
             }
             else {
-                changee = '#' + change.old.toString(16);
+                changee = '#' + Functions.convertDecToHex(change.old);
             }
             if(change.new < 1) {
                 changee2 = '#default';
             }
             else {
-                changee2 = '#' + change.new.toString(16);
+                changee2 = '#' + Functions.convertDecToHex(change.new);
             }
             embed.addField('⇢ Color', `**Was:** ${changee}\n**Now:** ${changee2}`, true);
         }
