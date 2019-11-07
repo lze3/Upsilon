@@ -1,6 +1,6 @@
 {
   "name": "upsilon",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A random Discord bot with miscellaneous features and commands.",
   "main": "index.js",
   "scripts": {
