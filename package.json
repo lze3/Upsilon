@@ -1,7 +1,7 @@
 {
-  "name": "jcrpbot",
+  "name": "upsilon",
   "version": "1.2.0",
-  "description": "A Discord bot designed specifically for use on the JusticeCommunityRP guild.",
+  "description": "A random Discord bot with miscellaneous features and commands.",
   "main": "index.js",
   "scripts": {
     "release": "standard-version",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Zeemahh/Upsilon.git"
   },
-  "author": "Scandula",
+  "author": "Zeemah",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Zeemahh/Upsilon/issues"
