@@ -65,7 +65,7 @@ module.exports = class PlayerInfo extends Command {
         let member = message.member;
         let embedColor = '#23E25D';
         if (message.guild) {
-            member = message.member || message.guild.fetchMember(message.author);
+            member = message.member || message.guild.members.fetch(message.author);
             embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
         }
 

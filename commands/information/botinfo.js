@@ -16,7 +16,7 @@ module.exports = class BotInfo extends Command {
     }
 
     run(message) {
-        const member = message.member || message.guild.fetchMember(message.author);
+        const member = message.member || message.guild.members.fetch(message.author);
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
 
         const logChannelName = (chId) => this.client.channels.find(channel => chId === channel.id).name;

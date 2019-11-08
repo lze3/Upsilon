@@ -54,7 +54,7 @@ module.exports = class Status extends Command {
     }
 
     async run(message, { server }) {
-        const member = message.member || message.guild.fetchMember(message.author);
+        const member = message.member || message.guild.members.fetch(message.author);
         const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
 
         // remove the command entererd by the user
