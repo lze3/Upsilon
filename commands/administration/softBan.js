@@ -38,7 +38,7 @@ module.exports = class SoftBan extends Command {
         }
 
         try {
-            member.ban({
+            message.guild.members.ban(member, {
                 days: 7,
                 reason: reason
             });

@@ -52,7 +52,7 @@ module.exports = class Ban extends Command {
         }
 
         try {
-            message.guild.ban(user);
+            message.guild.members.ban(user.id);
         }
         catch(e) {
             console.log(e.stack);
