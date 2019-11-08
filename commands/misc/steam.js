@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const steamAPI = require('steamapi');
 const steam = new steamAPI('74B4B0F5DE97280AE5090F379DB24799');
 const functs = require('../../utils/Functions');
@@ -47,7 +47,7 @@ module.exports = class Steam extends Command {
                         else{
                             state = 'Public';
                         }
-                        message.channel.send(new RichEmbed()
+                        message.channel.send(new MessageEmbed()
                             .addField('Steam Profile Link', `[Click Here](${_steam})`)
                             .addField('Steam64 ID', id, true)
                             .addField('SteamHex ID', converter.decToHex(id).toString().toUpperCase().slice(2), true)
@@ -77,7 +77,7 @@ module.exports = class Steam extends Command {
                     else {
                         state = 'Public';
                     }
-                    message.channel.send(new RichEmbed()
+                    message.channel.send(new MessageEmbed()
                         .addField('Steam Profile Link', `[Click Here](https://steamcommunity.com/profiles/${_steam})`)
                         .addField('Steam64 ID', _steam, true)
                         .addField('SteamHex ID', converter.decToHex(_steam).toString().toUpperCase().slice(2), true)

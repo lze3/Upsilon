@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 
@@ -38,7 +38,7 @@ module.exports = class vKick extends Command {
         temp_channel.delete();
         message.reply(member + ' was kick for the voice channel!');
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(member.user.tag, member.user.avatarURL)
             .setDescription(member + ' was kick for a voice channel by ' + message.member)
             .setTimestamp()

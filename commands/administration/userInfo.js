@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 
 const gameStates = {
@@ -78,7 +78,7 @@ module.exports = class UserInfo extends Command {
         locAcknow[user.id] = [];
 
         // create the new embed object
-        const embed = new RichEmbed();
+        const embed = new MessageEmbed();
 
         // get the member from the user
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);

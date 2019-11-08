@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const ms = require('pretty-ms');
 const config = require('../../config');
 
@@ -21,7 +21,7 @@ module.exports = class BotInfo extends Command {
 
         const logChannelName = (chId) => this.client.channels.find(channel => chId === channel.id).name;
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setTitle(`${message.guild.me.user.username}#${message.guild.me.user.discriminator} Information`)
             .addField('❯ Connectivity', `Ping: ${Math.floor(this.client.ping)}ms\nUptime: ${ms (this.client.uptime, { vosbose: true })}`)
             .addField('❯ Resources', `RAM Usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) + 'MB'}`)

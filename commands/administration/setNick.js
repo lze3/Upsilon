@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 
@@ -36,7 +36,7 @@ module.exports = class SetNick extends Command {
         member.setNickname(newNick);
         message.reply(member + ' nickname was changed to ' + newNick);
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(member.user.tag, member.user.avatarURL)
             .setDescription(member + ' nickname was changed from ' + oldNick + ' to ' + newNick + ' by ' + message.member + '!')
             .setTimestamp()

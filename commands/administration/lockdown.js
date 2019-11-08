@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 module.exports = class Lockdown extends Command {
@@ -45,7 +45,7 @@ module.exports = class Lockdown extends Command {
                 child.send('🔒 This channel was locked: **' + reason + '**')
                     .then(msg => msg.react('🗑'));
             });
-            const embed = new RichEmbed()
+            const embed = new MessageEmbed()
                 .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
                 .setDescription(`Category ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)
@@ -58,7 +58,7 @@ module.exports = class Lockdown extends Command {
                 SEND_MESSAGES: false
             });
             console.log('Locked channel [ ' + channel.name + ' ].');
-            const embed = new RichEmbed()
+            const embed = new MessageEmbed()
                 .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
                 .setDescription(`Channel ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)

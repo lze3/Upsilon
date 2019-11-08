@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class RulesGenerator extends Command {
     constructor(client) {
@@ -18,7 +18,7 @@ module.exports = class RulesGenerator extends Command {
     run(message) {
         message.delete();
 
-        const rulesEmbed = new RichEmbed()
+        const rulesEmbed = new MessageEmbed()
             .setAuthor('JusticeCommunityRP • Important Server Information - Rules', 'https://i.imgur.com/nKTfMbX.png')
             .setTitle('**Server Motto**: ' +
                 'Family, Friends and Fun!')
@@ -44,7 +44,7 @@ module.exports = class RulesGenerator extends Command {
                 '**20.** Do not have a negative attitude.')
             .setColor('#7893AE');
 
-        const rolesEmbed = new RichEmbed()
+        const rolesEmbed = new MessageEmbed()
             .setAuthor('JusticeCommunityRP • Important Server Information - Roles', 'https://i.imgur.com/nKTfMbX.png')
             .setDescription(
                 '`JCRP Collective | Owner` - The Owner of the server.\n\n' +

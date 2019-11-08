@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class Announce extends Command {
     constructor(client) {
@@ -39,7 +39,7 @@ module.exports = class Announce extends Command {
 
         message.delete();
 
-        const embed = new RichEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(`Announcement from ${message.member.user.username}`, message.author.avatarURL)
             .setDescription(announcement)
             .setColor('#1C98F8')
