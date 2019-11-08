@@ -43,7 +43,7 @@ module.exports = class Announce extends Command {
             .setAuthor(`Announcement from ${message.member.user.username}`, message.author.avatarURL)
             .setDescription(announcement)
             .setColor('#1C98F8')
-            .setFooter(message.member.highestRole.name)
+            .setFooter(message.member.roles.highest.name)
             .setTimestamp();
 
         if (deliminator[0] !== undefined) {
