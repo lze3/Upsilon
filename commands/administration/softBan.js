@@ -43,7 +43,7 @@ module.exports = class SoftBan extends Command {
                 reason: reason
             });
 
-            message.guild.unban(user, 'Softbanned by ' + message.author.tag).then(() => {
+            message.guild.members.unban(user.id, 'Softbanned by ' + message.author.tag).then(() => {
                 message.channel.send(`***${user.username}#${user.discriminator} was soft-banned for ${reason}!***`);
             });
         }

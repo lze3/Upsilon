@@ -34,7 +34,7 @@ module.exports = class Unban extends Command {
         message.delete();
 
         try {
-            message.guild.unban(user, reason);
+            message.guild.members.unban(user, reason);
         }
         catch(e) {
             console.log(e.stack);
