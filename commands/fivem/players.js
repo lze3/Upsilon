@@ -72,7 +72,7 @@ module.exports = class Status extends Command {
 
         // Error Embed for both Players and Server information request query
         const serverDownEmbed = new MessageEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Offline')
             .setColor('#FF9C00')
@@ -107,7 +107,7 @@ module.exports = class Status extends Command {
                 const sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
 
                 const embed = new MessageEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join('\n') : 'No players found!' : sortedPlayers.length > 0 ? sortedPlayers.map(sp => '**ID: ' + sp.id + '** - ' + sp.name).join('\n') : 'No players found!')
                     .addField('Join Server', '<fivem://connect/' + IP + ':' + details[server].port + '/>')
                     .setTitle('Player count: ' + playerData.length + '/' + serverData.vars.sv_maxClients)

@@ -74,14 +74,14 @@ module.exports = class PlayerInfo extends Command {
 
         // Error Embed for both Players and Server information request query
         const invalidPlayerEmbed = new MessageEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Information', 'Could not obtain information for that player, please ensure the ID is valid.')
             .setColor('#FF9C00')
             .setTimestamp();
 
         const serverDownEmbed = new MessageEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Server offline :(')
             .setColor('#FF9C00')
@@ -113,7 +113,7 @@ module.exports = class PlayerInfo extends Command {
 
             if (playerInfo) {
                 const embed = new MessageEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .addField('Player Name', playerInfo.name)
                     .addField('Identifiers', '```json\n' + playerInfo.identifiers.map(identifier => '"' + identifier + '"').join(',\n') + '```')
                     .addField('Ping', playerInfo.ping)

@@ -62,7 +62,7 @@ module.exports = class Status extends Command {
 
         // Error Embed for both Players and Server information request query
         const serverDownEmbed = new MessageEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Offline')
             .setColor('#FF9C00')
@@ -94,7 +94,7 @@ module.exports = class Status extends Command {
                 }
 
                 const embed = new MessageEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .addField('Server IP', IP + ':' + details[server].port)
                     .addField('Status', 'Online')
                     .addField('Uptime', serverData.vars.Uptime)
