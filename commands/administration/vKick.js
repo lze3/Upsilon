@@ -39,7 +39,7 @@ module.exports = class vKick extends Command {
         message.reply(member + ' was kick for the voice channel!');
 
         const embed = new MessageEmbed()
-            .setAuthor(member.user.tag, member.user.avatarURL)
+            .setAuthor(member.user.tag, member.user.avatarURL())
             .setDescription(member + ' was kick for a voice channel by ' + message.member)
             .setTimestamp()
             .setColor(config.embedColors.action);

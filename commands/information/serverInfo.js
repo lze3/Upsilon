@@ -17,7 +17,7 @@ module.exports = class MemberCount extends Command {
         const member = message.member || message.guild.members.fetch(message.author);
         const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
         const serverEmbed = new MessageEmbed()
-            .setAuthor(message.guild.name, message.guild.avatarURL)
+            .setAuthor(message.guild.name, message.guild.avatarURL())
             .setDescription('Detailed Information of ' + message.guild.name)
             .addField('❯ Owner', `Username: ${message.guild.owner.user.tag}\nID: ${message.guild.owner.user.id}`)
             .addField('❯ Roles', `Total Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id).size}\nAdmin Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id && role.hasPermission('ADMINISTRATOR')).size}\nNon-Admin Roles: ${message.guild.roles.filter(role => role.id !== message.guild.id && !role.hasPermission('ADMINISTRATOR')).size} `)

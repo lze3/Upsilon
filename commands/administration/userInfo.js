@@ -102,8 +102,8 @@ module.exports = class UserInfo extends Command {
             locAcknow[user.id].push('Server Owner');
         }
 
-        embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL);
-        embed.setThumbnail(user.avatarURL);
+        embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL());
+        embed.setThumbnail(user.avatarURL());
 
         // this is the username; will be undefined if they don't have one
         const nickname = user.nickname;

@@ -41,7 +41,7 @@ module.exports = class Move extends Command {
         message.reply(member + ' was moved to ' + channel.name);
 
         const embed = new MessageEmbed()
-            .setAuthor(member.user.tag, member.user.avatarURL)
+            .setAuthor(member.user.tag, member.user.avatarURL())
             .setDescription(member + ' was moved to ' + channel.name + ' by ' + message.member + '!')
             .setTimestamp()
             .setColor(config.embedColors.action);

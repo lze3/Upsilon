@@ -45,7 +45,7 @@ module.exports = class Unlockdown extends Command {
                 child.send('🔓 This channel was locked by ' + message.member.displayName);
             });
             const embed = new MessageEmbed()
-                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Category ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
@@ -58,7 +58,7 @@ module.exports = class Unlockdown extends Command {
             });
             console.log('Unlocked channel [ ' + channel.name + ' ].');
             const embed = new MessageEmbed()
-                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Channel ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)

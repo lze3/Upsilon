@@ -46,7 +46,7 @@ module.exports = class Lockdown extends Command {
                     .then(msg => msg.react('🗑'));
             });
             const embed = new MessageEmbed()
-                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Category ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
@@ -59,7 +59,7 @@ module.exports = class Lockdown extends Command {
             });
             console.log('Locked channel [ ' + channel.name + ' ].');
             const embed = new MessageEmbed()
-                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL)
+                .setAuthor('Lockdown | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Channel ${channel.name} has been locked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)

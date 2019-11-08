@@ -37,7 +37,7 @@ module.exports = class SetNick extends Command {
         message.reply(member + ' nickname was changed to ' + newNick);
 
         const embed = new MessageEmbed()
-            .setAuthor(member.user.tag, member.user.avatarURL)
+            .setAuthor(member.user.tag, member.user.avatarURL())
             .setDescription(member + ' nickname was changed from ' + oldNick + ' to ' + newNick + ' by ' + message.member + '!')
             .setTimestamp()
             .setColor(config.embedColors.action);
