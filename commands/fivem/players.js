@@ -65,7 +65,7 @@ module.exports = class Status extends Command {
 
     async run(message, { server, shorten }) {
         const member = message.member || message.guild.members.fetch(message.author);
-        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+        const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
 
         // remove the command entered by the user
         message.delete();

@@ -66,7 +66,7 @@ module.exports = class PlayerInfo extends Command {
         let embedColor = '#23E25D';
         if (message.guild) {
             member = message.member || message.guild.members.fetch(message.author);
-            embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
         }
 
         // remove the command entered by the user

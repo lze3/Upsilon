@@ -139,9 +139,9 @@ module.exports = class UserInfo extends Command {
         }
 
         // the color of the embed
-        embed.setColor(message.guild.me.colorRole.color);
-        if (member.colorRole !== null) {
-            embed.setColor(member.colorRole.color);
+        embed.setColor(message.guild.me.roles.color.color);
+        if (member.roles.color !== null) {
+            embed.setColor(member.roles.color.color);
         }
 
         if (nickname !== undefined) {

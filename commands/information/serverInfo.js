@@ -15,7 +15,7 @@ module.exports = class MemberCount extends Command {
 
     run(message) {
         const member = message.member || message.guild.members.fetch(message.author);
-        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+        const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
         const serverEmbed = new MessageEmbed()
             .setAuthor(message.guild.name, message.guild.avatarURL)
             .setDescription('Detailed Information of ' + message.guild.name)

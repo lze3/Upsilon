@@ -33,7 +33,7 @@ module.exports = class Steam extends Command {
         message.delete();
         if(_steam.includes('https://steamcommunity.com/id/') || _steam.includes('https://steamcommunity.com/profiles/')) {
             const member = message.member || message.guild.members.fetch(message.author);
-            const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
             steam.resolve(_steam).then(id => {
                 steam.getUserBans(id).then(bans => {
                     steam.getUserSummary(id).then(raw => {
@@ -64,7 +64,7 @@ module.exports = class Steam extends Command {
         }
         else {
             const member = message.member || message.guild.members.fetch(message.author);
-            const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
             steam.getUserBans(_steam).then(bans => {
                 steam.getUserSummary(_steam).then(raw => {
                     let state;
