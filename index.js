@@ -125,13 +125,10 @@ client.on('message', async message => {
 setInterval(() => {
 
     // this boolean will get set to true once the data has been parsed and is not undefined
-    if (serverStatusInfo) {
-
-        // ignore this check because we dont want to use this feature
-        if (!serverStatusInfo.status) return;
+    if (serverStatusInfo && serverStatusInfo.status) {
 
         // obviously, no channels = no endpoints = no data
-        if (!serverStatusInfo || !serverStatusInfo.statusChannels || typeof serverStatusInfo.statusChannels !== 'object') return;
+        if (!serverStatusInfo.statusChannels || typeof serverStatusInfo.statusChannels !== 'object') return;
 
         // iteration
         for (const channel of serverStatusInfo.statusChannels) {
@@ -140,7 +137,7 @@ setInterval(() => {
             const guildChannel = client.channels.find(ch => ch.id === channel);
 
             // if channel couldn't be found in collection, return
-            if (guildChannel === null) return console.log('foundchannel was null');
+            if (guildChannel === null) return console.log('Could not find channel (%s) in bot\'s collection.', channel);
 
             // we use topic for endpoint, we can't request anything if there is no topic/endpoint
             if (!guildChannel.topic) return console.log('the channel had no topic');
