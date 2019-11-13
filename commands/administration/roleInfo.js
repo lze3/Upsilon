@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 
 const functs = require('../../utils/Functions');
@@ -26,8 +26,8 @@ module.exports = class RoleInfo extends Command {
 
     run(message, { role }) {
         message.delete();
-        const embed = new RichEmbed()
-            // .setAuthor(`Role Information - ${role.name}`, message.author.avatarURL)
+        const embed = new MessageEmbed()
+            // .setAuthor(`Role Information - ${role.name}`, message.author.avatarURL())
             .setColor(role.color || '#23E25D')
             .addField('Name', role.name, true)
             .addField('ID', role.id, true)

@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const steamAPI = require('steamapi');
 const steam = new steamAPI('74B4B0F5DE97280AE5090F379DB24799');
 const functs = require('../../utils/Functions');
@@ -32,8 +32,8 @@ module.exports = class Steam extends Command {
     async run(message, { _steam }) {
         message.delete();
         if(_steam.includes('https://steamcommunity.com/id/') || _steam.includes('https://steamcommunity.com/profiles/')) {
-            const member = message.member || message.guild.fetchMember(message.author);
-            const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            const member = message.member || message.guild.members.fetch(message.author);
+            const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
             steam.resolve(_steam).then(id => {
                 steam.getUserBans(id).then(bans => {
                     steam.getUserSummary(id).then(raw => {
@@ -47,7 +47,7 @@ module.exports = class Steam extends Command {
                         else{
                             state = 'Public';
                         }
-                        message.channel.send(new RichEmbed()
+                        message.channel.send(new MessageEmbed()
                             .addField('Steam Profile Link', `[Click Here](${_steam})`)
                             .addField('Steam64 ID', id, true)
                             .addField('SteamHex ID', converter.decToHex(id).toString().toUpperCase().slice(2), true)
@@ -63,8 +63,8 @@ module.exports = class Steam extends Command {
             });
         }
         else {
-            const member = message.member || message.guild.fetchMember(message.author);
-            const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            const member = message.member || message.guild.members.fetch(message.author);
+            const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
             steam.getUserBans(_steam).then(bans => {
                 steam.getUserSummary(_steam).then(raw => {
                     let state;
@@ -77,7 +77,7 @@ module.exports = class Steam extends Command {
                     else {
                         state = 'Public';
                     }
-                    message.channel.send(new RichEmbed()
+                    message.channel.send(new MessageEmbed()
                         .addField('Steam Profile Link', `[Click Here](https://steamcommunity.com/profiles/${_steam})`)
                         .addField('Steam64 ID', _steam, true)
                         .addField('SteamHex ID', converter.decToHex(_steam).toString().toUpperCase().slice(2), true)

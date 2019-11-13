@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 
@@ -40,8 +40,8 @@ module.exports = class Move extends Command {
         member.setVoiceChannel(channel);
         message.reply(member + ' was moved to ' + channel.name);
 
-        const embed = new RichEmbed()
-            .setAuthor(member.user.tag, member.user.avatarURL)
+        const embed = new MessageEmbed()
+            .setAuthor(member.user.tag, member.user.avatarURL())
             .setDescription(member + ' was moved to ' + channel.name + ' by ' + message.member + '!')
             .setTimestamp()
             .setColor(config.embedColors.action);

@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 const IP = config.serverIp;
@@ -54,15 +54,15 @@ module.exports = class Status extends Command {
     }
 
     async run(message, { server }) {
-        const member = message.member || message.guild.fetchMember(message.author);
-        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+        const member = message.member || message.guild.members.fetch(message.author);
+        const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
 
         // remove the command entererd by the user
         message.delete();
 
         // Error Embed for both Players and Server information request query
-        const serverDownEmbed = new RichEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+        const serverDownEmbed = new MessageEmbed()
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Offline')
             .setColor('#FF9C00')
@@ -93,8 +93,8 @@ module.exports = class Status extends Command {
                     return message.reply(`An error occurred while running the command: \n\`${err.name}: ${err.message}\`\nYou shouldn't ever receive an error like this.\nPlease contact @DEVTEAMTAGHERE.`) && console.log(err.stack);
                 }
 
-                const embed = new RichEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                const embed = new MessageEmbed()
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .addField('Server IP', IP + ':' + details[server].port)
                     .addField('Status', 'Online')
                     .addField('Uptime', serverData.vars.Uptime)

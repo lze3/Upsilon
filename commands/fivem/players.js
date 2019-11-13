@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 const IP = config.serverIp;
@@ -64,15 +64,15 @@ module.exports = class Status extends Command {
     }
 
     async run(message, { server, shorten }) {
-        const member = message.member || message.guild.fetchMember(message.author);
-        const embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+        const member = message.member || message.guild.members.fetch(message.author);
+        const embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
 
         // remove the command entered by the user
         message.delete();
 
         // Error Embed for both Players and Server information request query
-        const serverDownEmbed = new RichEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+        const serverDownEmbed = new MessageEmbed()
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Offline')
             .setColor('#FF9C00')
@@ -106,8 +106,8 @@ module.exports = class Status extends Command {
                 // Sorting server players by thier unique In-Game ID
                 const sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
 
-                const embed = new RichEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                const embed = new MessageEmbed()
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .setDescription(shorten ? sortedPlayers.length > 0 ? sortedPlayers.map(sp => sp.name).join('\n') : 'No players found!' : sortedPlayers.length > 0 ? sortedPlayers.map(sp => '**ID: ' + sp.id + '** - ' + sp.name).join('\n') : 'No players found!')
                     .addField('Join Server', '<fivem://connect/' + IP + ':' + details[server].port + '/>')
                     .setTitle('Player count: ' + playerData.length + '/' + serverData.vars.sv_maxClients)

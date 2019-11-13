@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const moment = require('moment');
 
 const gameStates = {
@@ -78,7 +78,7 @@ module.exports = class UserInfo extends Command {
         locAcknow[user.id] = [];
 
         // create the new embed object
-        const embed = new RichEmbed();
+        const embed = new MessageEmbed();
 
         // get the member from the user
         const member = message.guild.members.find(foundMember => foundMember.id === user.id);
@@ -102,8 +102,8 @@ module.exports = class UserInfo extends Command {
             locAcknow[user.id].push('Server Owner');
         }
 
-        embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL);
-        embed.setThumbnail(user.avatarURL);
+        embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL());
+        embed.setThumbnail(user.avatarURL());
 
         // this is the username; will be undefined if they don't have one
         const nickname = user.nickname;
@@ -139,9 +139,9 @@ module.exports = class UserInfo extends Command {
         }
 
         // the color of the embed
-        embed.setColor(message.guild.me.colorRole.color);
-        if (member.colorRole !== null) {
-            embed.setColor(member.colorRole.color);
+        embed.setColor(message.guild.me.roles.color.color);
+        if (member.roles.color !== null) {
+            embed.setColor(member.roles.color.color);
         }
 
         if (nickname !== undefined) {

@@ -38,12 +38,12 @@ module.exports = class SoftBan extends Command {
         }
 
         try {
-            member.ban({
+            message.guild.members.ban(member, {
                 days: 7,
                 reason: reason
             });
 
-            message.guild.unban(user, 'Softbanned by ' + message.author.tag).then(() => {
+            message.guild.members.unban(user.id, 'Softbanned by ' + message.author.tag).then(() => {
                 message.channel.send(`***${user.username}#${user.discriminator} was soft-banned for ${reason}!***`);
             });
         }

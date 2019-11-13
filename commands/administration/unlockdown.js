@@ -1,5 +1,5 @@
 const { Command } = require('discord.js-commando');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 module.exports = class Unlockdown extends Command {
@@ -44,8 +44,8 @@ module.exports = class Unlockdown extends Command {
                 console.log(child);
                 child.send('🔓 This channel was locked by ' + message.member.displayName);
             });
-            const embed = new RichEmbed()
-                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+            const embed = new MessageEmbed()
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Category ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)
@@ -57,8 +57,8 @@ module.exports = class Unlockdown extends Command {
                 SEND_MESSAGES: null
             });
             console.log('Unlocked channel [ ' + channel.name + ' ].');
-            const embed = new RichEmbed()
-                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL)
+            const embed = new MessageEmbed()
+                .setAuthor('Lockdown End | ' + message.author.tag, message.author.avatarURL())
                 .setDescription(`Channel ${channel.name} has been unlocked.`)
                 .setColor(config.embedColors.action)
                 .addField('Reason', reason)

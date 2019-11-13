@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 const request = require('request');
-const { RichEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const config = require('../../config');
 
 const IP = config.serverIp;
@@ -65,23 +65,23 @@ module.exports = class PlayerInfo extends Command {
         let member = message.member;
         let embedColor = '#23E25D';
         if (message.guild) {
-            member = message.member || message.guild.fetchMember(message.author);
-            embedColor = member.colorRole ? member.colorRole.color : '#23E25D';
+            member = message.member || message.guild.members.fetch(message.author);
+            embedColor = member.roles.color ? member.roles.color.color : '#23E25D';
         }
 
         // remove the command entered by the user
         message.delete();
 
         // Error Embed for both Players and Server information request query
-        const invalidPlayerEmbed = new RichEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+        const invalidPlayerEmbed = new MessageEmbed()
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Information', 'Could not obtain information for that player, please ensure the ID is valid.')
             .setColor('#FF9C00')
             .setTimestamp();
 
-        const serverDownEmbed = new RichEmbed()
-            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+        const serverDownEmbed = new MessageEmbed()
+            .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
             .addField('Server IP', IP + ':' + details[server].port)
             .addField('Status', 'Server offline :(')
             .setColor('#FF9C00')
@@ -112,8 +112,8 @@ module.exports = class PlayerInfo extends Command {
             }
 
             if (playerInfo) {
-                const embed = new RichEmbed()
-                    .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL, 'https://discourse.jcrpweb.com')
+                const embed = new MessageEmbed()
+                    .setAuthor(`JusticeCommunityRP - ${details[server].name}: Player Information (Player ID: ${playerId})`, message.guild.iconURL(), 'https://discourse.jcrpweb.com')
                     .addField('Player Name', playerInfo.name)
                     .addField('Identifiers', '```json\n' + playerInfo.identifiers.map(identifier => '"' + identifier + '"').join(',\n') + '```')
                     .addField('Ping', playerInfo.ping)

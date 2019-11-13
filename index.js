@@ -273,12 +273,12 @@ setInterval(() => {
             ];
         }
 
-        guildChannel.fetchMessages()
+        guildChannel.messages.fetch()
             .then(messages => {
                 let statEmbed;
                 let offlineEmbed;
                 if (!isProbablyOffline) {
-                    statEmbed = new Discord.RichEmbed()
+                    statEmbed = new Discord.MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
                         .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
@@ -289,7 +289,7 @@ setInterval(() => {
                     statEmbed.fields = additionalFields;
                 }
                 else {
-                    offlineEmbed = new Discord.RichEmbed()
+                    offlineEmbed = new Discord.MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor('HighSpeed-Gaming', 'https://i.imgur.com/qTPd0ql.png')
                         .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'))
@@ -322,7 +322,7 @@ setInterval(() => {
 
                         // server offline handling
                         if (isProbablyOffline) {
-                            const embed = new Discord.RichEmbed(message_.embeds[0])
+                            const embed = new Discord.MessageEmbed(message_.embeds[0])
                                 .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
                             embed.fields = null;
@@ -332,7 +332,7 @@ setInterval(() => {
                         }
 
                         // create an embed from the current embed and set the description to the updated info
-                        const embed = new Discord.RichEmbed(message_.embeds[0])
+                        const embed = new Discord.MessageEmbed(message_.embeds[0])
                             .setDescription(format)
                             .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                                 `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`);
