@@ -2,7 +2,7 @@ module.exports = {
     /**
      * Determines whether to update status or not
      */
-    status: true,
+    status: false,
 
     /**
      * Sets the state of logging
