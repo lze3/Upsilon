@@ -9,7 +9,7 @@ module.exports = {
      *
      * @param {boolean} state The state of logging
      */
-    setStatus: state => {
+    setStatus: (state) => {
         if (!state || typeof state !== 'boolean') return;
         this.status = state;
     },
