@@ -20,8 +20,9 @@ module.exports = class StatusLoop extends Command {
     }
 
     run(message, { state }) {
-        if (!state) {
-            info.setStatus(!info.status);
+        if (!state || typeof state !== 'boolean') {
+            return info.setStatus(!info.status);
         }
+        return info.setStatus(state);
     }
 };
