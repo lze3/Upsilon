@@ -1,3 +1,6 @@
+/**
+ * Thanks to https://github.com/Naval-Base/yukikaze/blob/master/src/bot/commands/docs/docs.ts for this code
+ */
 const { Command } = require('discord.js-commando');
 const fetch = require('node-fetch');
 const qs = require('querystring');
@@ -27,6 +30,8 @@ module.exports = class Docs extends Command {
         const q = query.split(' ');
         const docs = 'stable';
         const source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
+
+        console.log(q.slice(-1)[0]);
 
         const queryString = qs.stringify({
             src: source,
