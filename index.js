@@ -122,7 +122,7 @@ client.on('message', async message => {
 });
 
 // this is for dynamic data that won't change often
-setInterval(() => {
+function getServerInfoData() {
 
     // this boolean will get set to true once the data has been parsed and is not undefined
     if (serverStatusInfo && serverStatusInfo.status) {
@@ -180,9 +180,11 @@ setInterval(() => {
             }
         }
     }
-}, serverQueryTime);
+}
+// eslint-disable-next-line no-unused-vars
+const getServerInfoThread = setInterval(getServerInfoData, serverQueryTime);
 
-setInterval(() => {
+function setServerStatusInfo() {
 
     // obviously we don't want to run this if the feature is disabled
     if (!serverStatusInfo || !serverStatusInfo.status) return;
@@ -202,7 +204,7 @@ setInterval(() => {
 
         // in order to request data, we use channel topics for the IP and port, if there is no channel topic, there is no request
         // therefore, no code can be run
-        if (!guildChannel.topic) return;
+        if (!guildChannel.topic) return console.log('No IP found, returning');
 
         // perform request and get data
         // timeout for 4000ms to prevent it hanging
@@ -350,7 +352,9 @@ setInterval(() => {
                 });
             });
     }
-}, serverStatusInfo.waitTime || 3000);
+}
+// eslint-disable-next-line no-unused-vars
+const setServerInfoThread = setInterval(setServerStatusInfo, serverStatusInfo.waitTime || 3000);
 
 client.on('error', console.error);
 
