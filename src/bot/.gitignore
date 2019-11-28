@@ -1,0 +1,10 @@
+node_modules/
+
+dist/
+
+# node environment
+.env
+
+.vscode/
+
+commands/local
