@@ -1,6 +1,8 @@
 node_modules/
 shortlog.txt
 
+dist/
+
 # node environment
 .env
 
