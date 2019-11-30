@@ -296,7 +296,7 @@ function setServerStatusInfo() {
                 }
 
                 if (messages.array().length === 0) {
-                    console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', channel);
+                    console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', guildChannel.name);
                     if (isProbablyOffline) {
                         console.log('I think the server is offline.');
                         return guildChannel.send(offlineEmbed);
@@ -316,7 +316,7 @@ function setServerStatusInfo() {
                     if (message_.embeds.length >= 1) {
                         console.log('I found a message (%s) in the channel (%s) with embeds, editing this message with the updated information.',
                             message_.id,
-                            channel
+                            guildChannel.name
                         );
 
                         // server offline handling
