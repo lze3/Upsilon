@@ -13,7 +13,7 @@ colors.setTheme({
 });
 
 const prefix = 'p.';
-const client = new CommandoClient({
+export const client = new CommandoClient({
     commandPrefix: prefix,
     owner: '264662751404621825',
     invite: 'https://discord.gg/EqC2wFf'
