@@ -165,7 +165,7 @@ function setServerStatusInfoThread(): void {
 
         let additionalFields: EmbedField[];
         const emptyFields: EmbedField[] = [];
-        if (serverData[channel].Data.gametype.includes('Authorization')) {
+        if (serverData[channel].serverData[channel].Data.gametype.includes('Authorization')) {
             const shortAlvl = hsgAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')];
             if (!isProbablyOffline) {
                 additionalFields = [
