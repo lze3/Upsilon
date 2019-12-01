@@ -4,6 +4,8 @@ import * as colors from 'colors';
 import { join } from 'path';
 import 'typescript';
 import { version } from 'typescript';
+import './utils/function';
+import './utils/server-status-tracking';
 
 colors.setTheme({
     success: 'green',
