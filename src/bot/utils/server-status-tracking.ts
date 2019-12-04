@@ -7,7 +7,7 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
     /**
      * Determines whether to update status or not
      */
-    logStatus: true,
+    logStatus: false,
 
     /**
      * An array or string containing status channel(s)
