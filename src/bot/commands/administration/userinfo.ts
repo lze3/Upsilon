@@ -1,7 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MessageEmbed, User, GuildMember, Guild } from 'discord.js';
+import { MessageEmbed, User, GuildMember } from 'discord.js';
 import * as moment from 'moment';
-import { NewLineKind } from 'typescript';
 
 const gameStates = {
     0: 'Playing',
