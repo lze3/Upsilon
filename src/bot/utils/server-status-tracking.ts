@@ -1,9 +1,7 @@
-import { Channel, TextChannel, GuildChannel, Guild, MessageEmbed, EmbedField, Message, DiscordAPIError } from 'discord.js';
+import { TextChannel, MessageEmbed, EmbedField } from 'discord.js';
 import { client } from '../bot';
-import { ArgumentType } from 'discord.js-commando';
 import * as request from 'request';
 import * as moment from 'moment';
-import { SpawnSyncOptionsWithStringEncoding } from 'child_process';
 
 const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
     /**
@@ -46,7 +44,6 @@ const playerData: any = {};
 let probablyOfflineTick: number = 0;
 let isProbablyOffline: boolean;
 
-// TODO
 function getServerInfoData(): void {
     
     // don't run if the status is false, obviously
@@ -290,6 +287,7 @@ interface playerDataStruct {
     ping: number;
 }
 
+// might use sometime in the future
 /*
 interface serverDataStruct {
     [key: string]: any;
