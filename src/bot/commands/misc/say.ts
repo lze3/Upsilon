@@ -24,6 +24,6 @@ export default class SayCommand extends Command {
 
     public run(message: CommandoMessage, { text }: { text: string }) {
         message.delete();
-        return message.say(text ?? 'No message sent.');
+        return message.say(text);
     }
 }
