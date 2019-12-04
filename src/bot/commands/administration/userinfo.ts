@@ -86,7 +86,7 @@ export default class UserInfo extends Command {
 
         const roles = amount_of_roles > 0 ?
             member.roles.map(role => role.name !== '@everyone' ? '<@&' + role.id + '>' : '').join(' ') :
-            'This user doesn\'t have anny roles.';
+            'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amount_of_roles}]`, roles);
 
         if (local_acknowledgements[user.id].length > 0) {
