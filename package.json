@@ -1,6 +1,10 @@
 {
+  "version": "1.3.2",
   "private": true,
   "workspaces": [
     "src/*"
-  ]
+  ],
+  "scripts": {
+    "release": "standard-version"
+  }
 }
