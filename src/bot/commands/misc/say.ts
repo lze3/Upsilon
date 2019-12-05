@@ -1,6 +1,4 @@
-import { Message, TextChannel } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { stringify } from 'querystring';
 
 export default class SayCommand extends Command {
     public constructor(client: CommandoClient) {
