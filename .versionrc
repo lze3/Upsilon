@@ -1,0 +1,40 @@
+{
+    "types": [
+        {
+            "type": "admin",
+            "section": "Administration"
+        },
+        {
+            "type": "misc",
+            "section": "Miscellaneous"
+        },
+        {
+            "type": "npm",
+            "section": "Node Package Manager"
+        },
+        {
+            "type": "utils",
+            "section": "Utilities"
+        },
+        {
+            "type": "ts",
+            "section": "TypeScript"
+        },
+        {
+            "type": "root",
+            "section": "Core Changes"
+        },
+        {
+            "type": "node",
+            "section": "Node"
+        },
+        {
+            "type": "docs",
+            "section": "Documentation"
+        },
+        {
+            "type": "dev",
+            "section": "Development"
+        }
+    ]
+}

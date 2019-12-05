@@ -5,8 +5,7 @@
   "main": "dist/bot.js",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "start": "npm run build && node .",
-    "release": "standard-version"
+    "start": "npm run build && node ."
   },
   "author": "",
   "license": "ISC",
@@ -30,7 +29,6 @@
     "@types/node": "^12.12.8",
     "@types/ws": "^6.0.3",
     "rimraf": "^3.0.0",
-    "standard-version": "^7.0.1",
     "typescript": "^3.7.3"
   }
 }
