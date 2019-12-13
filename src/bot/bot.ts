@@ -1,24 +1,25 @@
-import './lib/env';
-import { CommandoClient } from 'discord.js-commando';
 import * as colors from 'colors';
+import { TextChannel } from 'discord.js';
+import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
-import 'typescript';
 import { version } from 'typescript';
+import 'typescript';
+import './lib/env';
 import './utils/function';
 import './utils/server-status-tracking';
 
 colors.setTheme({
-    success: 'green',
+    debug: 'cyan',
     error: 'red',
-    warn: 'yellow',
-    debug: 'cyan'
+    success: 'green',
+    warn: 'yellow'
 });
 
 const prefix = 'p.';
 export const client = new CommandoClient({
     commandPrefix: prefix,
-    owner: '264662751404621825',
-    invite: 'https://discord.gg/EqC2wFf'
+    invite: 'https://discord.gg/EqC2wFf',
+    owner: '264662751404621825'
 });
 
 client
@@ -27,7 +28,7 @@ client
     .once('ready', () => {
         console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
         console.log(`Prefix is set to: ${prefix}`.cyan);
-        client.user?.setActivity(`Running TypeScript version ${version}!`);
+        (client.channels.find(c => c.id === '627501333439578112') as TextChannel).send('Hi, cunt. I\'m online and running TypeScript version ' + version);
     })
     .registry
         .registerDefaultTypes()
@@ -43,4 +44,4 @@ client
         })
         .registerCommandsIn(join(__dirname, 'commands'));
 
-client.login(process.env['BOT_TOKEN']);
+client.login(process.env.BOT_TOKEN);
