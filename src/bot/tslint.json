@@ -1,6 +1,13 @@
 {
     "extends": ["tslint:recommended", "tslint-config-prettier"],
     "rules": {
-        "no-console": false
+        "no-console": false,
+        "variable-name": {
+            "options": [
+                "allow-snake-case"
+            ]
+        },
+        "object-literal-sort-keys": false,
+        "ordered-imports": false
     }
 }
