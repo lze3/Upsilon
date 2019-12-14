@@ -1,5 +1,5 @@
+import { GuildMember, MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MessageEmbed, User, GuildMember } from 'discord.js';
 import * as moment from 'moment';
 
 const gameStates = {
@@ -9,7 +9,7 @@ const gameStates = {
     3: 'Watching'
 };
 
-const acknowledgements: { id: string, title: string, type: string}[] = [
+const acknowledgements: Array<{ id: string, title: string, type: string}> = [
     {
         id: '264662751404621825',
         title: 'Bot Developer',
@@ -20,28 +20,30 @@ const acknowledgements: { id: string, title: string, type: string}[] = [
 export default class UserInfo extends Command {
     public constructor(client: CommandoClient) {
         super(client, {
-            name: 'userinfo',
             aliases: ['whois', 'uinfo'],
-            group: 'admin',
-            memberName: 'userinfo',
-            description: 'Returns information about a specific user',
-            userPermissions: ['MANAGE_MESSAGES'],
-            clientPermissions: ['EMBED_LINKS'],
-            guildOnly: true,
-            hidden: true,
             args: [
                 {
+                    default: (m: CommandoMessage) => m.author,
                     key: 'user',
                     prompt: 'Which user whould you like to display information for?',
-                    type: 'user',
-                    default: (m: CommandoMessage) => m.author
+                    type: 'user'
                 }
-            ]
+            ],
+            clientPermissions: ['EMBED_LINKS'],
+            description: 'Returns information about a specific user',
+            group: 'admin',
+            guildOnly: true,
+            hidden: true,
+            memberName: 'userinfo',
+            name: 'userinfo',
+            userPermissions: ['MANAGE_MESSAGES']
         });
     }
 
     public run(message: CommandoMessage, { user }: { user: User }) {
         message.delete();
+
+        const current_date = new Date();
 
         const local_acknowledgements: any = {};
         local_acknowledgements[user.id] = [];
@@ -50,10 +52,10 @@ export default class UserInfo extends Command {
 
         const member: GuildMember = (message.guild.members.find(fm => fm.id === user.id) as GuildMember); 
 
-        for (let i = 0; i < acknowledgements.length; i++) {
-            if (acknowledgements[i].type === 'user') {
-                if (user.id === acknowledgements[i].id) {
-                    local_acknowledgements[user.id].push(acknowledgements[i].title);
+        for (const acknowledgement of acknowledgements) {
+            if (acknowledgement.type === 'user') {
+                if (user.id === acknowledgement.id) {
+                    local_acknowledgements[user.id].push(acknowledgement.title);
                 }
             }
         }
@@ -76,11 +78,11 @@ export default class UserInfo extends Command {
             embed.addField('❯ Status', status, true);
         }
 
-        const joined_at = moment(member.joinedAt!).format('ddd, MMM D, YYYY H:mm A');
-        embed.addField('❯ Joined', joined_at, true);
+        const joined_at = moment(member.joinedAt!);
+        embed.addField('❯ Joined', `${joined_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(joined_at, 'days')} days ago)`, true);
 
-        const created_at = moment(user.createdAt).format('ddd, MMM D, YYYY H:mm A');
-        embed.addField('❯ Registered', created_at);
+        const created_at = moment(user.createdAt);
+        embed.addField('❯ Registered', `${created_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(created_at, 'days')} days ago)`);
 
         const amount_of_roles = member.roles.array().length - 1;
 
@@ -105,6 +107,5 @@ export default class UserInfo extends Command {
         }
 
         return message.say(embed);
-        
     }
 }
