@@ -47,10 +47,14 @@ let isProbablyOffline: boolean;
 function getServerInfoData(): void {
     
     // don't run if the status is false, obviously
-    if (!settings.logStatus) return;
+    if (!settings.logStatus) {
+        return;
+    }
 
     // if no channels then no endpoints
-    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) return;
+    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) {
+        return;
+    }
 
     // iteration
     for (const channel of settings.statusChannels) {
@@ -61,15 +65,19 @@ function getServerInfoData(): void {
         guildChannel = client.channels.find(ch => ch.id === channel) as TextChannel;
 
         // if channel couldn't be found in collection, return 
-        if (guildChannel === undefined) return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+        if (guildChannel === undefined) {
+            return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+        }
 
         // if there is no topic, there is no endpoint, and no request
-        if (!guildChannel.topic) return console.log('the channel had no topic');
+        if (!guildChannel.topic) { 
+            return console.log('the channel had no topic');
+        }
 
-        const topicDelim = guildChannel.topic.split(/ +\| +/);
-        const IP = topicDelim[0];
-        const serverName = topicDelim[1] || null;
-        const iconUrl = topicDelim[2] || null;
+        const topic_deliminator = guildChannel.topic.split(/ +\| +/);
+        const IP = topic_deliminator[0];
+        const serverName = topic_deliminator[1] || null;
+        const iconUrl = topic_deliminator[2] || null;
 
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`https://servers-live.fivem.net/api/servers/single/${IP}`, {
@@ -77,7 +85,9 @@ function getServerInfoData(): void {
         }, (err, _, body) => {
             if (err) {
                 probablyOfflineTick++;
-                if (!err.toString().includes('TIMEDOUT')) console.log(err.stack);
+                if (!err.toString().includes('TIMEDOUT')) {
+                    console.log(err.stack);
+                }
                 serverData[channel] = {
                     state: 'offline'
                 };
@@ -118,10 +128,14 @@ const getServerInfoThread = setInterval(getServerInfoData, serverQueryTime);
 function setServerStatusInfoThread(): void {
 
     // don't run if state is false, obviously
-    if (!settings.logStatus) return;
+    if (!settings.logStatus) {
+        return;
+    }
 
     // if no channels then no endpoints
-    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) return;
+    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) {
+        return;
+    }
 
     for (const channel of settings.statusChannels) {
     
@@ -130,18 +144,24 @@ function setServerStatusInfoThread(): void {
         guildChannel = client.channels.find(ch => ch.id === channel) as TextChannel;
 
         // if the channel doesn't exist in the client's collection, we stop the code
-        if (guildChannel === undefined) return console.log('Could not find channel (%s) in bot\'s collection.', channel);;
+        if (guildChannel === undefined) {
+            return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+        }
     
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
-        if (!guildChannel.topic) return console.log('No IP found, returning');
+        if (!guildChannel.topic) {
+            return console.log('No IP found, returning');
+        }
 
-        const topicDelim = guildChannel.topic.split(/ +\| +/);
-        const IP = topicDelim[0];
-        const serverName = topicDelim[1] || 'FiveM';
-        const iconUrl = topicDelim[2] || undefined;
+        const topic_delim = guildChannel.topic.split(/ +\| +/);
+        const IP = topic_delim[0];
+        const serverName = topic_delim[1] || 'FiveM';
+        const iconUrl = topic_delim[2] || undefined;
 
-        if (!IP) return console.log('No IP found...');
+        if (!IP) {
+            return console.log('No IP found...');
+        }
 
         // requesting
         request.get(`http://${IP}/players.json`, {
@@ -163,20 +183,26 @@ function setServerStatusInfoThread(): void {
             }
         });
 
-        if (playerData[channel] === undefined) return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+        if (playerData[channel] === undefined) {
+            return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+        }
 
-        if (serverData[channel] === undefined) return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+        if (serverData[channel] === undefined) {
+            return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+        }
 
-        if (serverData[channel].Data === undefined) return console.log('serverData[\'%s\'].Data was undefined, running again...', channel);
+        if (serverData[channel].Data === undefined) {
+            return console.log('serverData[\'%s\'].Data was undefined, running again...', channel);
+        }
 
-        if (isProbablyOffline) isProbablyOffline = false;
+        if (isProbablyOffline) { isProbablyOffline = false; }
         if (probablyOfflineTick >= 5) {
             isProbablyOffline = true;
             probablyOfflineTick = 0;
         }
 
         const format = playerData[channel].length > 0 ?
-            '`' + playerData[channel].map((ply: playerDataStruct) => `${ply.name}`).join(', ') + '`' :
+            '`' + playerData[channel].map((ply: IPlayerDataStruct) => `${ply.name}`).join(', ') + '`' :
             'No players online.';
 
         let additionalFields: EmbedField[];
@@ -229,32 +255,34 @@ function setServerStatusInfoThread(): void {
                     return guildChannel?.send(statEmbed);
                 }
 
-                messages.forEach(message_ => {
-                    if (message_ === null) return console.log('I found a null message object, running again.');
+                messages.forEach(indexed_message => {
+                    if (indexed_message === null) {
+                        return console.log('I found a null message object, running again.');
+                    }
 
-                    if (message_.author.id !== client.user?.id) { return message_.delete(); }
+                    if (indexed_message.author.id !== client.user?.id) { return indexed_message.delete(); }
 
-                    if (message_.embeds.length >= 1) {
+                    if (indexed_message.embeds.length >= 1) {
                         console.log('I found a message (%s) in the channel (%s) with embeds, editing this message with the updated information.',
-                            message_.id,
+                            indexed_message.id,
                             guildChannel?.name);
 
                         if (isProbablyOffline) {
-                            const embed = new MessageEmbed(message_.embeds[0])
+                            const offline_embed = new MessageEmbed(indexed_message.embeds[0])
                                 .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
-                            delete embed.fields;
-                            delete embed.description;
+                            delete offline_embed.fields;
+                            delete offline_embed.description;
 
-                            return message_.edit(embed);
+                            return indexed_message.edit(offline_embed);
                         }
 
-                        const embed = new MessageEmbed(message_.embeds[0])
+                        const embed = new MessageEmbed(indexed_message.embeds[0])
                             .setDescription(format)
                             .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                                 `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`);
                         
-                        if (typeof additionalFields == 'object') {
+                        if (typeof additionalFields === 'object') {
                             embed.fields = additionalFields;
                         }
 
@@ -264,13 +292,13 @@ function setServerStatusInfoThread(): void {
                             embed.setFooter(topicDelim[1] + ' 2019');
                         }
 
-                        return message_.edit(embed);
+                        return indexed_message.edit(embed);
                     }
                     else {
-                        message_.delete();
+                        indexed_message.delete();
                         console.log('I found a message in %s by %s that was not status in #%s (%s)',
                             guildChannel?.name,
-                            message_.author.tag,
+                            indexed_message.author.tag,
                             guildChannel?.name,
                             guildChannel?.id);
                     }
@@ -280,7 +308,7 @@ function setServerStatusInfoThread(): void {
 }
 const setServerInfoThread = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
 
-interface playerDataStruct {
+interface IPlayerDataStruct {
     name: string;
     id: number;
     identifiers: string[];
