@@ -7,6 +7,9 @@ import 'typescript';
 import './lib/env';
 import './utils/function';
 import './utils/server-status-tracking';
+import * as Sentry from '@sentry/node';
+
+Sentry.init({ dsn: process.env.SENTRY_URL });
 
 colors.setTheme({
     debug: 'cyan',
