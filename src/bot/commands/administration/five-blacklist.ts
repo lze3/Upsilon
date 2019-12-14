@@ -3,7 +3,7 @@ import { get } from 'request';
 import { black } from 'colors';
 import { Message } from 'discord.js';
 
-export default class fiveBlacklist extends Command {
+export default class FiveBlacklist extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'fivebl',
