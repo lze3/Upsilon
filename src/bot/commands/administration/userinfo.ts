@@ -20,23 +20,23 @@ const acknowledgements: Array<{ id: string, title: string, type: string}> = [
 export default class UserInfo extends Command {
     public constructor(client: CommandoClient) {
         super(client, {
+            name: 'userinfo',
             aliases: ['whois', 'uinfo'],
-            args: [
-                {
-                    default: (m: CommandoMessage) => m.author,
-                    key: 'user',
-                    prompt: 'Which user whould you like to display information for?',
-                    type: 'user'
-                }
-            ],
-            clientPermissions: ['EMBED_LINKS'],
-            description: 'Returns information about a specific user',
             group: 'admin',
+            memberName: 'userinfo',
+            description: 'Returns information about a specified user.',
+            userPermissions: ['MANAGE_MESSAGES'],
+            clientPermissions: ['EMBED_LINKS'],
             guildOnly: true,
             hidden: true,
-            memberName: 'userinfo',
-            name: 'userinfo',
-            userPermissions: ['MANAGE_MESSAGES']
+            args: [
+                {
+                    key: 'user',
+                    prompt: 'Which user would you like to display information for?',
+                    type: 'user',
+                    default: (m: CommandoMessage) => m.author
+                }
+            ]
         });
     }
 
