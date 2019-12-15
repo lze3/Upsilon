@@ -4,8 +4,10 @@
         "no-console": false,
         "variable-name": {
             "options": [
+                "check-format",
                 "allow-snake-case"
-            ]
+            ],
+            "severity": "error"
         },
         "object-literal-sort-keys": false,
         "ordered-imports": false
