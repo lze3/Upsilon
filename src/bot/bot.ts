@@ -31,7 +31,6 @@ client
     .once('ready', () => {
         console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
         console.log(`Prefix is set to: ${prefix}`.cyan);
-        (client.channels.find(c => c.id === '627501333439578112') as TextChannel).send('Hi, cunt. I\'m online and running TypeScript version ' + version);
     })
     .registry
         .registerDefaultTypes()
