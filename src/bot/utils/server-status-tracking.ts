@@ -2,12 +2,13 @@ import { TextChannel, MessageEmbed, EmbedField } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
+import '../lib/env';
 
 const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
     /**
      * Determines whether to update status or not
      */
-    logStatus: false,
+    logStatus: (process.env.AUTO_STATUS ?? 'false') === 'true' ? true : false,
 
     /**
      * An array or string containing status channel(s)
