@@ -9,7 +9,7 @@
  *      convertBoolToStrState(1); // 'Yes'
  */
 export function convertBoolToStrState(bool: boolean): string {
-    return bool ? 'Yes' : 'No';
+    return bool && typeof bool === 'boolean' ? 'Yes' : 'No';
 };
 
 /**
