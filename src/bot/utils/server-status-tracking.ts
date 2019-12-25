@@ -123,7 +123,6 @@ function getServerInfoData(): void {
         }
     }
 }
-
 const getServerInfoThread = setInterval(getServerInfoData, serverQueryTime);
 
 function setServerStatusInfoThread(): void {
