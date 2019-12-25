@@ -39,7 +39,7 @@ export function convertHexToDec(hex: string): number {
 }
 
 /**
- * Cleans the string of any carets, tilde colors (e.g. ~r~) and HTML tags (<FONT COLOR='#D9E18'>D</FONT>)
+ * Cleans the string of any carets, tilde colors (e.g. \~r\~) and HTML tags (<FONT COLOR='#D9E18'>D</FONT>)
  *
  * @param {string} str The initial string.
  *
