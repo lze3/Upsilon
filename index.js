@@ -137,7 +137,7 @@ function getServerInfoData() {
             const guildChannel = client.channels.find(ch => ch.id === channel);
 
             // if channel couldn't be found in collection, return
-            if (guildChannel === null) return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+            if (guildChannel === undefined) return console.log('Could not find channel (%s) in bot\'s collection.', channel);
 
             // we use topic for endpoint, we can't request anything if there is no topic/endpoint
             if (!guildChannel.topic) return console.log('the channel had no topic');
