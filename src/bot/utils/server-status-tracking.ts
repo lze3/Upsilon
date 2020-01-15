@@ -8,7 +8,7 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
     /**
      * Determines whether to update status or not
      */
-    logStatus: (process.env.AUTO_STATUS ?? 'false') === 'true' ? true : false,
+    logStatus: (process.env.AUTO_STATUS ?? 'false') === 'true',
 
     /**
      * An array or string containing status channel(s)
