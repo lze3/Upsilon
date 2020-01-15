@@ -14,7 +14,7 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
      * An array or string containing status channel(s)
      */
     statusChannels: [
-        '639620849279696896'
+        '627278142133764096'
     ],
 
     /**
@@ -67,12 +67,12 @@ function getServerInfoData(): void {
 
         // if channel couldn't be found in collection, return 
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
-            return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+            return timeLog('Could not find channel (${channel}) in bot\'s collection.');
         }
 
         // if there is no topic, there is no endpoint, and no request
         if (!guildChannel.topic) { 
-            return console.log('the channel had no topic');
+            return timeLog('the channel had no topic');
         }
 
         const topic_deliminator = guildChannel.topic.split(/ +\| +/);
@@ -105,7 +105,7 @@ function getServerInfoData(): void {
             }
             catch(e) {
                 probablyOfflineTick++;
-                console.log('The following error is referring to http://%s/dynamic.json: %s', IP);
+                timeLog(`The following error is referring to http://${IP}/dynamic.json`);
                 return console.log(e.toString() + '\n');
             }
         });
@@ -129,14 +129,14 @@ function getServerInfoData(): void {
             }
             catch(e) {
                 probablyOfflineTick++;
-                console.log('The following error is referring to http://%s/info.json: %s', IP);
+                timeLog(`The following error is referring to http://${IP}/info.json:`);
                 return console.log(e.toString() + '\n');
             }
         });
 
         // run code again if data for this channel (or ip) was not found
         if (serverData[channel] === undefined) {
-            console.log('serverData[\'%s\'] was undefined, running again...', channel);
+            timeLog(`serverData[${channel}] was undefined, running again...`);
             serverData[channel] = {
                 state: 'offline'
             };
@@ -154,7 +154,7 @@ function setServerStatusInfoThread(): void {
 
     // don't run if state is false, obviously
     if (!settings.logStatus) {
-        return;
+        clearInterval();
     }
 
     // if no channels then no endpoints
@@ -170,13 +170,13 @@ function setServerStatusInfoThread(): void {
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
-            return console.log('Could not find channel (%s) in bot\'s collection.', channel);
+            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`);
         }
     
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
         if (!guildChannel.topic) {
-            return console.log('No IP found, returning');
+            return timeLog('No IP found, returning');
         }
 
         const topic_delim = guildChannel.topic.split(/ +\| +/);
@@ -185,7 +185,7 @@ function setServerStatusInfoThread(): void {
         const iconUrl = topic_delim[2] || undefined;
 
         if (!IP) {
-            return console.log('No IP found...');
+            return timeLog('No IP found...');
         }
 
         // requesting
@@ -209,11 +209,11 @@ function setServerStatusInfoThread(): void {
         });
 
         if (playerData[channel] === undefined) {
-            return console.log('playerData[\'%s\'] was undefined, running again...', channel);
+            return timeLog(`playerData[${channel}] was undefined, running again...`);
         }
 
         if (serverData[channel] === undefined) {
-            return console.log('serverData[\'%s\'] was undefined, running again...', channel);
+            return timeLog(`serverData[${channel}] was undefined, running again...`);
         }
 
         if (isProbablyOffline) { isProbablyOffline = false; }
@@ -250,7 +250,7 @@ function setServerStatusInfoThread(): void {
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
                         .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
-                            `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`)
+                            `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`)
                         .setDescription(format)
                         .setFooter(`${serverName} 2019`);
 
@@ -269,7 +269,7 @@ function setServerStatusInfoThread(): void {
                 if (messages.array().length === 0) {
                     console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', guildChannel?.name);
                     if (isProbablyOffline) {
-                        console.log('I think the server is offline.');
+                        timeLog('I think the server is offline.');
                         return guildChannel?.send(offlineEmbed);
                     }
                     
@@ -278,15 +278,13 @@ function setServerStatusInfoThread(): void {
 
                 messages.forEach(indexed_message => {
                     if (indexed_message === null) {
-                        return console.log('I found a null message object, running again.');
+                        return timeLog('I found a null message object, running again.');
                     }
 
                     if (indexed_message.author.id !== client.user?.id) { return indexed_message.delete(); }
 
                     if (indexed_message.embeds.length >= 1) {
-                        console.log('I found a message (%s) in the channel (%s) with embeds, editing this message with the updated information.',
-                            indexed_message.id,
-                            guildChannel?.name);
+                        timeLog(`I found a message (${indexed_message.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (isProbablyOffline) {
                             const offline_embed = new MessageEmbed(indexed_message.embeds[0])
@@ -301,7 +299,7 @@ function setServerStatusInfoThread(): void {
                         const embed = new MessageEmbed(indexed_message.embeds[0])
                             .setDescription(format)
                             .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
-                                `Total players: ${playerData[channel].length}/${serverData[channel].Data.vars.sv_maxClients}`);
+                                `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
                         
                         if (typeof additionalFields === 'object') {
                             embed.fields = additionalFields;
@@ -317,11 +315,7 @@ function setServerStatusInfoThread(): void {
                     }
                     else {
                         indexed_message.delete();
-                        console.log('I found a message in %s by %s that was not status in #%s (%s)',
-                            guildChannel?.name,
-                            indexed_message.author.tag,
-                            guildChannel?.name,
-                            guildChannel?.id);
+                        timeLog(`I found a message in ${guildChannel?.name} by ${indexed_message.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`);
                     }
                 });
             });
@@ -334,6 +328,27 @@ interface IPlayerDataStruct {
     id: number;
     identifiers: string[];
     ping: number;
+}
+
+export function timeLog(message: string): void {
+    const current_time: Date = new Date();
+    let hour: string = current_time.getHours().toString();
+    let min: string = current_time.getMinutes().toString();
+    let sec: string = current_time.getSeconds().toString();
+
+    if (current_time.getHours() < 10) {
+        hour = '0' + hour;
+    }
+
+    if (current_time.getMinutes() < 10) {
+        min = '0' + min;
+    }
+
+    if (current_time.getSeconds() < 10) {
+        sec = '0' + sec;
+    }
+
+    return console.log(`[${hour}:${min}:${sec}]`.red + ` ${message}`);
 }
 
 // might use sometime in the future
