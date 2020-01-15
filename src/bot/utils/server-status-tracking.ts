@@ -1,4 +1,4 @@
-import { TextChannel, MessageEmbed, EmbedField } from 'discord.js';
+import { TextChannel, MessageEmbed, EmbedField, Channel } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
@@ -60,13 +60,13 @@ function getServerInfoData(): void {
     // iteration
     for (const channel of settings.statusChannels) {
         
-        let guildChannel: TextChannel;
+        let guildChannel: Channel|undefined;
 
         // get channel from client's channel collection
-        guildChannel = client.channels.find(ch => ch.id === channel) as TextChannel;
+        guildChannel = client.channels.find(ch => ch.id === channel);
 
         // if channel couldn't be found in collection, return 
-        if (guildChannel === undefined) {
+        if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
             return console.log('Could not find channel (%s) in bot\'s collection.', channel);
         }
 
@@ -81,17 +81,18 @@ function getServerInfoData(): void {
         const iconUrl = topic_deliminator[2] || null;
 
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
-        request.get(`https://servers-live.fivem.net/api/servers/single/${IP}`, {
+        request.get(`http://${IP}/dynamic.json`, {
             timeout: 10000
-        }, (err, _, body) => {
-            if (err) {
+        }, (err, response, body) => {
+            if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
-                if (!err.toString().includes('TIMEDOUT')) {
+                if (err && !err.toString().includes('TIMEDOUT')) {
                     console.log(err.stack);
                 }
                 serverData[channel] = {
                     state: 'offline'
                 };
+                return;
             }
 
             // /!\ IMPORTANT /!\
@@ -100,11 +101,35 @@ function getServerInfoData(): void {
 
             // also, this crashes app if it's not caught
             try {
-                serverData[channel] = JSON.parse(body);
+                serverData[channel].dynamic = JSON.parse(body);
             }
             catch(e) {
                 probablyOfflineTick++;
-                console.log('The following error is referring to IP: %s', IP);
+                console.log('The following error is referring to http://%s/dynamic.json: %s', IP);
+                return console.log(e.toString() + '\n');
+            }
+        });
+
+        request.get(`http://${IP}/info.json`, {
+            timeout: 2000
+        }, (err, response, body) => {
+            if (err || response.statusCode === 404) {
+                probablyOfflineTick++;
+                if (err && !err.toString().includes('TIMEDOUT')) {
+                    console.log(err.stack);
+                }
+                serverData[channel] = {
+                    state: 'offline'
+                };
+                return;
+            }
+
+            try {
+                serverData[channel].info = JSON.parse(body);
+            }
+            catch(e) {
+                probablyOfflineTick++;
+                console.log('The following error is referring to http://%s/info.json: %s', IP);
                 return console.log(e.toString() + '\n');
             }
         });
@@ -191,10 +216,6 @@ function setServerStatusInfoThread(): void {
             return console.log('serverData[\'%s\'] was undefined, running again...', channel);
         }
 
-        if (serverData[channel].Data === undefined) {
-            return console.log('serverData[\'%s\'].Data was undefined, running again...', channel);
-        }
-
         if (isProbablyOffline) { isProbablyOffline = false; }
         if (probablyOfflineTick >= 5) {
             isProbablyOffline = true;
@@ -206,8 +227,8 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        if (!isProbablyOffline && serverData[channel].Data.gametype && serverData[channel].Data.gametype.includes('Authorization')) {
-            const shortAlvl = hsgAuths[serverData[channel].Data.gametype.replace('HSG-RP | Authorization ', '')];
+        if (!isProbablyOffline && serverData[channel].gametype && serverData[channel].gametype.includes('Authorization')) {
+            const shortAlvl = hsgAuths[serverData[channel].gametype.replace('HSG-RP | Authorization ', '')];
             additionalFields = [
                 {
                     name: 'Authorization',
@@ -215,7 +236,7 @@ function setServerStatusInfoThread(): void {
                 },
                 {
                     name: 'Roleplay Zone',
-                    value: serverData[channel].Data.mapname
+                    value: serverData[channel].mapname
                 }
             ]
         }
