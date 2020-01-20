@@ -10,7 +10,7 @@
  */
 export function convertBoolToStrState(bool: boolean): string {
     return bool && typeof bool === 'boolean' ? 'Yes' : 'No';
-};
+}
 
 /**
  * Converts decimal to hex

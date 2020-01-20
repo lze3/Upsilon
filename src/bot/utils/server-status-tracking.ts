@@ -21,8 +21,8 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
     /**
      * Time the interval waits before running again, default is 15000ms (15sec)
      */
-    waitTime: 2000
-}
+    waitTime: 5000
+};
 
 const hsgAuths: {[key: string]: string} = {
     'CR': 'Casual Restricted',
@@ -239,7 +239,7 @@ function setServerStatusInfoThread(): void {
                     name: 'Roleplay Zone',
                     value: serverData[channel].mapname
                 }
-            ]
+            ];
         }
 
         guildChannel.messages.fetch()
