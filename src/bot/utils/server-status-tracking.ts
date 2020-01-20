@@ -3,6 +3,7 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
+import { timeLog } from './function';
 
 const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
     /**
@@ -23,7 +24,7 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
     waitTime: 2000
 }
 
-const hsgAuths: any = {
+const hsgAuths: {[key: string]: string} = {
     'CR': 'Casual Restricted',
     'CU': 'Casual Unrestricted',
     'M1': 'New Member',
@@ -328,27 +329,6 @@ interface IPlayerDataStruct {
     id: number;
     identifiers: string[];
     ping: number;
-}
-
-export function timeLog(message: string): void {
-    const current_time: Date = new Date();
-    let hour: string = current_time.getHours().toString();
-    let min: string = current_time.getMinutes().toString();
-    let sec: string = current_time.getSeconds().toString();
-
-    if (current_time.getHours() < 10) {
-        hour = '0' + hour;
-    }
-
-    if (current_time.getMinutes() < 10) {
-        min = '0' + min;
-    }
-
-    if (current_time.getSeconds() < 10) {
-        sec = '0' + sec;
-    }
-
-    return console.log(`[${hour}:${min}:${sec}]`.red + ` ${message}`);
 }
 
 // might use sometime in the future
