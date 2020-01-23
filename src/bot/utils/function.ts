@@ -79,3 +79,17 @@ export function timeLog(message: string): void {
 
     return console.log(`[${hour}:${min}:${sec}]`.red + ` ${message}`);
 }
+
+/**
+ * Gets an environmental variable, if undefined it returns the second param
+ *
+ * @param {string} variable Variable name.
+ * @param {string} defaultVal Default value if value is undefined.
+ */
+export function getEnvironmentVariable(variable: string, defaultVal: string): string {
+    if (process.env[variable] !== undefined) {
+        return process.env[variable];
+    }
+
+    return defaultVal;
+}
