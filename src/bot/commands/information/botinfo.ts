@@ -16,7 +16,7 @@ export default class extends Command {
     }
 
     public run(message: CommandoMessage) {
-        const member = message.member ?? message.guild.members.fetch(message.author);
+        const member = message.member;
         const embed_color = member.roles.color?.color ?? '#23E25D';
 
         const embed = new MessageEmbed()
