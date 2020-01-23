@@ -228,16 +228,16 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        if (!isProbablyOffline && serverData[channel].gametype && serverData[channel].gametype.includes('Authorization')) {
-            const shortAlvl = hsgAuths[serverData[channel].gametype.replace('HSG-RP | Authorization ', '')];
+        if (!isProbablyOffline && serverData[channel].dynamic.gametype && serverData[channel].dynamic.gametype.includes('Authorization')) {
+            const shortAlvl = serverData[channel].dynamic.gametype.replace('HSG-RP | Authorization ', '');
             additionalFields = [
                 {
                     name: 'Authorization',
-                    value: hsgAuths[shortAlvl] + ` (${shortAlvl})`
+                    value: `${hsgAuths[shortAlvl]} (${shortAlvl})`
                 },
                 {
                     name: 'Roleplay Zone',
-                    value: serverData[channel].mapname
+                    value: serverData[channel].dynamic.mapname
                 }
             ];
         }
