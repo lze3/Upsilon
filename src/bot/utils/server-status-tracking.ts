@@ -3,13 +3,13 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog } from './function';
+import { timeLog, getEnvironmentVariable } from './function';
 
 const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
     /**
      * Determines whether to update status or not
      */
-    logStatus: (process.env.AUTO_STATUS ?? 'false') === 'true',
+    logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
 
     /**
      * An array or string containing status channel(s)
