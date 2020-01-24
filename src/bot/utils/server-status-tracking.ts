@@ -50,7 +50,7 @@ function getServerInfoData(): void {
     
     // don't run if the status is false, obviously
     if (!settings.logStatus) {
-        return;
+        clearInterval();
     }
 
     // if no channels then no endpoints
@@ -80,6 +80,8 @@ function getServerInfoData(): void {
         const IP = topic_deliminator[0];
         const serverName = topic_deliminator[1] || null;
         const iconUrl = topic_deliminator[2] || null;
+
+        console.log(IP);
 
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`http://${IP}/dynamic.json`, {
