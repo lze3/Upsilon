@@ -15,7 +15,7 @@ const acknowledgements: Array<{ id: string, title: string, type: string}> = [
         title: 'Bot Developer',
         type: 'user'
     }
-]
+];
 
 export default class UserInfo extends Command {
     public constructor(client: CommandoClient) {
@@ -74,7 +74,7 @@ export default class UserInfo extends Command {
         }
 
         if (user.presence !== null) {
-            const status = user.presence.status + (user.presence.activity !== null && user.presence.activity.type !== undefined ? user.presence.activity.type.toLowerCase()[0].toUpperCase() : '');
+            const status = user.presence.status + (user.presence.activities !== null && user.presence.activities[0].type !== undefined ? user.presence.activities[0].type.toLowerCase()[0].toUpperCase() : '');
             embed.addField('❯ Status', status, true);
         }
 
@@ -103,7 +103,7 @@ export default class UserInfo extends Command {
         embed.setFooter('Requested by ' + message.author.tag);
 
         if (user.id === '264662751404621825') {
-            embed.addField('❯ Twitter', '[Go follow me](https://twitter.com/Zeemah_ "This is the bot developer, FYI.")')
+            embed.addField('❯ Twitter', '[Go follow me](https://twitter.com/Zeemah_ "This is the bot developer, FYI.")');
         }
 
         return message.say(embed);
