@@ -81,8 +81,6 @@ function getServerInfoData(): void {
         const serverName = topic_deliminator[1] || null;
         const iconUrl = topic_deliminator[2] || null;
 
-        console.log(IP);
-
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`http://${IP}/dynamic.json`, {
             timeout: 10000
@@ -92,7 +90,6 @@ function getServerInfoData(): void {
                 if (err && !err.toString().includes('TIMEDOUT')) {
                     console.log(err.stack);
                 }
-                timeLog('Something fucked up badly!');
                 serverData[channel] = {
                     state: 'offline'
                 };
