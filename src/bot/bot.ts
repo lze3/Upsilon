@@ -34,8 +34,8 @@ export const client = new CommandoClient({
 });
 
 client
-    .on('error', console.error)
-    .on('warn', console.warn)
+    .on('error', Sentry.captureException)
+    .on('warn', Sentry.captureEvent)
     .once('ready', () => {
         console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
         console.log(`Prefix is set to: ${client.commandPrefix}`.cyan);
