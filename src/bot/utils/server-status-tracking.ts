@@ -92,6 +92,7 @@ function getServerInfoData(): void {
                 if (err && !err.toString().includes('TIMEDOUT')) {
                     console.log(err.stack);
                 }
+                timeLog('Something fucked up badly!');
                 serverData[channel] = {
                     state: 'offline'
                 };
