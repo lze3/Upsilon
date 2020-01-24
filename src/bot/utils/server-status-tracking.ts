@@ -228,7 +228,7 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        if (!isProbablyOffline && serverData[channel].dynamic.gametype && serverData[channel].dynamic.gametype.includes('Authorization')) {
+        if (!isProbablyOffline && serverData[channel].dynamic && serverData[channel].dynamic.gametype && serverData[channel].dynamic.gametype.includes('Authorization')) {
             const shortAlvl = serverData[channel].dynamic.gametype.replace('HSG-RP | Authorization ', '');
             additionalFields = [
                 {
