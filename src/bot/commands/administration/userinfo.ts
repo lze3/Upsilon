@@ -1,15 +1,9 @@
 import { GuildMember, MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as moment from 'moment';
+import { capitalize } from '../../utils/functions';
 
-const gameStates = {
-    0: 'Playing',
-    1: 'Streaming',
-    2: 'Listening to',
-    3: 'Watching'
-};
-
-const acknowledgements: Array<{ id: string, title: string, type: string}> = [
+const acknowledgements: Array<{ id: string|string[], title: string, type: 'user' | 'role'}> = [
     {
         id: '264662751404621825',
         title: 'Bot Developer',
@@ -43,19 +37,38 @@ export default class UserInfo extends Command {
     public run(message: CommandoMessage, { user }: { user: User }) {
         message.delete();
 
-        const current_date = new Date();
+        const current_date: Date = new Date();
 
-        const local_acknowledgements: any = {};
+        const local_acknowledgements: { [key: string]: string[] } = {};
         local_acknowledgements[user.id] = [];
 
-        const embed = new MessageEmbed();
+        const embed: MessageEmbed = new MessageEmbed();
 
-        const member: GuildMember = (message.guild.members.find(fm => fm.id === user.id) as GuildMember); 
+        const member: GuildMember|undefined = message.guild.members.find(fm => fm.id === user.id);
 
-        for (const acknowledgement of acknowledgements) {
+        if (!(member instanceof GuildMember)) {
+            return message.reply('I couldn\'t find that member.');
+        }
+
+        for (const [key, acknowledgement] of Object.entries(acknowledgements)) {
             if (acknowledgement.type === 'user') {
                 if (user.id === acknowledgement.id) {
                     local_acknowledgements[user.id].push(acknowledgement.title);
+                }
+            }
+
+            if (acknowledgement.type === 'role') {
+                if (typeof acknowledgement.id === 'object') {
+                    for (const [i, roleId] of Object.entries(acknowledgement.id)) {
+                        if (member.roles.has(roleId)) {
+                            local_acknowledgements[user.id].push(acknowledgement.title);
+                        }
+                    }
+                }
+                else {
+                    if (member.roles.has(acknowledgement.id)) {
+                        local_acknowledgements[user.id].push(acknowledgement.title);
+                    }
                 }
             }
         }
@@ -69,24 +82,24 @@ export default class UserInfo extends Command {
             embed.setThumbnail(user.avatarURL() as string);
         }
 
-        if (member.nickname !== undefined) {
+        if (member.nickname !== null) {
             embed.addField('❯ Nickname', member?.nickname);
         }
 
         if (user.presence !== null) {
-            const status = user.presence.status + (user.presence.activities !== null && user.presence.activities[0].type !== undefined ? user.presence.activities[0].type.toLowerCase()[0].toUpperCase() : '');
+            const status: string = user.presence.status.length > 3 ? capitalize(user.presence.status) : user.presence.status.toUpperCase();
             embed.addField('❯ Status', status, true);
         }
 
-        const joined_at = moment(member.joinedAt!);
+        const joined_at: moment.Moment = moment(member.joinedAt!);
         embed.addField('❯ Joined', `${joined_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(joined_at, 'days')} days ago)`, true);
 
-        const created_at = moment(user.createdAt);
+        const created_at: moment.Moment = moment(user.createdAt);
         embed.addField('❯ Registered', `${created_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(created_at, 'days')} days ago)`);
 
-        const amount_of_roles = member.roles.array().length - 1;
+        const amount_of_roles: number = member.roles.array().length - 1;
 
-        const roles = amount_of_roles > 0 ?
+        const roles: string = amount_of_roles > 0 ?
             member.roles.map(role => role.name !== '@everyone' ? '<@&' + role.id + '>' : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amount_of_roles}]`, roles);
@@ -95,7 +108,7 @@ export default class UserInfo extends Command {
             embed.addField('❯ User Acknowledgements', local_acknowledgements[user.id].map((title: string) => '• ' + title));
         }
 
-        embed.setColor(message.guild.me?.roles.color!.color);
+        embed.setColor(message.guild.me?.roles.color ? message.guild.me.roles.color!.color : '#ccc');
         if (member.roles.color !== null) {
             embed.setColor(member.roles.color.color);
         }
