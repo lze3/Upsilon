@@ -11,6 +11,10 @@
         },
         "object-literal-sort-keys": false,
         "ordered-imports": false,
-        "semicolon": [true, "always"]
+        "return-undefined": true,
+        "semicolon": [true, "always"],
+        "no-trailing-whitespace": true,
+        "typedef": [true, "variable-declaration"],
+        "trailing-comma": [true, {"multiline": "never"}]
     }
 }
