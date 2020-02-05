@@ -87,9 +87,14 @@ export function timeLog(message: string): void {
  * @param {string} defaultVal Default value if value is undefined.
  */
 export function getEnvironmentVariable(variable: string, defaultVal: string): string {
-    if (process.env[variable] !== undefined) {
-        return process.env[variable];
-    }
+    return process.env[variable] ?? defaultVal;
+}
 
-    return defaultVal;
+/**
+ * Capitalises any given string.
+ *
+ * @param init_str Upper or lower case string.
+ */
+export function capitalize(init_str: string): string {
+    return init_str.charAt(0).toUpperCase() + init_str.slice(1);
 }
