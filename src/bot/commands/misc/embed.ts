@@ -28,7 +28,7 @@ export default class Embed extends Command {
         }
 
         console.log(eobj);
-        const embed = new MessageEmbed(parsedData);
+        const embed: MessageEmbed = new MessageEmbed(parsedData);
 
         return message.say(embed);
     }

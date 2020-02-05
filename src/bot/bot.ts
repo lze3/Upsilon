@@ -5,13 +5,13 @@ import { join } from 'path';
 import { version } from 'typescript';
 import 'typescript';
 import './lib/env';
-import './utils/function';
+import './utils/functions';
 import './utils/server-status-tracking';
 import * as Sentry from '@sentry/node';
 // import { RewriteFrames } from '@sentry/integrations';
 
 Sentry.init({
-    dsn: process.env.SENTRY_URL,
+    dsn: process.env.SENTRY_URL
     /*
     integrations: [new RewriteFrames({
         root: global.__rootdir__
@@ -27,7 +27,7 @@ colors.setTheme({
 });
 
 
-export const client = new CommandoClient({
+export const client: CommandoClient = new CommandoClient({
     commandPrefix: process.env.PREFIX ?? 'p.',
     invite: 'https://discord.gg/EqC2wFf',
     owner: '264662751404621825'

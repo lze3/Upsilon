@@ -3,7 +3,7 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog, getEnvironmentVariable } from './function';
+import { timeLog, getEnvironmentVariable } from './functions';
 
 const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
     /**
@@ -47,7 +47,7 @@ let probablyOfflineTick: number = 0;
 let isProbablyOffline: boolean;
 
 function getServerInfoData(): void {
-    
+
     // don't run if the status is false, obviously
     if (!settings.logStatus) {
         clearInterval();
@@ -60,26 +60,26 @@ function getServerInfoData(): void {
 
     // iteration
     for (const channel of settings.statusChannels) {
-        
+
         let guildChannel: Channel|undefined;
 
         // get channel from client's channel collection
         guildChannel = client.channels.find(ch => ch.id === channel);
 
-        // if channel couldn't be found in collection, return 
+        // if channel couldn't be found in collection, return
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
             return timeLog('Could not find channel (${channel}) in bot\'s collection.');
         }
 
         // if there is no topic, there is no endpoint, and no request
-        if (!guildChannel.topic) { 
+        if (!guildChannel.topic) {
             return timeLog('the channel had no topic');
         }
 
-        const topic_deliminator = guildChannel.topic.split(/ +\| +/);
-        const IP = topic_deliminator[0];
-        const serverName = topic_deliminator[1] || null;
-        const iconUrl = topic_deliminator[2] || null;
+        const topic_deliminator: string[] = guildChannel.topic.split(/ +\| +/);
+        const IP: string = topic_deliminator[0];
+        const serverName: string = topic_deliminator[1] || null;
+        const iconUrl: string = topic_deliminator[2] || null;
 
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`http://${IP}/dynamic.json`, {
@@ -149,7 +149,7 @@ function getServerInfoData(): void {
         }
     }
 }
-const getServerInfoThread = setInterval(getServerInfoData, serverQueryTime);
+const getServerInfoThread: NodeJS.Timeout = setInterval(getServerInfoData, serverQueryTime);
 
 function setServerStatusInfoThread(): void {
 
@@ -164,7 +164,7 @@ function setServerStatusInfoThread(): void {
     }
 
     for (const channel of settings.statusChannels) {
-    
+
         let guildChannel: TextChannel;
 
         guildChannel = client.channels.find(ch => ch.id === channel) as TextChannel;
@@ -173,17 +173,17 @@ function setServerStatusInfoThread(): void {
         if (guildChannel === undefined) {
             return timeLog(`Could not find channel (${channel}) in bot\'s collection.`);
         }
-    
+
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
         if (!guildChannel.topic) {
             return timeLog('No IP found, returning');
         }
 
-        const topic_delim = guildChannel.topic.split(/ +\| +/);
-        const IP = topic_delim[0];
-        const serverName = topic_delim[1] || 'FiveM';
-        const iconUrl = topic_delim[2] || undefined;
+        const topic_delim: string[] = guildChannel.topic.split(/ +\| +/);
+        const IP: string = topic_delim[0];
+        const serverName: string = topic_delim[1] || 'FiveM';
+        const iconUrl: string = topic_delim[2] || undefined;
 
         if (!IP) {
             return timeLog('No IP found...');
@@ -223,13 +223,13 @@ function setServerStatusInfoThread(): void {
             probablyOfflineTick = 0;
         }
 
-        const format = playerData[channel].length > 0 ?
+        const format: string = playerData[channel].length > 0 ?
             '`' + playerData[channel].map((ply: IPlayerDataStruct) => `${ply.name}`).join(', ') + '`' :
             'No players online.';
 
         let additionalFields: EmbedField[];
         if (!isProbablyOffline && serverData[channel].dynamic && serverData[channel].dynamic.gametype && serverData[channel].dynamic.gametype.includes('Authorization')) {
-            const shortAlvl = serverData[channel].dynamic.gametype.replace('HSG-RP | Authorization ', '');
+            const shortAlvl: string = serverData[channel].dynamic.gametype.replace('HSG-RP | Authorization ', '');
             additionalFields = [
                 {
                     name: 'Authorization',
@@ -244,8 +244,8 @@ function setServerStatusInfoThread(): void {
 
         guildChannel.messages.fetch()
             .then(messages => {
-                let statEmbed;
-                let offlineEmbed;
+                let statEmbed: MessageEmbed;
+                let offlineEmbed: MessageEmbed;
                 if (!isProbablyOffline) {
                     statEmbed = new MessageEmbed()
                         .setColor('#7700EF')
@@ -273,7 +273,7 @@ function setServerStatusInfoThread(): void {
                         timeLog('I think the server is offline.');
                         return guildChannel?.send(offlineEmbed);
                     }
-                    
+
                     return guildChannel?.send(statEmbed);
                 }
 
@@ -288,7 +288,7 @@ function setServerStatusInfoThread(): void {
                         timeLog(`I found a message (${indexed_message.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (isProbablyOffline) {
-                            const offline_embed = new MessageEmbed(indexed_message.embeds[0])
+                            const offline_embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
                                 .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
                             delete offline_embed.fields;
@@ -297,16 +297,16 @@ function setServerStatusInfoThread(): void {
                             return indexed_message.edit(offline_embed);
                         }
 
-                        const embed = new MessageEmbed(indexed_message.embeds[0])
+                        const embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
                             .setDescription(format)
                             .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                                 `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
-                        
+
                         if (typeof additionalFields === 'object') {
                             embed.fields = additionalFields;
                         }
 
-                        const topicDelim = guildChannel.topic.split(/ +\| +/);
+                        const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
                         if (embed.author !== topicDelim[1]) {
                             embed.setAuthor(topicDelim[1], topicDelim[2]);
                             embed.setFooter(topicDelim[1] + ' 2019');
@@ -322,7 +322,7 @@ function setServerStatusInfoThread(): void {
             });
     }
 }
-const setServerInfoThread = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
+const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
 
 interface IPlayerDataStruct {
     name: string;
