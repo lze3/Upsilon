@@ -8,7 +8,7 @@ export default class extends Command {
         super(client, {
             name: 'botinfo',
             aliases: ['stats'],
-            group: 'misc',
+            group: 'information',
             memberName: 'botinfo',
             description: 'Returns information about the bot.',
             clientPermissions: ['EMBED_LINKS']

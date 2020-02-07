@@ -3,13 +3,13 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog, getEnvironmentVariable } from './functions';
+import { time_log, get_environment_variable, get_auth_level_by_acronym } from './functions';
 
-const settings: {logStatus: boolean, statusChannels: string[], waitTime: number} = {
+const settings: { logStatus: boolean, statusChannels: string[], waitTime: number } = {
     /**
      * Determines whether to update status or not
      */
-    logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
+    logStatus: get_environment_variable('AUTO_STATUS', 'false') === 'true',
 
     /**
      * An array or string containing status channel(s)
@@ -22,20 +22,6 @@ const settings: {logStatus: boolean, statusChannels: string[], waitTime: number}
      * Time the interval waits before running again, default is 15000ms (15sec)
      */
     waitTime: 5000
-};
-
-const hsgAuths: {[key: string]: string} = {
-    'CR': 'Casual Restricted',
-    'CU': 'Casual Unrestricted',
-    'M1': 'New Member',
-    'M2': 'Member',
-    'GS': 'General Staff',
-    'A1': 'Junior Administrator',
-    'A2': 'Senior Administrator',
-    'A3': 'Lead Administrator',
-    'DV': 'Developer',
-    'CD': 'Chief of Development',
-    'DR': 'Director'
 };
 
 let serverQueryTime: number = 6000;
@@ -68,12 +54,12 @@ function getServerInfoData(): void {
 
         // if channel couldn't be found in collection, return
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
-            return timeLog('Could not find channel (${channel}) in bot\'s collection.');
+            return time_log('Could not find channel (${channel}) in bot\'s collection.');
         }
 
         // if there is no topic, there is no endpoint, and no request
         if (!guildChannel.topic) {
-            return timeLog('the channel had no topic');
+            return time_log('the channel had no topic');
         }
 
         const topic_deliminator: string[] = guildChannel.topic.split(/ +\| +/);
@@ -106,7 +92,7 @@ function getServerInfoData(): void {
             }
             catch(e) {
                 probablyOfflineTick++;
-                timeLog(`The following error is referring to http://${IP}/dynamic.json`);
+                time_log(`The following error is referring to http://${IP}/dynamic.json`);
                 return console.log(e.toString() + '\n');
             }
         });
@@ -130,14 +116,14 @@ function getServerInfoData(): void {
             }
             catch(e) {
                 probablyOfflineTick++;
-                timeLog(`The following error is referring to http://${IP}/info.json:`);
+                time_log(`The following error is referring to http://${IP}/info.json:`);
                 return console.log(e.toString() + '\n');
             }
         });
 
         // run code again if data for this channel (or ip) was not found
         if (serverData[channel] === undefined) {
-            timeLog(`serverData[${channel}] was undefined, running again...`);
+            time_log(`serverData[${channel}] was undefined, running again...`);
             serverData[channel] = {
                 state: 'offline'
             };
@@ -171,13 +157,13 @@ function setServerStatusInfoThread(): void {
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
-            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`);
+            return time_log(`Could not find channel (${channel}) in bot\'s collection.`);
         }
 
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
         if (!guildChannel.topic) {
-            return timeLog('No IP found, returning');
+            return time_log('No IP found, returning');
         }
 
         const topic_delim: string[] = guildChannel.topic.split(/ +\| +/);
@@ -186,7 +172,7 @@ function setServerStatusInfoThread(): void {
         const iconUrl: string = topic_delim[2] || undefined;
 
         if (!IP) {
-            return timeLog('No IP found...');
+            return time_log('No IP found...');
         }
 
         // requesting
@@ -210,11 +196,11 @@ function setServerStatusInfoThread(): void {
         });
 
         if (playerData[channel] === undefined) {
-            return timeLog(`playerData[${channel}] was undefined, running again...`);
+            return time_log(`playerData[${channel}] was undefined, running again...`);
         }
 
         if (serverData[channel] === undefined) {
-            return timeLog(`serverData[${channel}] was undefined, running again...`);
+            return time_log(`serverData[${channel}] was undefined, running again...`);
         }
 
         if (isProbablyOffline) { isProbablyOffline = false; }
@@ -228,12 +214,12 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        if (!isProbablyOffline && serverData[channel].dynamic && serverData[channel].dynamic.gametype && serverData[channel].dynamic.gametype.includes('Authorization')) {
-            const shortAlvl: string = serverData[channel].dynamic.gametype.replace('HSG-RP | Authorization ', '');
+        const [ is_hsg, auth_level ]: [ boolean, string|null ] = get_auth_level_by_acronym(serverData[channel].dynamic.gametype);
+        if (!isProbablyOffline && is_hsg) {
             additionalFields = [
                 {
                     name: 'Authorization',
-                    value: `${hsgAuths[shortAlvl]} (${shortAlvl})`
+                    value: auth_level
                 },
                 {
                     name: 'Roleplay Zone',
@@ -255,7 +241,7 @@ function setServerStatusInfoThread(): void {
                         .setDescription(format)
                         .setFooter(`${serverName} 2019`);
 
-                    if (typeof additionalFields === 'object') {
+                    if (additionalFields.length > 0) {
                         statEmbed.fields = additionalFields;
                     }
                 }
@@ -270,7 +256,7 @@ function setServerStatusInfoThread(): void {
                 if (messages.array().length === 0) {
                     console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', guildChannel?.name);
                     if (isProbablyOffline) {
-                        timeLog('I think the server is offline.');
+                        time_log('I think the server is offline.');
                         return guildChannel?.send(offlineEmbed);
                     }
 
@@ -279,13 +265,13 @@ function setServerStatusInfoThread(): void {
 
                 messages.forEach(indexed_message => {
                     if (indexed_message === null) {
-                        return timeLog('I found a null message object, running again.');
+                        return time_log('I found a null message object, running again.');
                     }
 
                     if (indexed_message.author.id !== client.user?.id) { return indexed_message.delete(); }
 
                     if (indexed_message.embeds.length >= 1) {
-                        timeLog(`I found a message (${indexed_message.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
+                        time_log(`I found a message (${indexed_message.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (isProbablyOffline) {
                             const offline_embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
@@ -316,7 +302,7 @@ function setServerStatusInfoThread(): void {
                     }
                     else {
                         indexed_message.delete();
-                        timeLog(`I found a message in ${guildChannel?.name} by ${indexed_message.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`);
+                        time_log(`I found a message in ${guildChannel?.name} by ${indexed_message.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`);
                     }
                 });
             });
