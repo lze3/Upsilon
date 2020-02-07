@@ -83,6 +83,8 @@ export default class ServerStatus extends Command {
                     embed.addField('Authorization', auth_level);
                     embed.addField('Roleplay Zone', serverData.mapname);
                 }
+
+                return message.reply(embed);
             });
         });
     }
