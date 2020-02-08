@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/Zeemahh/Upsilon/compare/v1.4.0...v1.5.0) (2020-02-08)
+
+
+### Development
+
+* remove the old code ([cfc6634](https://github.com/Zeemahh/Upsilon/commit/cfc6634b99e60703df9e48f3c2190e202fad5986))
+* rename file ([f90248c](https://github.com/Zeemahh/Upsilon/commit/f90248c8ca4d726d0991e5bfc7cb612f30db1d7c))
+* update imports for renamed file ([284e547](https://github.com/Zeemahh/Upsilon/commit/284e5477af4abe8263ebdd16c2553599113d4c88))
+* **auto-updater:** additional proof check ([852507d](https://github.com/Zeemahh/Upsilon/commit/852507d727081b50afb4bcfcbf6a9a30cf7c5682))
+* **auto-updater:** export settings ([de07084](https://github.com/Zeemahh/Upsilon/commit/de07084bfc756e610ad6bd9289fa87bcfbbf3997))
+* **auto-updater:** whoops ([d417eb1](https://github.com/Zeemahh/Upsilon/commit/d417eb1e5a60c9e146fe6d01bcfcbd1486b8c657))
+* **root:** listen for 'error' and 'warn' and use sentry to capture ([0101d6b](https://github.com/Zeemahh/Upsilon/commit/0101d6be8a308f65d23e3ce6184838f7f9c43804))
+* **tasks:** add change field ([7dd86e2](https://github.com/Zeemahh/Upsilon/commit/7dd86e2af8fd01e3e20eb16b3b47ec026a19d6ee))
+* **tasks:** slight refactor ([4679d7c](https://github.com/Zeemahh/Upsilon/commit/4679d7c0173d17a2cadd8e9e270d47607f42422a))
+* **variables:** lower camel casing ([fde64bc](https://github.com/Zeemahh/Upsilon/commit/fde64bc72930595004cbd31c079fa838e3722677))
+* **variables:** lowerCamel again ([1a4439c](https://github.com/Zeemahh/Upsilon/commit/1a4439c6bcad991fe9574dfd125998efa44808c6))
+* **variables:** use lowerCamel instead of snake_case ([bff4834](https://github.com/Zeemahh/Upsilon/commit/bff4834f1f979513e721d19c60dd7afafe1c486e))
+* code refactor for obtaining server information ([f78d43e](https://github.com/Zeemahh/Upsilon/commit/f78d43e2b95ce1325eb5a0aa9f6e5bdd8cb7f2ac))
+* debug ([d8db2c9](https://github.com/Zeemahh/Upsilon/commit/d8db2c9ca8ee05dd81cd774607293c0bc082ba02))
+* move server data struct to utilities ([895f232](https://github.com/Zeemahh/Upsilon/commit/895f232dd4b7e82d48dac07a21c8481620b93817))
+* msg for error ([adaf2f4](https://github.com/Zeemahh/Upsilon/commit/adaf2f420aae7ed6990905ee04750d5e58b88d02))
+* remove last 2 commits, seems working now ([67272c8](https://github.com/Zeemahh/Upsilon/commit/67272c845eb080c35f89eb36969e09356d0703d0))
+* rename ([d48f54b](https://github.com/Zeemahh/Upsilon/commit/d48f54b6e5c59058715782a7af2f7356ebd97a82))
+* update ([a38a30d](https://github.com/Zeemahh/Upsilon/commit/a38a30dfc2240cd47a56804ad074342537aea259))
+
 ## [1.4.0](https://github.com/Zeemahh/Upsilon/compare/v1.3.5...v1.4.0) (2020-01-23)
 
 
