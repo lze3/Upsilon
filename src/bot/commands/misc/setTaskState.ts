@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { settings, toggleTasks } from '../../utils/server-status-tracking';
+import { settings, prototypeTaskSetter, allowedTypeTasks } from '../../utils/server-status-tracking';
 import { TextChannel } from 'discord.js';
 
 export default class SetTaskState extends Command {
@@ -11,21 +11,22 @@ export default class SetTaskState extends Command {
             description: 'Sets the state for tasks to run in auto-status-updater.',
             args: [
                 {
-                    key: 'state',
-                    type: 'boolean',
-                    prompt: 'State to set task.'
+                    key: 'type',
+                    type: 'string',
+                    prompt: 'State to set task.',
+                    oneOf: allowedTypeTasks
+                },
+                {
+                    key: 'value',
+                    type: 'string',
+                    prompt: 'What would you like to be alerted for?'
                 }
             ]
         });
     }
 
-    public run(message: CommandoMessage, { state }: { state: boolean }) {
-        const newState: boolean = toggleTasks(state);
-
-        let taskChannel: TextChannel;
-        taskChannel = (this.client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel);
-        taskChannel.setTopic(`I am ${!newState ? 'not ' : ''}going to let you know when a task happens!`);
-
-        return message.reply('set task state to ' + newState);
+    public run(message: CommandoMessage, { type, value }: { type: string, value: string }) {
+        const [ retT, retV ]: [ string, string ] = prototypeTaskSetter(type, value);
+        return message.reply('set task listener for ' + retT + ' with value ' + retV);
     }
 }

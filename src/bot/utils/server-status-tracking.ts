@@ -1,4 +1,4 @@
-import { TextChannel, MessageEmbed, EmbedField, Channel } from 'discord.js';
+import { TextChannel, MessageEmbed, EmbedField, Channel, AllowedImageFormat } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
@@ -34,6 +34,26 @@ let runTasks: boolean = true;
 export function toggleTasks(state: boolean): boolean {
     runTasks = state;
     return runTasks;
+}
+
+export const allowedTypeTasks: string[] = [
+    'pCount',
+    'alvlChange'
+];
+
+const activeTasks: {
+    [key: string]: {
+        active: boolean,
+        value: string
+    }
+} = {};
+
+export function prototypeTaskSetter(type: string, value: string): [ string, string ] {
+    activeTasks[type] = {
+        active: true,
+        value
+    };
+    return [ type, value ];
 }
 
 let serverQueryTime: number = 6000;
@@ -324,6 +344,43 @@ function setServerStatusInfoThread(): void {
                                 tChannel.send(`Hey, <@264662751404621825>, server player count is 31 and authorization is CR. I was told to tell you.`);
                             }
                         }
+
+                        if (runTasks && !taskSent) {
+                            let taskChannel: TextChannel;
+                            taskChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
+                            for (const [ item, key ] of Object.entries(activeTasks)) {
+                                if (item === 'pCount') {
+                                    if (key.active) {
+                                        if (prevPlayerData[channel] && (prevPlayerData[channel].length !== playerData[channel].length) && playerData[channel].length === key.value) {
+                                            taskSent = true;
+
+                                            const taskEmbed: MessageEmbed = new MessageEmbed()
+                                                .setTitle('Custom Task Emitter')
+                                                .setColor('#37bd75')
+                                                .addField('Task Type', item)
+                                                .setDescription('Player count is ' + key.value + ', I was told to notify you.');
+
+                                            taskChannel.send(taskEmbed);
+                                            break;
+                                        }
+                                    }
+                                } else if (item === 'alvlChange') {
+                                    if (key.active) {
+                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype) && is_hsg) {
+                                            const taskEmbed: MessageEmbed = new MessageEmbed()
+                                                .setTitle('Custom Task Emitter')
+                                                .setColor('#37bd75')
+                                                .addField('Task Type', item)
+                                                .setDescription('Authorization is ' + key.value + ', I was told to notify you of change.');
+
+                                            taskChannel.send(taskEmbed);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         prevServerData[channel] = serverData[channel];
                         prevPlayerData[channel] = playerData[channel];
                     }
