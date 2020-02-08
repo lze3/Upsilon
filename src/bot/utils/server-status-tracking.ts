@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import '../lib/env';
 import { timeLog, getEnvironmentVariable, getAuthLevelByAcronym } from './functions';
 
-const settings: { logStatus: boolean, statusChannels: string[], customTaskResponse: string, waitTime: number } = {
+export const settings: { logStatus: boolean, statusChannels: string[], customTaskResponse: string, waitTime: number } = {
     /**
      * Determines whether to update status or not
      */
