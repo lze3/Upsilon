@@ -37,8 +37,8 @@ export function toggleTasks(state: boolean): boolean {
 }
 
 export const allowedTypeTasks: string[] = [
-    'pCount',
-    'alvlChange'
+    'pcount',
+    'alvlchange'
 ];
 
 const activeTasks: {
