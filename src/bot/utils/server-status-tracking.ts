@@ -249,12 +249,12 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        const [ is_hsg, auth_level ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData[channel].dynamic.gametype);
-        if (!isProbablyOffline && is_hsg) {
+        const [ isHSG, curAuthLevel ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData[channel].dynamic.gametype);
+        if (!isProbablyOffline && isHSG) {
             additionalFields = [
                 {
                     name: 'Authorization',
-                    value: auth_level
+                    value: curAuthLevel
                 },
                 {
                     name: 'Roleplay Zone',
@@ -309,13 +309,13 @@ function setServerStatusInfoThread(): void {
                         timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (isProbablyOffline) {
-                            const offline_embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
+                            const newOfflineEmbed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                                 .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
-                            delete offline_embed.fields;
-                            delete offline_embed.description;
+                            delete newOfflineEmbed.fields;
+                            delete newOfflineEmbed.description;
 
-                            indexedMessage.edit(offline_embed);
+                            indexedMessage.edit(newOfflineEmbed);
                         }
 
                         const embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
@@ -336,7 +336,7 @@ function setServerStatusInfoThread(): void {
                         indexedMessage.edit(embed);
 
                         if (runTasks && !taskSent) {
-                            if (prevPlayerData[channel] && (prevPlayerData[channel].length === 32 && playerData[channel].length === 31) && is_hsg && auth_level === 'Casual Restricted') {
+                            if (prevPlayerData[channel] && (prevPlayerData[channel].length === 32 && playerData[channel].length === 31) && isHSG && curAuthLevel === 'Casual Restricted') {
                                 taskSent = true;
                                 let tChannel: TextChannel;
                                 tChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
@@ -366,13 +366,13 @@ function setServerStatusInfoThread(): void {
                                     }
                                 } else if (item === 'alvlChange') {
                                     if (key.active) {
-                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype && auth_level === key.value) && is_hsg) {
+                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype && curAuthLevel === key.value) && isHSG) {
                                             const [ _, oldAuth ]: [ boolean, string ] = getAuthLevelByAcronym(prevServerData[channel].dynamic.gametype);
                                             const taskEmbed: MessageEmbed = new MessageEmbed()
                                                 .setTitle('Custom Task Emitter')
                                                 .setColor('#37bd75')
                                                 .addField('Task Type', item)
-                                                .addField('Change', oldAuth + ' -> ' + auth_level)
+                                                .addField('Change', oldAuth + ' -> ' + curAuthLevel)
                                                 .setDescription('Authorization is ' + key.value + ', I was told to notify you of change.');
 
                                             taskChannel.send(taskEmbed);
