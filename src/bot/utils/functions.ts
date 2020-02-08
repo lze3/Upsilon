@@ -127,16 +127,66 @@ export interface IPlayerDataStruct {
 }
 
 /**
- * Returns server authorization level by acronym
+ * Returns boolean and string.
  *
  * @param acr Takes server var property 'gametype'
+ * @returns An array with 1st index being is server HSG server, 2nd index being auth level name if index 1 is not false, else `null`.
+ *
+ * @example
+ *  get_auth_level_by_acronym('HSG-RP | Authorization CU'); // [true, 'Casual Unrestricted']
+ *  get_auth_level_by_acronym('fivem'); // [false, null]
  */
 export function get_auth_level_by_acronym(acr: string): [boolean, string|null] {
     let shortened_auth: string;
 
-    // example response: HSG-RP | Authorization CR
     if (acr.includes('Authorization')) {
         shortened_auth = acr.replace('HSG-RP | Authorization ', '');
     }
+
     return hsgAuths[shortened_auth] ? [true, hsgAuths[shortened_auth]] : [false, null];
+}
+
+/**
+ * Structure for FiveM server data returned from ip:port/dynamic.json
+ *
+ * @example
+ * {
+ *      "clients": 21,
+ *      "gametype": "fivem",
+ *      "hostname": "meow",
+ *      "iv": "981675851",
+ *      "mapname": "fivem-map-skater",
+ *      "sv_maxclients": 32
+ * }
+ */
+export interface IServerDataStruct {
+    /**
+     * Returns total amount of clients on the server.
+     */
+    clients: number;
+
+    /**
+     * Returns current game type.
+     */
+    gametype: string;
+
+    /**
+     * Returns name of the server.
+     */
+    hostname: string;
+
+    /**
+     * Returns version number.
+     */
+    iv: string;
+
+    /**
+     * Returns current map name.
+     */
+    mapname: string;
+
+    /**
+     * Returns maximum amount of clients.
+     */
+    sv_maxclients: string;
 }

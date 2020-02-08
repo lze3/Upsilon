@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { get } from 'request';
 import { MessageEmbed, GuildMember, ColorResolvable } from 'discord.js';
-import { get_auth_level_by_acronym } from '../../utils/functions';
+import { get_auth_level_by_acronym, IServerDataStruct } from '../../utils/functions';
 
 let serverData: IServerDataStruct = {
     clients: 0,
@@ -9,7 +9,7 @@ let serverData: IServerDataStruct = {
     hostname: 'unknown',
     iv: '0000',
     mapname: 'unknown',
-    sv_maxclients: 0
+    sv_maxclients: '0'
 };
 let playerData: any = {};
 
@@ -50,14 +50,14 @@ export default class ServerStatus extends Command {
 
         get(`http://${ip}/players.json`, {
             timeout: 2000
-        }, (err, response, playersBody) => {
+        }, (err, _, playersBody) => {
             if (err) {
                 return message.reply(server_down_embed);
             }
 
             get(`http://${ip}/dynamic.json`, {
                 timeout: 2000
-            }, (errInfo, infoResponse, infoBody) => {
+            }, (errInfo, __, infoBody) => {
                 if (errInfo) {
                     return message.reply(server_down_embed);
                 }
@@ -88,13 +88,4 @@ export default class ServerStatus extends Command {
             });
         });
     }
-}
-
-interface IServerDataStruct {
-    clients: number;
-    gametype: string;
-    hostname: string;
-    iv: string;
-    mapname: string;
-    sv_maxclients: number;
 }
