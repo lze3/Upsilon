@@ -37,10 +37,10 @@ export default class UserInfo extends Command {
     public run(message: CommandoMessage, { user }: { user: User }) {
         message.delete();
 
-        const current_date: Date = new Date();
+        const currentDate: Date = new Date();
 
-        const local_acknowledgements: { [key: string]: string[] } = {};
-        local_acknowledgements[user.id] = [];
+        const localAcknowledgements: { [key: string]: string[] } = {};
+        localAcknowledgements[user.id] = [];
 
         const embed: MessageEmbed = new MessageEmbed();
 
@@ -53,7 +53,7 @@ export default class UserInfo extends Command {
         for (const [key, acknowledgement] of Object.entries(acknowledgements)) {
             if (acknowledgement.type === 'user') {
                 if (user.id === acknowledgement.id) {
-                    local_acknowledgements[user.id].push(acknowledgement.title);
+                    localAcknowledgements[user.id].push(acknowledgement.title);
                 }
             }
 
@@ -61,20 +61,20 @@ export default class UserInfo extends Command {
                 if (typeof acknowledgement.id === 'object') {
                     for (const [i, roleId] of Object.entries(acknowledgement.id)) {
                         if (member.roles.has(roleId)) {
-                            local_acknowledgements[user.id].push(acknowledgement.title);
+                            localAcknowledgements[user.id].push(acknowledgement.title);
                         }
                     }
                 }
                 else {
                     if (member.roles.has(acknowledgement.id)) {
-                        local_acknowledgements[user.id].push(acknowledgement.title);
+                        localAcknowledgements[user.id].push(acknowledgement.title);
                     }
                 }
             }
         }
 
         if (message.guild.owner?.id === user.id) {
-            local_acknowledgements[user.id].push('Server Owner');
+            localAcknowledgements[user.id].push('Server Owner');
         }
 
         embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL() ?? undefined);
@@ -92,10 +92,10 @@ export default class UserInfo extends Command {
         }
 
         const joined_at: moment.Moment = moment(member.joinedAt!);
-        embed.addField('❯ Joined', `${joined_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(joined_at, 'days')} days ago)`, true);
+        embed.addField('❯ Joined', `${joined_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(joined_at, 'days')} days ago)`, true);
 
         const created_at: moment.Moment = moment(user.createdAt);
-        embed.addField('❯ Registered', `${created_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(current_date).diff(created_at, 'days')} days ago)`);
+        embed.addField('❯ Registered', `${created_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(created_at, 'days')} days ago)`);
 
         const amount_of_roles: number = member.roles.array().length - 1;
 
@@ -104,8 +104,8 @@ export default class UserInfo extends Command {
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${amount_of_roles}]`, roles);
 
-        if (local_acknowledgements[user.id].length > 0) {
-            embed.addField('❯ User Acknowledgements', local_acknowledgements[user.id].map((title: string) => '• ' + title));
+        if (localAcknowledgements[user.id].length > 0) {
+            embed.addField('❯ User Acknowledgements', localAcknowledgements[user.id].map((title: string) => '• ' + title));
         }
 
         embed.setColor(message.guild.me?.roles.color ? message.guild.me.roles.color!.color : '#ccc');

@@ -59,7 +59,7 @@ export function fivemSantize(str: string): string {
  *
  * @param message Message you wish to log
  */
-export function time_log(message: string): void {
+export function timeLog(message: string): void {
     const current_time: Date = new Date();
     let hour: string = current_time.getHours().toString();
     let min: string = current_time.getMinutes().toString();
@@ -86,7 +86,7 @@ export function time_log(message: string): void {
  * @param {string} variable Variable name.
  * @param {string} defaultVal Default value if value is undefined.
  */
-export function get_environment_variable(variable: string, defaultVal: string): string {
+export function getEnvironmentVariable(variable: string, defaultVal: string): string {
     return process.env[variable] ?? defaultVal;
 }
 
@@ -136,14 +136,14 @@ export interface IPlayerDataStruct {
  *  get_auth_level_by_acronym('HSG-RP | Authorization CU'); // [true, 'Casual Unrestricted']
  *  get_auth_level_by_acronym('fivem'); // [false, null]
  */
-export function get_auth_level_by_acronym(acr: string): [boolean, string|null] {
-    let shortened_auth: string;
+export function getAuthLevelByAcronym(acr: string): [boolean, string|null] {
+    let shortAuth: string;
 
     if (acr.includes('Authorization')) {
-        shortened_auth = acr.replace('HSG-RP | Authorization ', '');
+        shortAuth = acr.replace('HSG-RP | Authorization ', '');
     }
 
-    return hsgAuths[shortened_auth] ? [true, hsgAuths[shortened_auth]] : [false, null];
+    return hsgAuths[shortAuth] ? [true, hsgAuths[shortAuth]] : [false, null];
 }
 
 /**

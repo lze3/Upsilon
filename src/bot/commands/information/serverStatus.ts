@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { get } from 'request';
 import { MessageEmbed, GuildMember, ColorResolvable } from 'discord.js';
-import { get_auth_level_by_acronym, IServerDataStruct } from '../../utils/functions';
+import { getAuthLevelByAcronym, IServerDataStruct } from '../../utils/functions';
 
 let serverData: IServerDataStruct = {
     clients: 0,
@@ -33,7 +33,7 @@ export default class ServerStatus extends Command {
 
     public run(message: CommandoMessage, { ip }: { ip: string }) {
         const member: GuildMember|Promise<GuildMember> = message.member ?? message.guild.members.fetch(message.author);
-        const embed_color: ColorResolvable = (member instanceof GuildMember && member.roles && member.roles.size > 1) ? member.roles.color.color : '#23E25D';
+        const embedColor: ColorResolvable = (member instanceof GuildMember && member.roles && member.roles.size > 1) ? member.roles.color.color : '#23E25D';
 
         if (!ip.match(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$/g)) {
             return message.reply('invalid IP address.');
@@ -75,12 +75,12 @@ export default class ServerStatus extends Command {
                     .addField('Server IP', ip)
                     .addField('Status', 'Online')
                     .addField('Players', playerData.length + ' | ' + serverData.sv_maxclients)
-                    .setColor(embed_color)
+                    .setColor(embedColor)
                     .setTimestamp();
 
-                const [ is_hsg, auth_level ]: [ boolean, string|null ] = get_auth_level_by_acronym(serverData.gametype);
-                if (is_hsg) {
-                    embed.addField('Authorization', auth_level);
+                const [ isHSG, authLevelLong ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData.gametype);
+                if (isHSG) {
+                    embed.addField('Authorization', authLevelLong);
                     embed.addField('Roleplay Zone', serverData.mapname);
                 }
 

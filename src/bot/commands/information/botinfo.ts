@@ -17,13 +17,13 @@ export default class extends Command {
 
     public run(message: CommandoMessage) {
         const member: GuildMember = message.member;
-        const embed_color: ColorResolvable = member.roles.color?.color ?? '#23E25D';
+        const embedColor: ColorResolvable = member.roles.color?.color ?? '#23E25D';
 
         const embed: MessageEmbed = new MessageEmbed()
             .setTitle(`${message.guild.me?.user.username}#${message.guild.me?.user.discriminator} Information`)
             .addField('❯ Connectivity', stripIndents`Ping: ${Math.floor(this.client.ws.ping)}ms
                         \nUptime: ${ms(this.client.uptime!, { verbose: true })}`)
-            .setColor(embed_color);
+            .setColor(embedColor);
 
         return message.reply(embed);
     }
