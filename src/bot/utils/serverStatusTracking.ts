@@ -336,16 +336,6 @@ function setServerStatusInfoThread(): void {
                         indexedMessage.edit(embed);
 
                         if (runTasks && !taskSent) {
-                            if (prevPlayerData[channel] && (prevPlayerData[channel].length === 32 && playerData[channel].length === 31) && isHSG && curAuthLevel === 'Casual Restricted') {
-                                taskSent = true;
-                                let tChannel: TextChannel;
-                                tChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
-
-                                tChannel.send(`Hey, <@264662751404621825>, server player count is 31 and authorization is CR. I was told to tell you.`);
-                            }
-                        }
-
-                        if (runTasks && !taskSent) {
                             let taskChannel: TextChannel;
                             taskChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
                             for (const [ item, key ] of Object.entries(activeTasks)) {
