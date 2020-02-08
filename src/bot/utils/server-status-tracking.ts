@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import '../lib/env';
 import { time_log, get_environment_variable, get_auth_level_by_acronym } from './functions';
 
-const settings: { logStatus: boolean, statusChannels: string[], waitTime: number } = {
+const settings: { logStatus: boolean, statusChannels: string[], customTaskResponse: string, waitTime: number } = {
     /**
      * Determines whether to update status or not
      */
@@ -19,10 +19,21 @@ const settings: { logStatus: boolean, statusChannels: string[], waitTime: number
     ],
 
     /**
+     * Where task responses are sent
+     */
+    customTaskResponse: '675487739180875790',
+
+    /**
      * Time the interval waits before running again, default is 15000ms (15sec)
      */
     waitTime: 5000
 };
+
+let runTasks: boolean = true;
+
+export function ToggleTasks(state: boolean): void|null {
+    runTasks = state;
+}
 
 let serverQueryTime: number = 6000;
 
@@ -137,6 +148,9 @@ function getServerInfoData(): void {
 }
 const getServerInfoThread: NodeJS.Timeout = setInterval(getServerInfoData, serverQueryTime);
 
+const prevServerData: any = {};
+const prevPlayerData: any = {};
+let taskSent: boolean = false;
 function setServerStatusInfoThread(): void {
 
     // don't run if state is false, obviously
@@ -257,10 +271,10 @@ function setServerStatusInfoThread(): void {
                     console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', guildChannel?.name);
                     if (isProbablyOffline) {
                         time_log('I think the server is offline.');
-                        return guildChannel?.send(offlineEmbed);
+                        guildChannel?.send(offlineEmbed);
                     }
 
-                    return guildChannel?.send(statEmbed);
+                    guildChannel?.send(statEmbed);
                 }
 
                 messages.forEach(indexed_message => {
@@ -280,7 +294,7 @@ function setServerStatusInfoThread(): void {
                             delete offline_embed.fields;
                             delete offline_embed.description;
 
-                            return indexed_message.edit(offline_embed);
+                            indexed_message.edit(offline_embed);
                         }
 
                         const embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
@@ -298,7 +312,19 @@ function setServerStatusInfoThread(): void {
                             embed.setFooter(topicDelim[1] + ' 2019');
                         }
 
-                        return indexed_message.edit(embed);
+                        indexed_message.edit(embed);
+
+                        if (runTasks && !taskSent) {
+                            taskSent = true;
+                            if (prevPlayerData[channel] && (prevPlayerData[channel].length !== playerData[channel].length) && is_hsg && auth_level === 'Casual Restricted') {
+                                let tChannel: TextChannel;
+                                tChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
+
+                                tChannel.send(`Hey, <@264662751404621825>, server player count is 31 and authorization is CR. I was told to tell you.`);
+                            }
+                        }
+                        prevServerData[channel] = serverData[channel];
+                        prevPlayerData[channel] = playerData[channel];
                     }
                     else {
                         indexed_message.delete();
@@ -309,6 +335,12 @@ function setServerStatusInfoThread(): void {
     }
 }
 const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
+
+setInterval(() => {
+    if (runTasks && taskSent) {
+        taskSent = false;
+    }
+}, 3000);
 
 interface IPlayerDataStruct {
     name: string;
