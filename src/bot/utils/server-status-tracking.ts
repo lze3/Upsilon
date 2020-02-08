@@ -86,7 +86,7 @@ function getServerInfoData(): void {
 
         // if channel couldn't be found in collection, return
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
-            return timeLog('Could not find channel (${channel}) in bot\'s collection.');
+            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`);
         }
 
         // if there is no topic, there is no endpoint, and no request
