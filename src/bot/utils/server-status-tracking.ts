@@ -278,27 +278,27 @@ function setServerStatusInfoThread(): void {
                     guildChannel?.send(statEmbed);
                 }
 
-                messages.forEach(indexed_message => {
-                    if (indexed_message === null) {
+                messages.forEach(indexedMessage => {
+                    if (indexedMessage === null) {
                         return timeLog('I found a null message object, running again.');
                     }
 
-                    if (indexed_message.author.id !== client.user?.id) { return indexed_message.delete(); }
+                    if (indexedMessage.author.id !== client.user?.id) { return indexedMessage.delete(); }
 
-                    if (indexed_message.embeds.length >= 1) {
-                        timeLog(`I found a message (${indexed_message.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
+                    if (indexedMessage.embeds.length >= 1) {
+                        timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (isProbablyOffline) {
-                            const offline_embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
+                            const offline_embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                                 .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
 
                             delete offline_embed.fields;
                             delete offline_embed.description;
 
-                            indexed_message.edit(offline_embed);
+                            indexedMessage.edit(offline_embed);
                         }
 
-                        const embed: MessageEmbed = new MessageEmbed(indexed_message.embeds[0])
+                        const embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                             .setDescription(format)
                             .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                                 `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
@@ -313,7 +313,7 @@ function setServerStatusInfoThread(): void {
                             embed.setFooter(topicDelim[1] + ' 2019');
                         }
 
-                        indexed_message.edit(embed);
+                        indexedMessage.edit(embed);
 
                         if (runTasks && !taskSent) {
                             if (prevPlayerData[channel] && (prevPlayerData[channel].length === 32 && playerData[channel].length === 31) && is_hsg && auth_level === 'Casual Restricted') {
@@ -328,8 +328,8 @@ function setServerStatusInfoThread(): void {
                         prevPlayerData[channel] = playerData[channel];
                     }
                     else {
-                        indexed_message.delete();
-                        timeLog(`I found a message in ${guildChannel?.name} by ${indexed_message.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`);
+                        indexedMessage.delete();
+                        timeLog(`I found a message in ${guildChannel?.name} by ${indexedMessage.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`);
                     }
                 });
             });
