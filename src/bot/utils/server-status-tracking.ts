@@ -316,7 +316,7 @@ function setServerStatusInfoThread(): void {
 
                         if (runTasks && !taskSent) {
                             taskSent = true;
-                            if (prevPlayerData[channel] && (prevPlayerData[channel].length !== playerData[channel].length) && (prevPlayerData[channel].length < 32) && is_hsg && auth_level === 'Casual Restricted') {
+                            if (prevPlayerData[channel] && (prevPlayerData[channel].length !== playerData[channel].length) && (playerData[channel].length < 32) && is_hsg && auth_level === 'Casual Restricted') {
                                 let tChannel: TextChannel;
                                 tChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
 
