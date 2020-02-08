@@ -6,7 +6,7 @@ import { version } from 'typescript';
 import 'typescript';
 import './lib/env';
 import './utils/functions';
-import './utils/server-status-tracking';
+import './utils/serverStatusTracking';
 import * as Sentry from '@sentry/node';
 // import { RewriteFrames } from '@sentry/integrations';
 

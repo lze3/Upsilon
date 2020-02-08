@@ -1,6 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { settings, prototypeTaskSetter, allowedTypeTasks } from '../../utils/server-status-tracking';
-import { TextChannel } from 'discord.js';
+import { prototypeTaskSetter, allowedTypeTasks } from '../../utils/serverStatusTracking';
 
 export default class SetTaskState extends Command {
     constructor(client: CommandoClient) {
