@@ -366,7 +366,7 @@ function setServerStatusInfoThread(): void {
                                     }
                                 } else if (item === 'alvlChange') {
                                     if (key.active) {
-                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype) && is_hsg) {
+                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype && auth_level === key.value) && is_hsg) {
                                             const taskEmbed: MessageEmbed = new MessageEmbed()
                                                 .setTitle('Custom Task Emitter')
                                                 .setColor('#37bd75')
