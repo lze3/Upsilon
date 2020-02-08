@@ -367,10 +367,12 @@ function setServerStatusInfoThread(): void {
                                 } else if (item === 'alvlChange') {
                                     if (key.active) {
                                         if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype && auth_level === key.value) && is_hsg) {
+                                            const [ _, oldAuth ]: [ boolean, string ] = getAuthLevelByAcronym(prevServerData[channel].dynamic.gametype);
                                             const taskEmbed: MessageEmbed = new MessageEmbed()
                                                 .setTitle('Custom Task Emitter')
                                                 .setColor('#37bd75')
                                                 .addField('Task Type', item)
+                                                .addField('Change', oldAuth + ' -> ' + auth_level)
                                                 .setDescription('Authorization is ' + key.value + ', I was told to notify you of change.');
 
                                             taskChannel.send(taskEmbed);
