@@ -4,6 +4,7 @@ import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
 import { timeLog, getEnvironmentVariable, getAuthLevelByAcronym } from './functions';
+import { isReturnStatement } from 'typescript';
 
 export const settings: { logStatus: boolean, statusChannels: string[], customTaskResponse: string, waitTime: number } = {
     /**
@@ -226,7 +227,14 @@ function setServerStatusInfoThread(): void {
                 playerData[channel] = {
                     state: 'offline'
                 };
-                probablyOfflineTick++;
+                if (probablyOfflineTick >= 5) {
+                    isProbablyOffline = true;
+                    probablyOfflineTick = 0;
+                    return;
+                }
+                else {
+                    probablyOfflineTick++;
+                }
             }
         });
 
@@ -238,18 +246,12 @@ function setServerStatusInfoThread(): void {
             return timeLog(`serverData[${channel}] was undefined, running again...`);
         }
 
-        if (isProbablyOffline) { isProbablyOffline = false; }
-        if (probablyOfflineTick >= 5) {
-            isProbablyOffline = true;
-            probablyOfflineTick = 0;
-        }
-
         const format: string = playerData[channel].length > 0 ?
             '`' + playerData[channel].map((ply: IPlayerDataStruct) => `${ply.name}`).join(', ') + '`' :
             'No players online.';
 
         let additionalFields: EmbedField[];
-        const [ isHSG, curAuthLevel ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData[channel].dynamic.gametype);
+        const [ isHSG, curAuthLevel ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData[channel]?.dynamic.gametype);
         if (!isProbablyOffline && isHSG) {
             additionalFields = [
                 {
@@ -286,6 +288,8 @@ function setServerStatusInfoThread(): void {
                         .setAuthor(serverName, iconUrl)
                         .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'))
                         .setFooter(`${serverName} 2019`);
+
+                    isProbablyOffline = false;
                 }
 
                 if (messages.array().length === 0) {
