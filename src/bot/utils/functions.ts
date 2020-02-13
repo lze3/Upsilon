@@ -120,9 +120,24 @@ export const hsgAuths: {[key: string]: string} = {
  * FiveM player data structure
  */
 export interface IPlayerDataStruct {
+    /**
+     * The player name
+     */
     name: string;
+
+    /**
+     * The server ID of the user
+     */
     id: number;
+
+    /**
+     * String array of the player's identifiers
+     */
     identifiers: string[];
+
+    /**
+     * Player's ping to server
+     */
     ping: number;
 }
 
