@@ -251,18 +251,24 @@ function setServerStatusInfoThread(): void {
             'No players online.';
 
         let additionalFields: EmbedField[];
-        const [ isHSG, curAuthLevel ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData[channel]?.dynamic.gametype);
-        if (!isProbablyOffline && isHSG) {
-            additionalFields = [
-                {
-                    name: 'Authorization',
-                    value: curAuthLevel
-                },
-                {
-                    name: 'Roleplay Zone',
-                    value: serverData[channel].dynamic.mapname
-                }
-            ];
+        let [ isHSG, curAuthLevel ]: [ boolean, string ] = [ false, 'Casual Restricted' ];
+        if (serverData[channel].dynamic !== undefined) {
+            [ isHSG, curAuthLevel ] = getAuthLevelByAcronym(serverData[channel].dynamic?.gametype);
+            if (!isProbablyOffline && isHSG) {
+                additionalFields = [
+                    {
+                        name: 'Authorization',
+                        value: curAuthLevel
+                    },
+                    {
+                        name: 'Roleplay Zone',
+                        value: serverData[channel].dynamic.mapname
+                    }
+                ];
+            }
+        }
+        else {
+            isProbablyOffline = true;
         }
 
         guildChannel.messages.fetch()
