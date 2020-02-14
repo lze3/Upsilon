@@ -33,7 +33,7 @@ export default class ServerStatus extends Command {
 
     public run(message: CommandoMessage, { ip }: { ip: string }) {
         const member: GuildMember|Promise<GuildMember> = message.member ?? message.guild.members.fetch(message.author);
-        const embedColor: ColorResolvable = (member instanceof GuildMember && member.roles && member.roles.size > 1) ? member.roles.color.color : '#23E25D';
+        const embedColor: ColorResolvable = (member instanceof GuildMember && member.roles && member.roles.cache.size > 1) ? member.roles.color.color : '#23E25D';
 
         if (!ip.match(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$/g)) {
             return message.reply('invalid IP address.');

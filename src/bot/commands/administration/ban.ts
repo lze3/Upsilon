@@ -29,7 +29,7 @@ export default class Ban extends Command {
     }
 
     public run(message: CommandoMessage, { user, reason }: { user: User, reason: string }) {
-        const member: GuildMember|undefined = message.guild.members.find(fm => fm.id === user.id);
+        const member: GuildMember = message.guild.members.cache.find(fm => fm.id === user.id);
 
         message.delete();
 

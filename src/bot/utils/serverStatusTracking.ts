@@ -83,7 +83,7 @@ function getServerInfoData(): void {
         let guildChannel: Channel|undefined;
 
         // get channel from client's channel collection
-        guildChannel = client.channels.find(ch => ch.id === channel);
+        guildChannel = client.channels.cache.find(ch => ch.id === channel);
 
         // if channel couldn't be found in collection, return
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
@@ -189,7 +189,7 @@ function setServerStatusInfoThread(): void {
 
         let guildChannel: TextChannel;
 
-        guildChannel = client.channels.find(ch => ch.id === channel) as TextChannel;
+        guildChannel = client.channels.cache.find(ch => ch.id === channel) as TextChannel;
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
@@ -347,7 +347,7 @@ function setServerStatusInfoThread(): void {
 
                         if (runTasks && !taskSent) {
                             let taskChannel: TextChannel;
-                            taskChannel = client.channels.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
+                            taskChannel = client.channels.cache.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
                             for (const [ item, key ] of Object.entries(activeTasks)) {
                                 if (item === 'pCount') {
                                     if (key.active) {
