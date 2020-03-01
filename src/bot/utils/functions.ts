@@ -108,7 +108,7 @@ export const hsgAuths: {[key: string]: string} = {
     'M1': 'New Member',
     'M2': 'Member',
     'GS': 'General Staff',
-    'A1': 'Junior Administrator',
+    'A1': 'Administrator',
     'A2': 'Senior Administrator',
     'A3': 'Lead Administrator',
     'DV': 'Developer',
