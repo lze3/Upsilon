@@ -258,11 +258,13 @@ function setServerStatusInfoThread(): void {
                 additionalFields = [
                     {
                         name: 'Authorization',
-                        value: curAuthLevel
+                        value: curAuthLevel,
+                        inline: false
                     },
                     {
                         name: 'Roleplay Zone',
-                        value: serverData[channel].dynamic.mapname
+                        value: serverData[channel].dynamic.mapname,
+                        inline: false
                     }
                 ];
             }
