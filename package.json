@@ -33,6 +33,6 @@
     "steamapi": "^2.0.7"
   },
   "devDependencies": {
-    "standard-version": "^7.0.0"
+    "standard-version": "^8.0.1"
   }
 }
